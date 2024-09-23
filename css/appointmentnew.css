@@ -1,0 +1,188 @@
+html{
+    height: 100%;
+}
+
+body{
+    margin: 0%;
+    min-height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(45deg, #009C80 ,#66C7BE ,#009C80  );
+    background-size: 300% 300%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+header{
+    background-color: #bdf6e7; 
+    top:0;
+    margin:0;
+    width: 100%;
+    padding: 10px 100px;    
+    position: static;
+    align-items: center;
+}
+/* NAVIGATION TOP */
+.menu a{
+    padding-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #000000;
+    margin-left: 100px;
+    text-decoration:none;
+        
+}
+.navigation .btn_Logout{
+    width: 110px;
+    height: 50px;
+    font-weight: bold;
+    background-color: #bdf6e7;
+    color: #000000;
+    margin-left: 550px;
+    outline: none;                     
+
+}
+/* SIDEBAR */
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    list-style: none;
+    height: 100%;
+    width: 180px;
+    background-color: #ffffff;
+}
+.sidebar h1{
+
+   text-align: center;
+   background-color: #bdf6e7;
+   margin: 0;
+   line-height: 85px;
+
+
+}
+.sidebar a{
+    font-size: 15px;
+    color: #000000;
+    text-decoration: none;
+    text-align: center;
+    line-height: 80px;
+    font-weight: bold;
+    padding: 10px 10px;
+   
+}
+/* FILL UP FORM */
+.appoinment_form{
+    position: relative;
+    max-width: 1150px;
+    width: 100%;
+    height: fit-content;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    margin-left: 180px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    box-sizing: border-box ;
+  
+
+}
+
+
+
+.appoinment_form .title-form{
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 80px;
+   
+
+
+}
+ /* For  button*/
+ .appoinment_form .btnNewPatient{
+    margin-top: 0;
+    background-color: #bdf6e7;
+    font-weight: bold;
+    outline: none;
+    box-shadow: #ffffff;
+    width: 100px;
+    height: 50px;
+    text-decoration: none;
+    border: none;
+    text-align: center;
+ }
+ .appoinment_form .btnOldPatient{
+    margin-top: 0;
+    background-color: #bdf6e7;
+    font-weight: bold;
+    outline: none;
+    box-shadow: #ffffff;
+    width: 100px;
+    height: 50px;
+    text-decoration: none;
+    border: none;
+    text-align: center;
+ }
+   /* For radio button*/
+.radio-button{
+    line-height: 50px;
+}
+.radio-button label{
+    word-spacing: 4px;
+    margin-right: 20px;
+   
+}
+/* For text input */
+.input-box {
+    line-height: 50px;
+}
+.input-box label {
+    word-spacing:2px;
+}
+
+/* For title text */
+ .text-title{
+    font-weight: bolder;
+    font-size: 20px;
+    line-height: 50px;
+   
+}
+/* For checkbox */
+.check-box{
+    line-height: 50px;
+}
+.check-box label{
+    word-spacing: 4px;
+    margin-right: 50px;
+  
+}
+/* FOOTER */
+footer{
+    
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    height: auto;
+    width: 100vw;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 0;
+    color: #000;
+    margin-top: auto;
+}
+
+
+.footer-bottom{
+    background-color:#bdf6e7;
+    width: 100vw;
+    padding: 20px 0;
+    text-align:  center;
+}
+
+.footer-bottom p{
+    font-size: 14px;
+    word-spacing: 2px;
+    text-transform: capitalize;    
+}

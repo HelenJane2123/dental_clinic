@@ -1,0 +1,103 @@
+
+.navigation{
+  
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    padding: 10px 100px;
+    background-color: #bdf6e7;
+    align-items: center;
+}
+.menu a{
+
+    font-size: 20emm;
+    font-weight: bold;
+    color: #000000;
+    margin-left: 100px;
+    text-decoration:none;
+        
+}
+.navigation .btn_Login{
+    width: 110px;
+    height: 50px;
+    font-weight: bold;
+    background-color: #bdf6e7;
+    color: #000000;
+    margin-left: 550px;
+    outline: none;                     
+
+}
+footer{
+    
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    height: auto;
+    width: 100vw;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 0;
+    color: #000;
+    margin-top: auto;
+}
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.footer-content h3{
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    line-height: 0px;
+}
+
+.footer-content p{
+    max-width: 500px;
+    margin: 10px auto;
+    line-height: 0px;
+    font-size: 14px;
+}
+
+.socials{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1px 0 2px 0;
+}
+.socials li{
+    margin: 0 10px;
+}
+
+.socials a{
+    text-decoration: none;
+    color: #000;
+}
+.socials a i{
+    font-size: 2rem;
+    transition: color .4 ease;
+    
+}
+
+
+.footer-bottom{
+    background-color:#bdf6e7;
+    width: 100vw;
+    padding: 20px 0;
+    text-align:  center;
+}
+
+.footer-bottom p{
+    font-size: 14px;
+    word-spacing: 2px;
+    text-transform: capitalize;    
+}
+.footer-bottom span{
+    text-transform: uppercase;
+    opacity: .4;
+    font-weight: 200;
+}
+
