@@ -17,12 +17,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_user'])) {
         header('Location: ../login.php');
         exit();
     } else {
-        // Set session variables for logged-in user
-        $_SESSION['username'] = $username;
-        $_SESSION['success'] = true;
-        $_SESSION['message'] = 'Login successful.';
-        header('Location: ../appointment.php');
-        exit();
+       // Set session variables for logged-in user
+       $_SESSION['username'] = $username;
+       $_SESSION['success'] = true;
+       $_SESSION['message'] = 'Login successful.';
+
+       // Get user information
+       $user_info = $funObj->getUserByUsername($username);
+       
+       if ($user_info) {
+           $_SESSION['firstname'] = $user_info['firstname'];
+           $_SESSION['lastname'] = $user_info['lastname'];
+       }
+
+       header('Location: ../appointment.php');
+       exit();
     }
 } else {
     // Redirect if the request is not a POST request

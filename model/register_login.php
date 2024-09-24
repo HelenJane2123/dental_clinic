@@ -81,7 +81,36 @@
         
             return password_verify($password, $hashed_password); // Verify password
         }
-        
+
+         /*** Get all user accounts ***/
+        public function getAllUsers() {
+            $sql = "SELECT * FROM accounts";
+            $result = $this->db->query($sql);
+            
+            if ($result) {
+                $users = [];
+                while ($row = $result->fetch_assoc()) {
+                    $users[] = $row;
+                }
+                return $users;
+            } else {
+                return false; // Return false on failure
+            }
+        }
+            
+        public function getUserByUsername($username) {
+            $sql = "SELECT firstname, lastname FROM accounts WHERE username = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param('s', $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc();
+            } else {
+                return false;
+            }
+        }
     
         public function __destruct() {
             $this->db->close();

@@ -1,0 +1,173 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(45deg, #009C80, #66C7BE, #009C80);
+    animation: color 12s ease-in-out infinite;
+    margin: 0;
+}
+
+.navigation {
+    position: fixed;
+    top: 17.5px;
+    width: 500%;
+    padding: 10px 40px;
+    background-color: #bdf6e7;
+    align-items: center;
+}
+
+.search input {
+    padding: 5px 50px;
+}
+
+.sidebar {
+    position: fixed;
+    background-color: #bdf6e7;
+    bottom: 40px;
+    width: 15vw;
+    min-width: fit-content;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    left: 1px;
+}
+
+.sidebar .Name {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar li {
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;
+    color: #000;
+    background-color: #bdf6e7;
+    font-weight: bold;
+}
+
+.sidebar li:hover {
+    background: #066A58;
+    color: #5CF5DA;
+}
+
+.todo-container {
+    margin: 50px auto;
+    margin-right: 30vh;
+    background-color: #ffffff;
+}
+
+.todo-list li {
+    margin: 10px 0;
+    height: 10px;
+}
+.appointments ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.see-all {
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #00a693;
+}
+.patient-stats{
+    margin: 40px auto;
+    margin-right: 30vh;
+    background-color: #ffffff;
+}
+.patient-record {
+    margin: 200px;
+    margin-right: 20%;
+    margin-bottom: 10px;
+}
+
+.patient-record h2 {
+    color: #444;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #00a693;
+    color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-family: 'Arial', sans-serif;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+.update-btn {
+    background-color: #00a693;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+    background-color: #007f6a;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    height: auto;
+    width: 100vw;
+    padding-top: 0;
+    color: #000;
+    margin-top: auto;
+}
+
+.footer-bottom {
+    background-color: #bdf6e7;
+    width: 100vw;
+    padding: 1px 0;
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: 14px;
+    word-spacing: 2px;
+    text-transform: capitalize;
+}

@@ -1,0 +1,107 @@
+html{
+    height: 100%;
+}
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("LOGO.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.wrapper{
+    width: 450px;
+    height:  340px;
+    background: transparent;
+    border: 2px solid #009C80;
+    backdrop-filter: blur(20px);
+    color: #000000;
+    border-radius: 10px;
+    padding: 30px 40px;
+    }
+    
+.wrapper h1{
+        font-size: 36px;
+        text-align: center;
+        font-weight: bolder
+    }
+
+        
+    .wrapper .input-box{
+        position: relative;
+        width:  100%;
+        height: 50px;
+        margin:30px 0;
+    }
+    .input-box input{
+        width: 99%;
+        height: 100%;
+        background:transparent;
+        border: none;
+        outline:none;
+        border: 2px solid rgba(255, 255, 255, .2);
+        border-radius: 45px;
+        font-size: 16px;
+    }
+    
+    .input-box input::placeholder{
+        color: #000000;
+    }
+    .input-box i{
+        position: absolute;
+        right: 20px;
+        top: 30px;
+        transform: translateY(-50%);
+        font-size: 20px;
+    }
+
+    .wrapper .remember-forget{
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin: -14px 0 14px;
+    }
+    .remember-forget label input{
+        accent-color: #0000;
+        margin-right: 3px;
+    }
+    .remember-forget a {
+        text-decoration: none;
+    }
+    .remember-forget a:hover{
+        text-decoration: underline;
+    }
+
+    .wrapper .btn{
+        width: 100%;
+        height: 45px;
+        background: #009C80;
+        border: none;
+        outline: none;
+        border-radius: 40px;
+        box-shadow: 0 0 10px rgb(0,0,0,.1);
+        cursor: pointer;
+        font-size: 16px;
+        color: #fff;
+        font-weight: 600;
+    }
+    .wrapper .register-link{
+        font-size: 14.5px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .register-link p a{
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .register-link p a:hover{
+        text-decoration: underline;
+    }

@@ -1,0 +1,63 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+}
+body{
+    position: relative;
+    background: #009C80;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+::selection{
+    color: #ececee;
+    background: #bdf6e7;
+}
+.form{
+    position: relative;
+    background: #f2f3f7;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: -3px 3px 10px -5px rgb(0,0,0,0.2);
+    padding: 30px 30px;
+}
+.form h2{
+    font-size: 30px;
+    font-weight: 700;
+}
+.fields-input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0
+}
+.otp-field{
+    border-radius: 5px;
+    font-size: 50px;
+    height: 60px;
+    width: 50px;
+    border: 3px solid #cacaca;
+    margin: 1%;
+    text-align: center;
+    outline: none;
+}
+.otp-field::-webkit-inner-spin-button,
+.otp-field::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin:0;
+}
+.otp-field:valid{
+    border-color:#009C80;
+    box-shadow: 0 10px 10px -5px rgb(0,0,0,0.25);
+}
+@media only screen and (max-width: 375px){
+    .otp-field{
+        font-size: 50px;
+        height: 60px;
+        width: 50px;
+    }
+}
