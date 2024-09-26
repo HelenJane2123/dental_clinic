@@ -22307,3 +22307,32 @@ dl li {
     background-color: #fff;
     -webkit-box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2); }
+
+    .tooltip {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        z-index: 1000;
+        display: none; /* Initially hidden */
+    }
+
+    .status-legend {
+        display: flex;
+        margin-bottom: 20px; /* Space below the legend */
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        margin-right: 15px; /* Space between legend items */
+    }
+    
+    .legend-color {
+        width: 15px;
+        height: 15px;
+        border-radius: 3px;
+        margin-right: 5px;
+    }

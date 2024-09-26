@@ -3,7 +3,7 @@ session_start();
 include_once('inc/header.php');
 ?>
     <div class="wrapper-login">
-        <form action="login/login_account.php" id="login_form" class="needs-validation" method="POST" novalidate enctype="multipart/form-data">
+        <form action="controller/login_account.php" id="login_form" class="needs-validation" method="POST" novalidate enctype="multipart/form-data">
             <h1>Log in to Dental Clinic</h1>
             <?php 
                 if (isset($_SESSION['message'])) : 

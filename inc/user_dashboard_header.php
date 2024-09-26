@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php
+    session_start();
+    if (!isset($_SESSION['username'])) {
+        header('Location: login.php'); // Redirect to login page if not logged in
+        exit();
+    }
+  require_once ('model/user_dashboard.php');
+  $appointment = new UserDashboard();
+?>
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -39,13 +48,13 @@
           <span></span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/my_appointments.php">
+          <a class="nav-link" href="my_appointments.php">
             <i class="mdi mdi-grid-large menu-icon"></i>
             <span class="menu-title">My Appointments</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/my_profile.php">
+          <a class="nav-link" href="my_profile.php">
             <i class="mdi mdi-emoticon menu-icon"></i>
             <span class="menu-title">My Profile</span>
           </a>
