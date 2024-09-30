@@ -111,36 +111,31 @@
         
         // Block all Saturdays
         dayRender: function(info) {
-            const today = new Date();
-            const isPastDate = info.date < today;
-
             // Block all Saturdays
             if (info.date.getDay() === 6) {
-                info.el.style.backgroundColor = '#f0f0f0'; // Change background color for Saturday
-                info.el.style.pointerEvents = 'none'; // Disable interaction
-                info.el.innerHTML = '<div style="text-align: center; padding-top: 10px; color: red;">Closed</div>'; // Add closed text
+                info.el.style.backgroundColor = '#f0f0f0';
+                info.el.style.pointerEvents = 'none';
+                info.el.innerHTML = '<div style="text-align: center; padding-top: 10px; color: red;">Closed</div>';
             } else {
-                // For past dates, style differently but show the date
-                if (isPastDate) {
+                // For past dates
+                if (info.date < new Date()) {
                     info.el.style.backgroundColor = '#f0f0f0'; // Light gray for past dates
                     info.el.style.color = '#aaa'; // Gray text for past dates
                     info.el.style.pointerEvents = 'none'; // Disable interaction
-                    info.el.innerHTML = '<div style="text-align: center; padding-top: 10px; color: red;">Cannot choose past dates</div>';
+                    info.el.innerHTML = `<div style="text-align: center; padding-top: 10px;">${info.date.getDate()}</div>`;
                 } else {
-                    // Add hover effect for future dates
                     info.el.classList.add('hoverable');
                 }
-                // Display the date number in the center
-                info.el.innerHTML = `<div style="text-align: center; padding-top: 10px;">${info.date.getDate()}</div>`;
             }
         },
-
-
         dateClick: function(info) {
-            // Open the modal and set the date only for today and future dates
             if (info.date >= new Date()) {
                 document.getElementById('appointmentDate').value = info.date.toISOString().split('T')[0];
                 $('#appointmentModal').modal('show');
+
+                $('.close, .btn-secondary').on('click', function() {
+                $('#appointmentModal').modal('hide'); // Hide the modal
+            });
             } else {
                 alert('You cannot select past dates.');
             }
@@ -163,39 +158,6 @@
              $('.close, .btn-secondary').on('click', function() {
                 $('#appointmentDetailsModal').modal('hide'); // Hide the modal
             });
-        },
-
-        dayRender: function(info) {
-            if (info.date.getDay() === 6) {
-                info.el.style.backgroundColor = '#f0f0f0';
-                info.el.style.pointerEvents = 'none';
-                info.el.innerHTML = '<div style="text-align: center; padding-top: 10px; color: red;">Closed</div>';
-            } else {
-                info.el.classList.add('hoverable');
-
-                info.el.addEventListener('mouseenter', function() {
-                    hoveredDate = info.date; // Set hovered date
-                });
-
-                info.el.addEventListener('mouseleave', function() {
-                    hoveredDate = null; // Clear hovered date
-                });
-            }
-        },
-
-        dateClick: function(info) {
-            // Set the date in the form
-            document.getElementById('appointmentDate').value = info.date.toISOString().split('T')[0]; // Set to the clicked date
-            // Show the modal
-            $('#appointmentModal').modal('show');
-
-             // Attach an event listener to the close button
-             $('.close, .btn-secondary').on('click', function() {
-                $('#appointmentModal').modal('hide'); // Hide the modal
-            });
-            },
-            dateHover: function(info) {
-            hoveredDate = info.date; // Store the currently hovered date
         },
       });
 
