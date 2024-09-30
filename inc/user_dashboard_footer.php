@@ -162,8 +162,20 @@
       });
 
       calendar.render();
+
+      //automatically cancel appointment
+      const pendingAppointments = events.filter(event => event.status === 'Pending');
+      const today = new Date().toISOString().split('T')[0];
+
+      pendingAppointments.forEach(appointment => {
+          if (appointment.start === today) {
+              alert(`Appointment for ${appointment.title} is still pending. It will be automatically canceled.`);
+              window.location.reload();
+          }
+      });
     });
 
+  
     function submitAppointment() {
         // Add logic to handle form submission
         //alert("Appointment booked successfully!");

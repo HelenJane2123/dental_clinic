@@ -25,6 +25,10 @@
     $canceledAppointmentsCount = $appointment->get_canceled_appointments_count();
     $todaysAppointments = $appointment->get_todays_appointments();
 
+    //search and cancel pending appointments today
+    $message = $appointment->automatic_cancel_appointment();
+
+
 ?>
 <head>
   <!-- Required meta tags -->

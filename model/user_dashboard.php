@@ -220,7 +220,7 @@
 
         // Method to get count of canceled appointments
         public function get_canceled_appointments_count() {
-            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Cancelled'";
+            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Canceled'";
             $result = $this->db->query($query);
             $row = $result->fetch_assoc();
             return $row['count']; // Return the count of canceled appointments
@@ -247,6 +247,40 @@
         
             // Check if the query was successful and return the results
             return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        }
+
+        public function automatic_cancel_appointment() {
+            // Get today's date
+            $today = date('Y-m-d');
+
+            // Fetch all pending appointments scheduled for today
+            $sql = "SELECT id FROM appointments WHERE status = 'Pending' AND appointment_date = ?";
+            $stmt = $this->db->prepare($sql);  // Changed from $this->conn to $this->db
+            $stmt->bind_param('s', $today);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            // Check if any pending appointments exist
+            if ($result->num_rows > 0) {
+                // Loop through pending appointments and cancel them
+                while ($row = $result->fetch_assoc()) {
+                    $appointmentId = $row['id'];
+
+                    // Update the status of the appointment to 'Canceled'
+                    $cancelSql = "UPDATE appointments SET status = 'Canceled', canceled_at = now() WHERE id = ?";
+                    $cancelStmt = $this->db->prepare($cancelSql);  // Also changed to $this->db
+                    $cancelStmt->bind_param('i', $appointmentId);
+                    $cancelStmt->execute();
+                }
+
+                // Free the statement and result
+                $stmt->close();
+                $cancelStmt->close();
+
+                return "Pending appointments have been canceled.";
+            } else {
+                return "No pending appointments to cancel for today.";
+            }
         }
     }
 ?>
