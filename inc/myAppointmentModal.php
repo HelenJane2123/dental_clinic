@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="controller/set_appointment.php" method="POST" name="appointmentForm" novalidate enctype="multipart/form-data" id="appointmentForm">
+                <form action="controller/setAppointment.php" method="POST" name="appointmentForm" novalidate enctype="multipart/form-data" id="appointmentForm">
                     <div class="form-group">
                         <label for="appointmentType">Appointment For:</label>
                         <div>
@@ -118,7 +118,7 @@
             Are you sure you want to delete this appointment?
         </div>
         <div class="modal-footer">
-            <form method="POST" action="controller/delete_appointment.php">
+            <form method="POST" action="controller/deleteAppointment.php">
                 <input type="hidden" name="appointment_id" id="appointment_id" value="">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                 <button type="submit" class="btn btn-danger">Yes, delete</button>
@@ -137,7 +137,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="controller/edit_appointment.php" method="POST">
+            <form action="controller/editAppointment.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="appointment_id" id="edit_appointment_id">
                     

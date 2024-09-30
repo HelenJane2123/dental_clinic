@@ -7,7 +7,7 @@
         header('Location: login.php'); // Redirect to login page if not logged in
         exit();
     }
-  require_once ('model/user_dashboard.php');
+  require_once ('model/userDashboard.php');
   $appointment = new UserDashboard();
 
     // Fetch appointments for the logged-in member

@@ -1,5 +1,5 @@
 <?php
-    include('../model/register_login.php'); 
+    include('../model/registerLogin.php'); 
     session_start();   
     // initializing variables
     $email_address  = "";

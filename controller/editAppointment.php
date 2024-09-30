@@ -1,5 +1,5 @@
 <?php
-    include('../model/user_dashboard.php');
+    include('../model/userDashboard.php');
     session_start();
     
     // initializing variables

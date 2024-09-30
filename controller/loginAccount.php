@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../model/register_login.php');
+include('../model/registerLogin.php');
 
 $funObj = new User();
 

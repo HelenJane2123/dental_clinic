@@ -40,7 +40,7 @@
                     </span>
                  </div>
             <?php endif ?>
-            <form action="controller/register_account.php"  method="post"  name="register" id="register" class="needs-validation-registration" novalidate enctype="multipart/form-data">
+            <form action="controller/registerAccount.php"  method="post"  name="register" id="register" class="needs-validation-registration" novalidate enctype="multipart/form-data">
               <div class="row gy-3 overflow-hidden">
                 <div class="col-12">
                     <div class="form-group row">

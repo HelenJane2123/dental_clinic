@@ -1,5 +1,5 @@
 <?php
-    include_once("inc/user_dashboard_header.php");
+    include_once("inc/userDashboardHeader.php");
 ?>
     <div class="container-fluid page-body-wrapper">
       <!-- partial:./partials/_navbar.html -->
@@ -273,6 +273,6 @@
           <!-- row end -->
           
 <?php
-    include_once("inc/my_appointment_modal.php");
-    include_once("inc/user_dashboard_footer.php");
+    include_once("inc/myAppointmentModal.php");
+    include_once("inc/userDashboardFooter.php");
 ?>
