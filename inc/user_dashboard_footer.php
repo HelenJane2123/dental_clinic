@@ -45,6 +45,9 @@
   <script src='vendors/fullcalendar/packages/interaction/main.js'></script>
   <script src='vendors/fullcalendar/packages/daygrid/main.js'></script>
 
+  <!-- DataTables JS -->
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const statusColors = {
@@ -111,30 +114,6 @@
           }
         },
         
-        // eventMouseEnter: function(info) {
-        //     var tooltip = document.createElement('div');
-        //     tooltip.className = 'tooltip';
-        //     tooltip.innerHTML = `
-        //         <strong>Description:</strong> ${info.event.title}<br>
-        //         <strong>Status:</strong> ${info.event.extendedProps.status || 'No status available'}
-        //     `;
-
-        //     document.body.appendChild(tooltip);
-
-        //     // Position the tooltip near the cursor
-        //     tooltip.style.left = (info.jsEvent.pageX + 10) + 'px';
-        //     tooltip.style.top = (info.jsEvent.pageY + 10) + 'px';
-
-        //     // Store the tooltip in the event's extendedProps for later removal
-        //     info.event.extendedProps.tooltip = tooltip;
-        // },
-        // eventMouseLeave: function(info) {
-        //     // Remove the tooltip
-        //     if (info.event.extendedProps.tooltip) {
-        //         document.body.removeChild(info.event.extendedProps.tooltip);
-        //         delete info.event.extendedProps.tooltip;
-        //     }
-        // },
         // Add event click handling
         eventClick: function(info) {
             // Populate modal with event details
@@ -186,12 +165,40 @@
         $(document).ready(function() {
             $('#viewAppointmentModal').modal('show'); // Show the modal
 
-             // Attach an event listener to the close button
+            // Attach an event listener to the close button
             $('.close, .btn-secondary').on('click', function() {
                 $('#viewAppointmentModal').modal('hide'); // Hide the modal
             });
         });
     <?php endif; ?>
+
+    $(document).ready( function () {
+      $('#appointmentTable').DataTable({
+          "paging": true,       // Enable pagination
+          "searching": true,    // Enable search filter
+          "ordering": true,     // Enable sorting
+          "info": true,         // Display table information
+          "autoWidth": false    // Disable automatic column width calculation
+      });
+    });
+
+    function setAppointmentId(appointmentId) {
+      document.getElementById('appointment_id').value = appointmentId;
+    }
+
+    function openEditModal(id, date, time, notes, status) {
+        document.getElementById('edit_appointment_id').value = id;
+        document.getElementById('edit_appointment_date').value = date ? date : ''; // Set date or leave empty
+        document.getElementById('edit_appointment_time').value = time ? time : ''; // Set time or leave empty
+        document.getElementById('edit_notes').value = notes ? notes : ''; // Set notes or leave empty
+        document.getElementById('status').value = status; // Set the current status
+        $('#editAppointmentModal').modal('show'); // Show the modal
+
+        // Attach an event listener to the close button
+        $('.close, .btn-secondary').on('click', function() {
+            $('#editAppointmentModal').modal('hide'); // Hide the modal
+        });
+    }
   </script>
 </body>
 

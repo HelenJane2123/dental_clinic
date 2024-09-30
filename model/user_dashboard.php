@@ -155,5 +155,48 @@
             return $appointment;
 
         }
+
+        public function delete_appointment($appointmentId) {
+            $query = "DELETE FROM appointments WHERE id = ?";
+            
+            if ($stmt = $this->db->prepare($query)) {
+                $stmt->bind_param("i", $appointmentId);
+        
+                if ($stmt->execute()) {
+                    return true; // Appointment successfully deleted
+                } else {
+                    return false; // Error during deletion
+                }
+        
+                $stmt->close();
+            }
+        
+            return false; // Error preparing the query
+        }
+
+        public function update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes) {
+            $query = "UPDATE appointments SET 
+                        appointment_date = ?, 
+                        appointment_time = ?, 
+                        status = ?, 
+                        notes = ? 
+                      WHERE id = ?";
+            
+            // Prepare and execute the statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind the parameters
+                $stmt->bind_param("ssssi", $appointmentDate, $appointmentTime, $status, $notes, $appointmentId);
+                
+                // Execute the statement and check if successful
+                $result = $stmt->execute();
+                $stmt->close(); // Close the statement
+        
+                return $result; // Return the result of the execute (true on success, false on failure)
+            } else {
+                return false; // Return false if the statement could not be prepared
+            }
+        }
+        
+        
     }
 ?>

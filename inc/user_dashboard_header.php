@@ -19,6 +19,9 @@
       // Fetch appointment details
       $appointmentDetails = $appointment->view_appointment_by_id($appointmentId); // Ensure this method exists
     }
+
+    //get appointment by id
+    
 ?>
 <head>
   <!-- Required meta tags -->
@@ -35,6 +38,9 @@
   <link rel="stylesheet" href="css/dashboard/style.css">
   <link href='vendors/fullcalendar/packages/core/main.css' rel='stylesheet' />
   <link href='vendors/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
   <!-- endinject -->
   <link rel="shortcut icon" href="img/images/favicon.png" />
 </head>

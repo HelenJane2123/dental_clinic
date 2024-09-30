@@ -36,7 +36,7 @@
                               ?>
                             </p>
                             <div class="table-responsive">
-                              <table class="table table-hover">
+                              <table id="appointmentTable" class="table table-hover">
                                   <thead>
                                       <tr>
                                           <th>Member ID</th>
@@ -59,21 +59,23 @@
                                                   <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
                                                   <td>
-                                                      <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
-                                                          <?= htmlspecialchars($appointment['status']) ?>
-                                                      </label>
+                                                    <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : 
+                                                        ($appointment['status'] == 'Confirmed' ? 'badge-success' : 
+                                                        ($appointment['status'] == 'Rescheduled' ? 'badge-info' : 'badge-warning'))) ?>">
+                                                        <?= htmlspecialchars($appointment['status']) ?>
+                                                    </label>
                                                   </td>
                                                   <td><?= htmlspecialchars($appointment['notes']) ?></td>
                                                   <td>
-                                                      <button class="btn btn-info btn-sm" onclick="window.location.href='my_appointments.php?id=<?= $appointment['id'] ?>'" title="View">
+                                                        <button class="btn btn-info btn-sm" onclick="window.location.href='my_appointments.php?id=<?= $appointment['id'] ?>'" title="View">
                                                           <i class="mdi mdi-eye"></i>
-                                                      </button>
-                                                      <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>)" title="Edit">
-                                                          <i class="mdi mdi-pencil"></i>
-                                                      </button>
-                                                      <button class="btn btn-danger btn-sm" onclick="deleteAppointment(<?= $appointment['id'] ?>)" title="Delete">
-                                                          <i class="mdi mdi-delete"></i>
-                                                      </button>
+                                                        </button>
+                                                        <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>')" title="Edit">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">
+                                                            <i class="mdi mdi-delete"></i>
+                                                        </button>
                                                   </td>
                                               </tr>
                                           <?php endforeach; ?>
@@ -94,113 +96,7 @@
             </div>
           </div>
           <!-- row end -->
-      <!-- Add Appointment Modal -->
-      <div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id="appointmentModalLabel">Book an Appointment</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <form action="controller/set_appointment.php" method="POST" name="appointmentForm" novalidate enctype="multipart/form-data" id="appointmentForm">
-                          <div class="form-group">
-                              <label for="appointmentType">Appointment For:</label>
-                              <div>
-                                  <label>
-                                      <input type="radio" name="appointmentType" value="myself" onclick="toggleNameFields(this)" checked> For Myself
-                                  </label>
-                                  <label>
-                                      <input type="radio" name="appointmentType" value="newPatient" onclick="toggleNameFields(this)"> New Patient
-                                  </label>
-                              </div>
-                          </div>
-                          <input type="hidden" name="old_firstname" class="form-control" value="<?=$_SESSION['firstname']?>" id="old_firstname">
-                          <input type="hidden" name="old_lastname" class="form-control" value="<?=$_SESSION['lastname']?>" id="old_lastname">
-                          <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>"  id="member_id">
-                          <div id="nameFields">
-                              <div class="form-group">
-                                  <label for="userName">First Name</label>
-                                  <input type="text" name="firstname" class="form-control" id="userName" required>
-                              </div>
-                              <div class="form-group">
-                                  <label for="lastName">Last Name</label>
-                                  <input type="text" name="lastname" class="form-control" id="lastName" required>
-                              </div>
-                          </div>
-                          <div class="form-group">
-                                  <label for="lastName">Contact Number</label>
-                                  <input type="text" name="contactnumber" class="form-control" id="lastName" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="lastName">Email Address</label>
-                              <input type="text" name="emailaddress" class="form-control" id="lastName" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="appointmentDate">Appointment Date</label>
-                              <input type="date" class="form-control" name="appointmentDate" id="appointmentDate" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="appointmentTime">Appointment Time</label>
-                              <input type="time" class="form-control" name="appointmentTime" id="appointmentTime" required>
-                          </div>
-                          <div class="form-group">
-                              <label for="services">Dental Services</label>
-                              <select class="form-control" id="services" name="services" required>
-                                  <option value="" disabled selected>Select a service</option>
-                                  <option value="cleaning">Teeth Cleaning</option>
-                                  <option value="extraction">Tooth Extraction</option>
-                                  <option value="filling">Dental Filling</option>
-                                  <option value="checkup">Dental Checkup</option>
-                                  <option value="whitening">Teeth Whitening</option>
-                                  <option value="brace_adjustment">Brace Adjustment</option>
-                                  <option value="brace_consultation">Braces Consultation</option>
-                                  <option value="brace_installation">Dental Braces Installation</option>
-                              </select>
-                          </div>
-                          <div class="form-group">
-                              <label for="notes">Additional Notes</label>
-                              <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
-                          </div>
-                      </form>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary" onclick="submitAppointment()">Submit</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!-- Modal for Viewing Appointment Details -->
-      <!-- Modal for Viewing Appointment Details -->
-      <div class="modal fade" id="viewAppointmentModal" tabindex="-1" role="dialog" aria-labelledby="viewAppointmentModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id="viewAppointmentModalLabel">Appointment Details</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-                  <div class="modal-body">
-                      <?php if (isset($appointmentDetails)): ?>
-                          <p><strong>Appointment Date:</strong> <span><?= htmlspecialchars($appointmentDetails['appointment_date']) ?></span></p>
-                          <p><strong>Appointment Time:</strong> <span><?= htmlspecialchars($appointmentDetails['appointment_time']) ?></span></p>
-                          <p><strong>Status:</strong> <span><?= htmlspecialchars($appointmentDetails['status']) ?></span></p>
-                          <p><strong>Notes:</strong> <span><?= htmlspecialchars($appointmentDetails['notes']) ?></span></p>
-                          <p><strong>Services:</strong> <span><?= htmlspecialchars($appointmentDetails['services']) ?></span></p>
-                      <?php else: ?>
-                          <p>No appointment details found.</p>
-                      <?php endif; ?>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  </div>
-              </div>
-          </div>
-      </div>
 <?php
+    include_once("inc/my_appointment_modal.php");
     include_once("inc/user_dashboard_footer.php");
 ?>
