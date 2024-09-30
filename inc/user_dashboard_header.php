@@ -20,8 +20,11 @@
       $appointmentDetails = $appointment->view_appointment_by_id($appointmentId); // Ensure this method exists
     }
 
-    //get appointment by id
-    
+    $upcomingAppointments = $appointment->get_upcoming_appointments();
+    $confirmedAppointmentsCount = $appointment->get_confirmed_appointments_count();
+    $canceledAppointmentsCount = $appointment->get_canceled_appointments_count();
+    $todaysAppointments = $appointment->get_todays_appointments();
+
 ?>
 <head>
   <!-- Required meta tags -->

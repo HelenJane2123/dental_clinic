@@ -22336,3 +22336,12 @@ dl li {
         border-radius: 3px;
         margin-right: 5px;
     }
+
+    .hoverable {
+        cursor: pointer; /* Show pointer cursor on hover */
+    }
+    
+    .hoverable:hover {
+        background-color: rgba(0, 123, 255, 0.3); /* Light blue background on hover */
+        border: 2px dashed #007BFF; /* Dashed border on hover */
+    }

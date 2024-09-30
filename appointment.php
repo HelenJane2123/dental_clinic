@@ -113,108 +113,166 @@
       <!-- partial -->
       <div class="main-panel">
         <div class="content-wrapper">
-        <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Set Appointments</h4>
-                    <div class="status-legend">
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #FFC107;"></div>
-                            <span>Pending</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #28A745;"></div>
-                            <span>Confirmed</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #DC3545;"></div>
-                            <span>Canceled</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #007BFF;"></div>
-                            <span>Completed</span>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div id='calendar'></div>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- row end -->
           <div class="row">
-            <div class="col-lg-12 grid-margin stretch-card">
+            <div class="col-lg-8 grid-margin stretch-card"> <!-- Adjusted width for main content -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Set Appointments</h4>
+                        <div class="status-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #FFC107;"></div>
+                                <span>Pending</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #28A745;"></div>
+                                <span>Confirmed</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #DC3545;"></div>
+                                <span>Canceled</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #007BFF;"></div>
+                                <span>Completed</span>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <div id='calendar'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Appointment Notifications Column -->
+            <div class="col-lg-4 grid-margin stretch-card"> <!-- New column for notifications -->
               <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">My Appointments</h4>
-                  <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Member ID</th>
-                                <th>Name</th>
-                                <th>Patient ID</th>
-                                <th>Appointment Date</th>
-                                <th>Appointment Time</th>
-                                <th>Status</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($appointments)) : ?>
-                                <?php foreach ($appointments as $appointment) : ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($appointment['member_id']) ?></td>
-                                        <td><?= htmlspecialchars($appointment['first_name'])." ".htmlspecialchars($appointment['last_name']) ?></td>
-                                        <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
-                                        <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
-                                        <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
-                                        <td>
-                                            <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
-                                                <?= htmlspecialchars($appointment['status']) ?>
-                                            </label>
-                                        </td>
-                                        <td><?= htmlspecialchars($appointment['notes']) ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <tr>
-                                    <td colspan="5" class="text-center">No appointments found.</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                  <div class="card-body">
+                      <h4 class="card-title">Appointment Notifications</h4>
+                      <ul class="list-group">
+                          <?php 
+                          $serviceNames = [
+                              'cleaning' => 'Teeth Cleaning',
+                              'extraction' => 'Tooth Extraction',
+                              'filling' => 'Dental Filling',
+                              'checkup' => 'Dental Checkup',
+                              'whitening' => 'Teeth Whitening',
+                              'brace_adjustment' => 'Brace Adjustment',
+                              'brace_consultation' => 'Braces Consultation',
+                              'brace_installation' => 'Dental Braces Installation'
+                          ];                                
+
+                          // Upcoming Appointments
+                          if (!empty($upcomingAppointments)): ?>
+                              <li class="list-group-item">
+                                  <strong>Upcoming Appointments:</strong>
+                                  <ul class="list-unstyled">
+                                      <?php foreach ($upcomingAppointments as $appointment): ?>
+                                          <li class="mt-2">
+                                              <strong><?= htmlspecialchars($appointment['appointment_date']) ?> at <?= htmlspecialchars($appointment['appointment_time']) ?></strong>
+                                              <p>
+                                                  <?php
+                                                      // Get the service name based on the appointment's services
+                                                      $serviceName = isset($serviceNames[$appointment['services']]) ? $serviceNames[$appointment['services']] : 'Unknown Service';
+                                                      echo "Service: " . htmlspecialchars($serviceName);
+                                                  ?>
+                                              </p>
+                                          </li>
+                                      <?php endforeach; ?>
+                                  </ul>
+                              </li>
+                          <?php else: ?>
+                              <li class="list-group-item">No upcoming appointments.</li>
+                          <?php endif; ?>
+
+                          <!-- Today's Appointments -->
+                          <?php if (!empty($todaysAppointments)): ?>
+                              <li class="list-group-item">
+                                  <strong>Appointments for Today:</strong>
+                                  <ul class="list-unstyled">
+                                      <?php foreach ($todaysAppointments as $appointment): ?>
+                                          <li class="mt-2">
+                                              <strong><?= htmlspecialchars($appointment['appointment_date']) ?> at <?= htmlspecialchars($appointment['appointment_time']) ?></strong>
+                                              <p>
+                                                  <?php
+                                                      // Get the service name based on the appointment's services
+                                                      $serviceName = isset($serviceNames[$appointment['services']]) ? $serviceNames[$appointment['services']] : 'Unknown Service';
+                                                      echo "Service: " . htmlspecialchars($serviceName);
+                                                  ?>
+                                              </p>
+                                          </li>
+                                      <?php endforeach; ?>
+                                  </ul>
+                              </li>
+                          <?php else: ?>
+                              <li class="list-group-item">No appointments for today.</li>
+                          <?php endif; ?>
+
+                          <!-- Confirmed Appointments Count -->
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                              Confirmed
+                              <span class="badge bg-success rounded-pill"><?= $confirmedAppointmentsCount ?></span>
+                          </li>
+
+                          <!-- Canceled Appointments Count -->
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                              Canceled
+                              <span class="badge bg-danger rounded-pill"><?= $canceledAppointmentsCount ?></span>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <!-- row end -->
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">My Appointments</h4>
+                    <div class="table-responsive">
+                      <table id="appointmentTable" class="table table-hover">
+                          <thead>
+                              <tr>
+                                  <th>Member ID</th>
+                                  <th>Name</th>
+                                  <th>Patient ID</th>
+                                  <th>Appointment Date</th>
+                                  <th>Appointment Time</th>
+                                  <th>Status</th>
+                                  <th>Notes</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <?php if (!empty($appointments)) : ?>
+                                  <?php foreach ($appointments as $appointment) : ?>
+                                      <tr>
+                                          <td><?= htmlspecialchars($appointment['member_id']) ?></td>
+                                          <td><?= htmlspecialchars($appointment['first_name'])." ".htmlspecialchars($appointment['last_name']) ?></td>
+                                          <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
+                                          <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
+                                          <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
+                                          <td>
+                                              <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
+                                                  <?= htmlspecialchars($appointment['status']) ?>
+                                              </label>
+                                          </td>
+                                          <td><?= htmlspecialchars($appointment['notes']) ?></td>
+                                      </tr>
+                                  <?php endforeach; ?>
+                              <?php else : ?>
+                                  <tr>
+                                      <td colspan="5" class="text-center">No appointments found.</td>
+                                  </tr>
+                              <?php endif; ?>
+                          </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
           <!-- row end -->
-          <!-- Appointment Details Modal -->
-          <div class="modal fade" id="appointmentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title" id="appointmentDetailsModalLabel">Appointment Details</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                          </button>
-                      </div>
-                      <div class="modal-body">
-                          <div id="appointmentDetailsContent">
-                              <!-- Details will be populated here -->
-                          </div>
-                      </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        
-
+          
 <?php
+    include_once("inc/my_appointment_modal.php");
     include_once("inc/user_dashboard_footer.php");
 ?>

@@ -196,7 +196,57 @@
                 return false; // Return false if the statement could not be prepared
             }
         }
+
+        public function get_appointments_summary() {
+            $query = "SELECT status, COUNT(*) as count FROM appointments WHERE appointment_date >= CURDATE() GROUP BY status";
         
+            $result = $this->db->query($query);
+            $summary = [];
         
+            while ($row = $result->fetch_assoc()) {
+                $summary[$row['status']] = $row['count'];
+            }
+        
+            return $summary;
+        } 
+
+       // Method to get count of confirmed appointments
+        public function get_confirmed_appointments_count() {
+            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Confirmed'";
+            $result = $this->db->query($query);
+            $row = $result->fetch_assoc();
+            return $row['count']; // Return the count of confirmed appointments
+        }
+
+        // Method to get count of canceled appointments
+        public function get_canceled_appointments_count() {
+            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Cancelled'";
+            $result = $this->db->query($query);
+            $row = $result->fetch_assoc();
+            return $row['count']; // Return the count of canceled appointments
+        }
+
+        // Your existing method for getting upcoming appointments
+        public function get_upcoming_appointments() {
+            $query = "SELECT appointment_date, appointment_time, services FROM appointments 
+                  WHERE appointment_date = CURDATE() + INTERVAL 2 DAY 
+                  AND status = 'Confirmed'";
+            $result = $this->db->query($query);
+            
+            return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        }
+
+        public function get_todays_appointments() {
+            // Define the query to select today's confirmed appointments
+            $query = "SELECT appointment_date, appointment_time, notes, services
+                      FROM appointments 
+                      WHERE appointment_date = CURDATE() AND status = 'Confirmed'";
+        
+            // Execute the query
+            $result = $this->db->query($query);
+        
+            // Check if the query was successful and return the results
+            return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        }
     }
 ?>
