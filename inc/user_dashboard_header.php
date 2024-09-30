@@ -9,6 +9,16 @@
     }
   require_once ('model/user_dashboard.php');
   $appointment = new UserDashboard();
+
+    // Fetch appointments for the logged-in member
+    $member_id = $_SESSION['member_id']; // Get the member ID from session
+    $appointments = $appointment->get_all_appointments_by_member_id($member_id); // Fetch appointments
+
+    if (isset($_GET['id'])) {
+      $appointmentId = $_GET['id'];
+      // Fetch appointment details
+      $appointmentDetails = $appointment->view_appointment_by_id($appointmentId); // Ensure this method exists
+    }
 ?>
 <head>
   <!-- Required meta tags -->

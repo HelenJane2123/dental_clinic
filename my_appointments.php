@@ -1,15 +1,5 @@
 <?php
     include_once("inc/user_dashboard_header.php");
-
-    // Fetch appointments for the logged-in member
-    $member_id = $_SESSION['member_id']; // Get the member ID from session
-    $appointments = $appointment->get_all_appointments_by_member_id($member_id); // Fetch appointments
-
-    if (isset($_GET['id'])) {
-      $appointmentId = $_GET['id'];
-      // Fetch appointment details
-      $appointmentDetails = $appointment->view_appointment_by_id($appointmentId); // Ensure this method exists
-    }
 ?>
     <div class="container-fluid page-body-wrapper">
       <?php  include_once("inc/search_header.php"); ?>
@@ -49,6 +39,9 @@
                               <table class="table table-hover">
                                   <thead>
                                       <tr>
+                                          <th>Member ID</th>
+                                          <th>Name</th>
+                                          <th>Patient ID</th>
                                           <th>Appointment Date</th>
                                           <th>Appointment Time</th>
                                           <th>Status</th>
@@ -60,6 +53,9 @@
                                       <?php if (!empty($appointments)) : ?>
                                           <?php foreach ($appointments as $appointment) : ?>
                                               <tr>
+                                                  <td><?= htmlspecialchars($appointment['member_id']) ?></td>
+                                                  <td><?= htmlspecialchars($appointment['first_name'])." ".htmlspecialchars($appointment['last_name']) ?></td>
+                                                  <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
                                                   <td>
@@ -88,7 +84,7 @@
                                       <?php endif; ?>
                                   </tbody>
                               </table>
-                          </div>
+                            </div>
                           </div>
                         </div>
                       </div>

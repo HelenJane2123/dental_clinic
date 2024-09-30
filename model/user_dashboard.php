@@ -90,7 +90,10 @@
         
         public function get_all_appointments_by_member_id($member_id) {
             // Prepare the SQL statement
-            $query = "SELECT * FROM appointments WHERE member_id = ?";
+            $query = "SELECT a.*, p.first_name, p.last_name 
+                            FROM appointments AS a
+                            JOIN patients AS p ON a.patient_id = p.patient_id
+                            WHERE a.member_id = ?";
 
             // Initialize the statement
             $stmt = $this->db->prepare($query); // Use $this->db instead of $this->conn

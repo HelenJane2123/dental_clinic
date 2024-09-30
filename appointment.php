@@ -1,9 +1,5 @@
 <?php
     include_once("inc/user_dashboard_header.php");
-
-    // Fetch appointments for the logged-in member
-    $member_id = $_SESSION['member_id']; // Get the member ID from session
-    $appointments = $appointment->get_all_appointments_by_member_id($member_id); // Fetch appointments
 ?>
     <div class="container-fluid page-body-wrapper">
       <!-- partial:./partials/_navbar.html -->
@@ -154,53 +150,41 @@
                 <div class="card-body">
                   <h4 class="card-title">My Appointments</h4>
                   <div class="table-responsive">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>
-                            Appointment Description
-                          </th>
-                          <th>
-                            Date
-                          </th>
-                          <th>
-                            Remarks
-                          </th>
-                          <th>
-                            Status
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td class="py-1">
-                            Brace Adjustment
-                          </td>
-                          <td>
-                            September 9, 2024
-                          </td>
-                          <td>
-                            None
-                          </td>
-                          <td>
-                            Upcoming
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="py-1">
-                            Tooth Extraction
-                          </td>
-                          <td>
-                            September 9, 2024
-                          </td>
-                          <td>
-                            for brace adjustment
-                          </td>
-                          <td>
-                            Upcoming
-                          </td>
-                        </tr>
-                      </tbody>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Member ID</th>
+                                <th>Name</th>
+                                <th>Patient ID</th>
+                                <th>Appointment Date</th>
+                                <th>Appointment Time</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($appointments)) : ?>
+                                <?php foreach ($appointments as $appointment) : ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($appointment['member_id']) ?></td>
+                                        <td><?= htmlspecialchars($appointment['first_name'])." ".htmlspecialchars($appointment['last_name']) ?></td>
+                                        <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
+                                        <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
+                                        <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
+                                        <td>
+                                            <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
+                                                <?= htmlspecialchars($appointment['status']) ?>
+                                            </label>
+                                        </td>
+                                        <td><?= htmlspecialchars($appointment['notes']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="5" class="text-center">No appointments found.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
                     </table>
                   </div>
                 </div>
