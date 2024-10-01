@@ -124,7 +124,7 @@
                     info.el.style.backgroundColor = '#f0f0f0'; // Light gray for past dates
                     info.el.style.color = '#aaa'; // Gray text for past dates
                     info.el.style.pointerEvents = 'none'; // Disable interaction
-                    info.el.innerHTML = `<div style="text-align: center; padding-top: 10px;">${info.date.getDate()}</div>`;
+                    //info.el.innerHTML = `<div style="text-align: center; padding-top: 10px;">${info.date.getDate()}</div>`;
                 } else {
                     info.el.classList.add('hoverable');
                 }
