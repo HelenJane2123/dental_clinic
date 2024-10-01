@@ -54,7 +54,8 @@
           'Pending': '#FFC107',   // Yellow
           'Confirmed': '#28A745', // Green
           'Canceled': '#DC3545',  // Red
-          'Completed': '#007BFF'  // Blue
+          'Completed': '#007BFF',  // Blue
+          'Re-schedule': '#A020F0'  // Purple
       };
       let hoveredDate = null;
       var calendarEl = document.getElementById('calendar');
@@ -63,6 +64,7 @@
       var events = [
         <?php foreach ($appointments as $appointment): ?>
           {
+            id: '<?php echo htmlspecialchars($appointment['id']); ?>',
             title: '<?php echo htmlspecialchars(
                 $appointment['services'] === 'cleaning' ? 'Teeth Cleaning' :
                 ($appointment['services'] === 'extraction' ? 'Tooth Extraction' : 
@@ -167,13 +169,38 @@
       const pendingAppointments = events.filter(event => event.status === 'Pending');
       const today = new Date().toISOString().split('T')[0];
 
+      // Get the current time in 24-hour format (HH:mm)
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
       pendingAppointments.forEach(appointment => {
+        console.log(convertTo24Hour(appointment.time));
+        console.log(currentTime);
           if (appointment.start === today) {
-              alert(`Appointment for ${appointment.title} is still pending. It will be automatically canceled.`);
-              window.location.reload();
+              // Compare current time with appointment time
+              if (currentTime > convertTo24Hour(appointment.time)) {  // Convert appointment time to 24-hour format for comparison
+                  alert(`Appointment for ${appointment.title} scheduled at ${appointment.time} is still pending. It will be automatically canceled.`);
+                  window.location.href = `appointment.php?cancel=${appointment.id}`;  // Refresh the page for cancellation processing
+              }
           }
       });
     });
+
+    function convertTo24Hour(timeStr) {
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+        
+        // Convert hours to string before using padStart
+        hours = String(hours);
+
+        if (hours === '12') {
+            hours = '00';
+        }
+        if (modifier === 'PM') {
+            hours = (parseInt(hours, 10) + 12).toString();
+        }
+
+        return `${hours.padStart(2, '0')}:${minutes}`;
+    }
 
   
     function submitAppointment() {

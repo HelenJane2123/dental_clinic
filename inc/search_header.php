@@ -85,7 +85,14 @@
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
-                <img src="img/images/faces/face5.jpg" alt="profile"/>
+              <?php
+                    // Display the user's profile picture if available, otherwise use a default image
+                    $profilePic = isset($profile_picture) && !empty($profile_picture)
+                        ? htmlspecialchars($profile_picture)
+                        : 'img/images/faces/face5.jpg'; // Path to your default profile image
+
+                    echo '<img src="' . $profilePic . '" alt="profile" />';
+                ?>
                 <span class="nav-profile-name">
                     <?php 
                         if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) {

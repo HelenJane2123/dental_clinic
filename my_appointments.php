@@ -59,9 +59,9 @@
                                                   <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
                                                   <td>
-                                                    <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : 
+                                                    <label class="badge <?= htmlspecialchars($appointment['status'] == 'Canceled' ? 'badge-danger' : 
                                                         ($appointment['status'] == 'Confirmed' ? 'badge-success' : 
-                                                        ($appointment['status'] == 'Rescheduled' ? 'badge-info' : 'badge-warning'))) ?>">
+                                                        ($appointment['status'] == 'Re-schedule' ? 'badge-info' : 'badge-warning'))) ?>">
                                                         <?= htmlspecialchars($appointment['status']) ?>
                                                     </label>
                                                   </td>
@@ -81,7 +81,7 @@
                                           <?php endforeach; ?>
                                       <?php else : ?>
                                           <tr>
-                                              <td colspan="5" class="text-center">No appointments found.</td>
+                                              <td colspan="8" class="text-center">No appointments found.</td>
                                           </tr>
                                       <?php endif; ?>
                                   </tbody>

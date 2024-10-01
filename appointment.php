@@ -135,9 +135,25 @@
                                 <div class="legend-color" style="background-color: #007BFF;"></div>
                                 <span>Completed</span>
                             </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #A020F0;"></div>
+                                <span>Re-Scheduled</span>
+                            </div>
                         </div>
 
                         <div class="content">
+                            <?php
+                                if (isset($_SESSION['display_message'])) {
+                                    $message = $_SESSION['display_message'];
+                                    $message_type = $_SESSION['message_type'];
+                                    
+                                    echo "<div class='alert alert-{$message_type}'>{$message}</div>";
+                                    
+                                    // Unset the message so it doesn't persist on page reload
+                                    unset($_SESSION['display_message']);
+                                    unset($_SESSION['message_type']);
+                                }
+                              ?>
                             <div id='calendar'></div>
                         </div>
                     </div>
@@ -251,7 +267,7 @@
                                           <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                           <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
                                           <td>
-                                              <label class="badge <?= htmlspecialchars($appointment['status'] == 'Cancelled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
+                                              <label class="badge <?= htmlspecialchars($appointment['status'] == 'Canceled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
                                                   <?= htmlspecialchars($appointment['status']) ?>
                                               </label>
                                           </td>

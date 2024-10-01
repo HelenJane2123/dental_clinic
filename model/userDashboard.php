@@ -211,36 +211,36 @@
         } 
 
        // Method to get count of confirmed appointments
-        public function get_confirmed_appointments_count() {
-            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Confirmed'";
+        public function get_confirmed_appointments_count($member_id) {
+            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Confirmed' AND member_id = '$member_id'";
             $result = $this->db->query($query);
             $row = $result->fetch_assoc();
             return $row['count']; // Return the count of confirmed appointments
         }
 
         // Method to get count of canceled appointments
-        public function get_canceled_appointments_count() {
-            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Canceled'";
+        public function get_canceled_appointments_count($member_id) {
+            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Canceled' AND member_id = '$member_id'";
             $result = $this->db->query($query);
             $row = $result->fetch_assoc();
             return $row['count']; // Return the count of canceled appointments
         }
 
         // Your existing method for getting upcoming appointments
-        public function get_upcoming_appointments() {
+        public function get_upcoming_appointments($member_id) {
             $query = "SELECT appointment_date, appointment_time, services FROM appointments 
                   WHERE appointment_date = CURDATE() + INTERVAL 2 DAY 
-                  AND status = 'Confirmed'";
+                  AND status = 'Confirmed' AND member_id = '$member_id'";
             $result = $this->db->query($query);
             
             return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         }
 
-        public function get_todays_appointments() {
+        public function get_todays_appointments($member_id) {
             // Define the query to select today's confirmed appointments
             $query = "SELECT appointment_date, appointment_time, notes, services
                       FROM appointments 
-                      WHERE appointment_date = CURDATE() AND status = 'Confirmed'";
+                      WHERE appointment_date = CURDATE() AND status = 'Confirmed' AND member_id = '$member_id'";
         
             // Execute the query
             $result = $this->db->query($query);
@@ -249,38 +249,79 @@
             return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         }
 
-        public function automatic_cancel_appointment() {
-            // Get today's date
+        public function automatic_cancel_appointment($member_id,$appointmentId) {
+            // Get today's date and current time
             $today = date('Y-m-d');
 
-            // Fetch all pending appointments scheduled for today
-            $sql = "SELECT id FROM appointments WHERE status = 'Pending' AND appointment_date = ?";
-            $stmt = $this->db->prepare($sql);  // Changed from $this->conn to $this->db
-            $stmt->bind_param('s', $today);
+            // Prepare the cancellation SQL query
+            $sql = "UPDATE appointments 
+                SET status = 'Canceled', canceled_at = NOW(), notes = 'Scheduled appointment is still pending and past the set appointment time.'
+                WHERE id = ? AND member_id = ?";
+
+            $stmt = $this->db->prepare($sql);
+            if ($stmt === false) {
+                return "Failed to prepare cancellation query.";
+            }
+
+            // Bind parameters: 'i' for integer (appointmentId) and 'i' for integer (member_id)
+            $stmt->bind_param('ii', $appointmentId, $member_id);
             $stmt->execute();
-            $result = $stmt->get_result();
+            // Free the statement
+            $stmt->close();
+        }
 
-            // Check if any pending appointments exist
-            if ($result->num_rows > 0) {
-                // Loop through pending appointments and cancel them
-                while ($row = $result->fetch_assoc()) {
-                    $appointmentId = $row['id'];
+        public function update_profile($firstname, $lastname, $contactnumber, $email, $gender, $address, $profilePicPath, $remarks, $member_id) {
+            $sql = "UPDATE accounts 
+                    SET firstname = ?, lastname = ?, contactnumber = ?, email = ?, gender = ?, address = ?, profile_picture = IFNULL(?, profile_picture), remarks = ?
+                    WHERE member_id = ?";
+            
+            $stmt = $this->db->prepare($sql);
+            if ($stmt === false) {
+                return false;  // Handle error
+            }
+            
+            // Debugging output
+            error_log("Updating user with member_id: " . $member_id);
 
-                    // Update the status of the appointment to 'Canceled'
-                    $cancelSql = "UPDATE appointments SET status = 'Canceled', canceled_at = now() WHERE id = ?";
-                    $cancelStmt = $this->db->prepare($cancelSql);  // Also changed to $this->db
-                    $cancelStmt->bind_param('i', $appointmentId);
-                    $cancelStmt->execute();
-                }
-
-                // Free the statement and result
+            // Bind parameters: 8 strings and 1 integer
+            $stmt->bind_param('sssssssss', $firstname, $lastname, $contactnumber, $email, $gender, $address, $profilePicPath, $remarks, $member_id);
+            
+            if ($stmt->execute()) {
                 $stmt->close();
-                $cancelStmt->close();
-
-                return "Pending appointments have been canceled.";
+                return true;
             } else {
-                return "No pending appointments to cancel for today.";
+                return false;
             }
         }
+
+        public function get_user_profile($member_id) {
+            $sql = "SELECT * FROM accounts WHERE member_id = ?";
+            
+            // Prepare the statement
+            $stmt = $this->db->prepare($sql);
+            
+            if ($stmt === false) {
+                // Handle error in preparing statement
+                return false;
+            }
+            
+            // Bind the parameter (member_id)
+            $stmt->bind_param('s', $member_id);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Get the result
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                // Fetch the user data as an associative array
+                return $result->fetch_assoc();
+            } else {
+                // No user found
+                return false;
+            }
+        }
+        
     }
 ?>

@@ -20,14 +20,33 @@
       $appointmentDetails = $appointment->view_appointment_by_id($appointmentId); // Ensure this method exists
     }
 
-    $upcomingAppointments = $appointment->get_upcoming_appointments();
-    $confirmedAppointmentsCount = $appointment->get_confirmed_appointments_count();
-    $canceledAppointmentsCount = $appointment->get_canceled_appointments_count();
-    $todaysAppointments = $appointment->get_todays_appointments();
+    $upcomingAppointments = $appointment->get_upcoming_appointments($member_id);
+    $confirmedAppointmentsCount = $appointment->get_confirmed_appointments_count($member_id);
+    $canceledAppointmentsCount = $appointment->get_canceled_appointments_count($member_id);
+    $todaysAppointments = $appointment->get_todays_appointments($member_id);
 
-    //search and cancel pending appointments today
-    $message = $appointment->automatic_cancel_appointment();
+    if (isset($_GET['cancel'])) {
+      $appointmentId = (int) $_GET['cancel']; // Get the appointment ID from the URL
+      $member_id = // Get the member ID based on your session or authentication method
+  
+      // Call the cancellation function
+      $result = $appointment->automatic_cancel_appointment($member_id, $appointmentId);
+      echo $result; // You can echo or log the result for debugging
+  }
 
+  // Fetch user details
+  $userDetails = $appointment->get_user_profile($member_id);
+
+  if ($userDetails) {
+      $firstname = $userDetails['firstname'];
+      $lastname = $userDetails['lastname'];
+      $email = $userDetails['email'];
+      $contact_number = $userDetails['contactnumber'];
+      $gender = $userDetails['gender'];
+      $address = $userDetails['address'];
+      $remarks = $userDetails['remarks'];
+      $profile_picture = $userDetails['profile_picture'];
+  }
 
 ?>
 <head>
@@ -77,9 +96,21 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="my_record.php">
+            <i class="mdi mdi-notebook menu-icon"></i>
+            <span class="menu-title">My Record</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="my_profile.php">
             <i class="mdi mdi-emoticon menu-icon"></i>
             <span class="menu-title">My Profile</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="change_password.php">
+            <i class="mdi mdi-lock menu-icon"></i>
+            <span class="menu-title">Change Password</span>
           </a>
         </li>
         <li class="nav-item sidebar-category">
