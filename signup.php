@@ -1,5 +1,4 @@
 <?php
-    session_start();
     include_once('inc/header.php');
 ?>
 <!-- Registration 7 - Bootstrap Brain Component -->

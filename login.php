@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once('inc/header.php');
 ?>
     <div class="wrapper-login">
@@ -50,14 +49,11 @@ include_once('inc/header.php');
             </div>
             <div class="row mb-4 mt-3">
                 <div class="col">
-                    <a href="forgetpass.php" class="text-black">Forgot password?</a>
+                    <p><a href="#">Forgot password? </a></p>
                 </div>
                 <div class="col">
-                    <a href="signup.php" class="text-black">Not yet a member?</a>
+                    <p>Not a member? <a href="signup.php">Register</a></p>
                 </div>
-            </div>
-            <div class="text-center">
-                <p>Not a member? <a href="#!">Register</a></p>
             </div>
         </form>
     </div>

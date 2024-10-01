@@ -120,19 +120,7 @@
         <li class="nav-item">
           <a class="nav-link" href="index.php">
             <i class="mdi mdi-home menu-icon"></i>
-            <span class="menu-title">Home Page</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="docs/documentation.html">
-            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-            <span class="menu-title">Services</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="docs/documentation.html">
-            <i class="mdi mdi-phone menu-icon"></i>
-            <span class="menu-title">Contact us</span>
+            <span class="menu-title">Back to Home Page</span>
           </a>
         </li>
       </ul>
