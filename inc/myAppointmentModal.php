@@ -1,6 +1,6 @@
 <!-- Add Appointment Modal -->
 <div class="modal fade" id="appointmentModal" tabindex="-1" role="dialog" aria-labelledby="appointmentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="appointmentModalLabel">Book an Appointment</h5>
@@ -21,34 +21,32 @@
                             </label>
                         </div>
                     </div>
+                    
                     <input type="hidden" name="old_firstname" class="form-control" value="<?=$_SESSION['firstname']?>" id="old_firstname">
                     <input type="hidden" name="old_lastname" class="form-control" value="<?=$_SESSION['lastname']?>" id="old_lastname">
-                    <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>"  id="member_id">
+                    <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>" id="member_id">
                     <div id="nameFields">
-                        <div class="form-group">
-                            <label for="userName">First Name</label>
-                            <input type="text" name="firstname" class="form-control" id="userName" required>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="userName">First Name</label>
+                                <input type="text" name="firstname" class="form-control" id="userName" required>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" name="lastname" class="form-control" id="lastName" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name</label>
-                            <input type="text" name="lastname" class="form-control" id="lastName" required>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="contactNumber">Contact Number</label>
+                            <input type="text" name="contactnumber" class="form-control" id="contactNumber" required>
                         </div>
-                    </div>
-                    <div class="form-group">
-                            <label for="lastName">Contact Number</label>
-                            <input type="text" name="contactnumber" class="form-control" id="lastName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Email Address</label>
-                        <input type="text" name="emailaddress" class="form-control" id="lastName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="appointmentDate">Appointment Date</label>
-                        <input type="date" class="form-control" name="appointmentDate" id="appointmentDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="appointmentTime">Appointment Time</label>
-                        <input type="time" class="form-control" name="appointmentTime" id="appointmentTime" required>
+
+                        <div class="form-group col-sm-6">
+                            <label for="emailAddress">Email Address</label>
+                            <input type="email" name="emailaddress" class="form-control" id="emailAddress" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="services">Dental Services</label>
@@ -63,6 +61,16 @@
                             <option value="brace_consultation">Braces Consultation</option>
                             <option value="brace_installation">Dental Braces Installation</option>
                         </select>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label for="appointmentDate">Appointment Date</label>
+                            <input type="date" class="form-control" name="appointmentDate" id="appointmentDate" required>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="appointmentTime">Appointment Time</label>
+                            <input type="time" class="form-control" name="appointmentTime" id="appointmentTime" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="notes">Additional Notes</label>

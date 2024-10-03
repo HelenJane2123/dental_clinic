@@ -192,16 +192,16 @@ p{
 #showhidepassword {
     position: absolute;
     font-size: 20px;
-    right: 63px;
-    top: 56%;
+    right: 307px;
+    top: 52%;
     cursor: pointer;
 }
 
 #confirm_showhidepassword {
-    position: absolute;
+   position: absolute;
     font-size: 20px;
-    right: 64px;
-    top: 63%;
+    right: 55px;
+    top: 52%;
     cursor: pointer;
 }
 
@@ -594,3 +594,12 @@ main {
     right: 10px;
 }
 
+.dental-image-wrapper {
+    text-align: center;
+  }
+  
+  .dental-image-wrapper img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }

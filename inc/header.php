@@ -1,62 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dental Clinic</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/registrations/registration-7/assets/css/registration-7.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="css/main.css">
-    <style>
-        /* Custom style for the dropdown menu */
-        .dropdown-menu {
-            background-color: #003366; /* Dark blue color */
-            border: none; /* Optional: removes border */
-        }
-        .dropdown-item {
-            color: white; /* White text for dropdown items */
-        }
-        .dropdown-item:hover {
-            background-color: #00509E; /* Lighter blue on hover */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <div class="navigation">
-                <nav class="menu">
-                    <a href="#" class="logo">
-                        <img src="images/logo.png" alt="Dental Clinic Logo">
-                    </a>
-                    <div class="menu-items">
-                        <a href="index.php">HOME</a>
-                        <a href="about-us.php">ABOUT</a>
-                        <a href="services.php">SERVICES</a>
-                        <a href="contact-us.php">CONTACT</a>
-                    </div>
-                    
-                    <?php
-                        session_start();
-                        if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) {
-                            // User is logged in, display their name and dropdown
-                            echo '<div class="nav-profile dropdown">';
-                            echo '<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">';
-                            echo '<span class="navbar-text">Welcome, ' . htmlspecialchars($_SESSION['firstname']) . ' ' . htmlspecialchars($_SESSION['lastname']) . '!</span>';
-                            echo '</a>';
-                            echo '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">';
-                            echo '<a class="dropdown-item" href="appointment.php">Go to Dashboard</a>'; // Link to user dashboard
-                            echo '<a class="dropdown-item" href="logout.php">Logout</a>'; // Logout option
-                            echo '</div>';
-                            echo '</div>';
-                        } else {
-                            // User is not logged in, display the login button
-                            echo '<button class="btn_Login" id="login_button">LOGIN <i class="fa-solid fa-circle-user fa-lg"></i></button>';
-                        }
-                    ?>
-                </nav>
-            </div>
-        </header>
+  <head>
+    <title>Roselle Santander's Dental Clinic</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+
+  </head>
+  <body>
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Roselle Santander's <span>Dental Clinic</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="oi oi-menu"></span> Menu
+    </button>
+
+    <div class="collapse navbar-collapse" id="ftco-nav">
+      <ul class="navbar-nav ml-auto align-items-center"> <!-- align-items-center ensures the items are aligned properly -->
+        <li class="nav-item active"><a href="index.php" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="services.php" class="nav-link">Services</a></li>
+        <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
+        <li class="nav-item cta">
+          <a href="book_appointment.php" class="nav-link" data-toggle="modal" data-target="#modalRequest">
+            <span>Make an Appointment</span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- User Dropdown -->
+      <div class="ml-lg-3 d-flex align-items-center"> <!-- Add margin-left and center align -->
+        <?php
+          session_start();
+          if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) {
+              // User is logged in, display their name and dropdown
+              echo '<div class="dropdown">';
+              echo '<a class="nav-link dropdown-toggle text-primary" href="#" id="profileDropdown" data-toggle="dropdown">';
+              echo 'Welcome, ' . htmlspecialchars($_SESSION['firstname']) . ' ' . htmlspecialchars($_SESSION['lastname']) . '';
+              echo '</a>';
+              echo '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">';
+              echo '<a class="dropdown-item" href="appointment.php">Go to Dashboard</a>';
+              echo '<a class="dropdown-item" href="logout.php">Logout</a>';
+              echo '</div>';
+              echo '</div>';
+          } else {
+              // User is not logged in, display the login button
+              echo '<button class="btn btn-primary ml-3" id="login_button">';
+              echo '<span>Login </span><i class="fa fa-user"></i>';
+              echo '</button>';
+          }
+        ?>
+      </div>
+    </div>
+  </div>
+</nav>

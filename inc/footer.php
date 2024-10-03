@@ -1,147 +1,194 @@
-<footer class="text-center text-lg-start bg-body-tertiary text-muted">
-    <!-- Section: Social media -->
-    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-        <!-- Left -->
-        <div class="me-5 d-none d-lg-block">
-        <span>Get connected with us on social networks:</span>
-        </div>
-        <!-- Left -->
 
-        <!-- Right -->
-        <div>
-        <a href="" class="me-4 text-reset">
-            <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="" class="me-4 text-reset">
-            <i class="fab fa-linkedin"></i>
-        </a>
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Roselle Santander's Dental Clinic</h2>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+            </div>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft ">
+              <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+            </ul>
+          </div>
+          <div class="col-md-2">
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">Quick Links</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">About</a></li>
+                <li><a href="#" class="py-2 d-block">Services</a></li>
+                <li><a href="#" class="py-2 d-block">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+            	<h2 class="ftco-heading-2">Office</h2>
+            	<div class="block-23 mb-3">
+	              <ul>
+	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
+	              </ul>
+	            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This website is used for Capstone purpose only</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalRequest" tabindex="-1" role="dialog" aria-labelledby="modalRequestLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalRequestLabel">Make an Appointment</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="#">
+            <div class="form-group">
+              <!-- <label for="appointment_name" class="text-black">Full Name</label> -->
+              <input type="text" class="form-control" id="appointment_name" placeholder="Full Name">
+            </div>
+            <div class="form-group">
+              <!-- <label for="appointment_email" class="text-black">Email</label> -->
+              <input type="text" class="form-control" id="appointment_email" placeholder="Email">
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <!-- <label for="appointment_date" class="text-black">Date</label> -->
+                  <input type="text" class="form-control appointment_date" placeholder="Date">
+                </div>    
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <!-- <label for="appointment_time" class="text-black">Time</label> -->
+                  <input type="text" class="form-control appointment_time" placeholder="Time">
+                </div>
+              </div>
+            </div>
+            
+
+            <div class="form-group">
+              <!-- <label for="appointment_message" class="text-black">Message</label> -->
+              <textarea name="" id="appointment_message" class="form-control" cols="30" rows="10" placeholder="Message"></textarea>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Make an Appointment" class="btn btn-primary">
+            </div>
+          </form>
+        </div>
         
-        </div>
-        <!-- Right -->
-    </section>
-    <!-- Section: Social media -->
-
-    <!-- Section: Links  -->
-    <section class="">
-        <div class="container text-center text-md-start mt-5">
-        <!-- Grid row -->
-        <div class="row mt-3">
-            <!-- Grid column -->
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-            <!-- Content -->
-            <h6 class="text-uppercase fw-bold mb-3">
-                <i class="fas fa-tooth me-3"></i>Roselle Santander Dental Clinic
-            </h6>
-            <p>
-                Here you can use rows and columns to organize your footer content. Lorem ipsum
-                dolor sit amet, consectetur adipisicing elit.
-            </p>
-            </div>
-            <!-- Grid column -->
-
-            <!-- Grid column -->
-            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
-            <h6 class="text-uppercase fw-bold mb-4">
-                Our Sevices
-            </h6>
-        
-            <p>
-                <a href="#!" class="text-reset">Braces</a>
-            </p>
-            <p>
-                <a href="#!" class="text-reset">Denture</a>
-            </p>
-            <p>
-                <a href="#!" class="text-reset">Others</a>
-            </p>
-            </div>
-            <!-- Grid column -->
-
-            <!-- Grid column -->
-            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-            <!-- Links -->
-            <h6 class="text-uppercase fw-bold mb-4">
-                Useful links
-            </h6>
-            <p>
-                <a href="#!" class="text-reset">Home</a>
-            </p>
-            <p>
-                <a href="#!" class="text-reset">Book an Appoinment now</a>
-            </p>
-            </div>
-            <!-- Grid column -->
-
-            <!-- Grid column -->
-            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-            <!-- Links -->
-            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
-            <p><i class="fas fa-home me-3"></i> Visit Us! 2nd Flr. EDP bldg, San Juan 1 Gen. Trias City, Cavite, PH</p>
-            <p>
-                <i class="fas fa-envelope me-3"></i>
-                info@example.com
-            </p>
-            <p><i class="fas fa-phone me-3"></i> 0995-499-3703</p>
-            <p><i class="fas fa-facebook me-3"></i> <a href="https://www.facebook.com/login/"></a></p>
-            </div>
-            <!-- Grid column -->
-        </div>
-        <!-- Grid row -->
-        </div>
-    </section>
-    <!-- Section: Links  -->
-
-    <!-- Copyright -->
-    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2024 Copyright: for Capstone purpose
+      </div>
     </div>
-    <!-- Copyright -->
-</footer>
+  </div>
 
-</div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
-    <script src="js/login.js"></script>
-    <script src="js/register.js"></script>
-    <script type="text/javascript">
-            document.getElementById("login_button").onclick = function () {
-                location.href = "login.php";
-            };
 
-            document.addEventListener('DOMContentLoaded', function() {
-                const slides = document.querySelectorAll('.carousel-slide');
-                const nextBtn = document.getElementById('next-slide');
-                const prevBtn = document.getElementById('prev-slide');
-                let currentIndex = 0;
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script type="text/javascript">
+        document.getElementById("login_button").onclick = function () {
+            location.href = "login.php";
+        };
 
-                function showSlide(index) {
-                    if (index >= slides.length) {
-                        currentIndex = 0;
-                    } else if (index < 0) {
-                        currentIndex = slides.length - 1;
-                    } else {
-                        currentIndex = index;
-                    }
-                    const offset = -currentIndex * 100;
-                    document.querySelector('.carousel-container').style.transform = `translateX(${offset}%)`;
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const nextBtn = document.getElementById('next-slide');
+            const prevBtn = document.getElementById('prev-slide');
+            let currentIndex = 0;
+
+            function showSlide(index) {
+                if (index >= slides.length) {
+                    currentIndex = 0;
+                } else if (index < 0) {
+                    currentIndex = slides.length - 1;
+                } else {
+                    currentIndex = index;
                 }
+                const offset = -currentIndex * 100;
+                document.querySelector('.carousel-container').style.transform = `translateX(${offset}%)`;
+            }
 
-                nextBtn.addEventListener('click', function() {
-                    showSlide(currentIndex + 1);
-                });
-
-                prevBtn.addEventListener('click', function() {
-                    showSlide(currentIndex - 1);
-                });
-
-                // Optional: Auto-slide functionality
-                setInterval(function() {
-                    showSlide(currentIndex + 1);
-                }, 5000); // Change slide every 5 seconds
+            nextBtn.addEventListener('click', function() {
+                showSlide(currentIndex + 1);
             });
-        </script>
-</body>
+
+            prevBtn.addEventListener('click', function() {
+                showSlide(currentIndex - 1);
+            });
+
+            // Optional: Auto-slide functionality
+            setInterval(function() {
+                showSlide(currentIndex + 1);
+            }, 5000); // Change slide every 5 seconds
+        });
+        
+        var input = document.querySelector("#contact_number");
+        window.intlTelInput(input, {
+            initialCountry: "auto",
+            geoIpLookup: function(callback) {
+                fetch('https://ipinfo.io?token=YOUR_TOKEN', {headers: {'Accept': 'application/json'}})
+                .then(response => response.json())
+                .then(data => callback(data.country))
+                .catch(() => callback('us'));
+            },
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js" // For formatting/validation
+        });
+
+        // Restrict contact number input to numeric values only
+        document.getElementById('contact_number').addEventListener('input', function (e) {
+            // Remove any non-numeric characters from input
+            this.value = this.value.replace(/\D/g, '');
+
+            // Enforce max length of 10 digits
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
+
+        // Form validation on submit to ensure exactly 10 digits
+        document.getElementById('register').addEventListener('submit', function (e) {
+            const contactNumber = document.getElementById('contact_number').value;
+
+            if (contactNumber.length !== 10) {
+                e.preventDefault();
+                alert('Please enter a valid 10-digit contact number.');
+            }
+        });
+    </script>
+
+  </body>
 </html>

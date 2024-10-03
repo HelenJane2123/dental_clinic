@@ -36,6 +36,15 @@
             exit();
         }
 
+         // Password condition: at least 8 characters, one uppercase, one lowercase, one digit, and one special character
+         $password_regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).{8,}$/";
+         if (!preg_match($password_regex, $password_1)) {
+             $_SESSION['message'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+             $_SESSION['message_type'] = "error";
+             header('Location: ../signup.php');
+             exit();
+         }
+
         // Hash the password
         $hashed_password = password_hash($password_1, PASSWORD_DEFAULT);
 
@@ -44,7 +53,7 @@
         if ($query) {
           $_SESSION['success'] = true;
           $_SESSION['message'] = 'Registration successful.';
-          header('Location:../signup.php');
+          header('Location:../login.php');
         }
         else {
           $_SESSION['message'] = 'Registration failed. Email or Username already exists, please try again.';
