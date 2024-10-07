@@ -11,20 +11,22 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Patient Information Record</h4>
-                            <form action="controller/mymedicalRecord.php" method="POST" class="forms-sample">
+                            <form action="controller/myRecord.php" method="POST" class="forms-sample"  enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                                <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($member_id) ? $member_id : '' ?>">
                                 <div class="row">
                                 <!-- Personal Information -->
                                     <div class="form-group col-sm-4">
                                         <label for="last_name">Last Name</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?= isset($lastname) ? $lastname : '' ?>" disabled required>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="first_name">First Name</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?= isset($firstname) ? $firstname : '' ?>" disabled required>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="middle_name">Middle Name</label>
-                                        <input type="text" class="form-control" id="middle_name" name="middle_name">
+                                        <input type="text" class="form-control" id="middle_name" name="middle_name" value="<?= isset($middle_name) ? $middle_name : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -39,8 +41,8 @@
                                     <div class="form-group col-sm-4">
                                         <label>Sex</label>
                                         <select class="form-control" id="sex" name="sex">
-                                            <option value="M">Male</option>
-                                            <option value="F">Female</option>
+                                            <option value="male" <?= isset($gender) && $gender == 'male' ? 'selected' : '' ?>>Male</option>
+                                            <option value="female" <?= isset($gender) && $gender == 'female' ? 'selected' : '' ?>>Female</option>
                                         </select>
                                     </div>
                                 </div>
@@ -61,15 +63,15 @@
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="cellphone_no">Cellphone No.</label>
-                                        <input type="text" class="form-control" id="cellphone_no" name="cellphone_no">
+                                        <input type="text" class="form-control" id="cellphone_no" name="cellphone_no" value="<?= isset($contact_number) ? $contact_number : '' ?>" disabled>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="email">Email Address</label>
-                                        <input type="email" class="form-control" id="email" name="email">
+                                        <input type="email" class="form-control" id="email" name="email" value="<?= isset($email) ? $email : '' ?>" disabled>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="home_address">Home Address</label>
-                                        <input type="text" class="form-control" id="home_address" name="home_address">
+                                        <input type="text" class="form-control" id="home_address" name="home_address" value="<?= isset($address) ? $address : '' ?>" disabled>
                                     </div>
                                 </div>
                                 <div class="row">

@@ -7,6 +7,11 @@
         header('Location: login.php'); // Redirect to login page if not logged in
         exit();
     }
+
+    // Generate CSRF token if not already set
+  if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+  }
   require_once ('model/userDashboard.php');
   $appointment = new UserDashboard();
 

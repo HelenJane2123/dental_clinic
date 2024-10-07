@@ -322,6 +322,173 @@
                 return false;
             }
         }
+
+        public function update_medical_record($data) {
+            // Step 1: Check if the patient record exists
+            $checkQuery = "SELECT patient_info_id FROM patient_information_record WHERE patient_info_id = ?";
+            if ($stmt = $this->db->prepare($checkQuery)) {
+                $stmt->bind_param('i', $_SESSION['user_id']);
+                $stmt->execute();
+                $stmt->store_result();
+                
+                if ($stmt->num_rows > 0) {
+                    // Step 2: Record exists, perform update
+                    $stmt->close();  // Close the previous statement before preparing a new one
+        
+                    $updateQuery = "UPDATE patient_information_record SET 
+                                first_name = ?, 
+                                middle_name = ?, 
+                                birthdate = ?, 
+                                age = ?, 
+                                sex = ?, 
+                                nickname = ?, 
+                                religion = ?, 
+                                nationality = ?, 
+                                occupation = ?, 
+                                guardian_name = ?, 
+                                guardian_occupation = ?, 
+                                referral_source = ?, 
+                                reason_for_consultation = ?, 
+                                previous_dentist = ?, 
+                                last_dental_visit = ?, 
+                                physician_name = ?, 
+                                physician_specialty = ?, 
+                                physician_address = ?, 
+                                physician_phone_no = ?, 
+                                good_health = ?, 
+                                under_medical_treatment = ?, 
+                                serious_illness = ?, 
+                                illness_details = ?, 
+                                hospitalization = ?, 
+                                hospitalization_reason = ?, 
+                                taking_medication = ?, 
+                                medication_details = ?, 
+                                use_tobacco = ?, 
+                                use_drugs = ?, 
+                                allergies = ?, 
+                                medical_conditions = ?, 
+                                pregnant = ?, 
+                                nursing = ?, 
+                                birth_control = ?, 
+                                blood_type = ?, 
+                                blood_pressure = ? 
+                              WHERE patient_info_id = ?";
+            
+                    if ($stmt = $this->db->prepare($updateQuery)) {
+                        $stmt->bind_param(
+                            'sssssssssssssssssssssssssssssssssi',
+                            $data['first_name'], 
+                            $data['middle_name'], 
+                            $data['birthdate'], 
+                            $data['age'], 
+                            $data['sex'], 
+                            $data['nickname'], 
+                            $data['religion'], 
+                            $data['nationality'], 
+                            $data['occupation'], 
+                            $data['guardian_name'], 
+                            $data['guardian_occupation'], 
+                            $data['referral_source'], 
+                            $data['reason_for_consultation'], 
+                            $data['previous_dentist'], 
+                            $data['last_dental_visit'], 
+                            $data['physician_name'], 
+                            $data['physician_specialty'], 
+                            $data['physician_address'], 
+                            $data['physician_phone_no'], 
+                            $data['good_health'], 
+                            $data['under_medical_treatment'], 
+                            $data['serious_illness'], 
+                            $data['illness_details'], 
+                            $data['hospitalization'], 
+                            $data['hospitalization_reason'], 
+                            $data['taking_medication'], 
+                            $data['medication_details'], 
+                            $data['use_tobacco'], 
+                            $data['use_drugs'], 
+                            $data['allergies'], 
+                            $data['medical_conditions'], 
+                            $data['pregnant'], 
+                            $data['nursing'], 
+                            $data['birth_control'], 
+                            $data['blood_type'], 
+                            $data['blood_pressure'],
+                            $_SESSION['user_id']
+                        );
+        
+                        if ($stmt->execute()) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                } else {
+                    // Step 3: No record exists, perform insert
+                    $stmt->close();  // Close the previous statement before preparing a new one
+        
+                    $insertQuery = "INSERT INTO patient_information_record 
+                        (first_name, middle_name, birthdate, age, sex, nickname, religion, nationality, occupation, guardian_name, 
+                         guardian_occupation, referral_source, reason_for_consultation, previous_dentist, last_dental_visit, 
+                         physician_name, physician_specialty, physician_address, physician_phone_no, good_health, under_medical_treatment, 
+                         serious_illness, illness_details, hospitalization, hospitalization_reason, taking_medication, medication_details, 
+                         use_tobacco, use_drugs, allergies, medical_conditions, pregnant, nursing, birth_control, blood_type, blood_pressure, 
+                         patient_info_id)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+                    if ($stmt = $this->db->prepare($insertQuery)) {
+                        $stmt->bind_param(
+                            'sssssssssssssssssssssssssssssssssii',
+                            $data['first_name'], 
+                            $data['middle_name'], 
+                            $data['birthdate'], 
+                            $data['age'], 
+                            $data['sex'], 
+                            $data['nickname'], 
+                            $data['religion'], 
+                            $data['nationality'], 
+                            $data['occupation'], 
+                            $data['guardian_name'], 
+                            $data['guardian_occupation'], 
+                            $data['referral_source'], 
+                            $data['reason_for_consultation'], 
+                            $data['previous_dentist'], 
+                            $data['last_dental_visit'], 
+                            $data['physician_name'], 
+                            $data['physician_specialty'], 
+                            $data['physician_address'], 
+                            $data['physician_phone_no'], 
+                            $data['good_health'], 
+                            $data['under_medical_treatment'], 
+                            $data['serious_illness'], 
+                            $data['illness_details'], 
+                            $data['hospitalization'], 
+                            $data['hospitalization_reason'], 
+                            $data['taking_medication'], 
+                            $data['medication_details'], 
+                            $data['use_tobacco'], 
+                            $data['use_drugs'], 
+                            $data['allergies'], 
+                            $data['medical_conditions'], 
+                            $data['pregnant'], 
+                            $data['nursing'], 
+                            $data['birth_control'], 
+                            $data['blood_type'], 
+                            $data['blood_pressure'],
+                            $_SESSION['user_id']  // Use the session user ID
+                        );
+        
+                        if ($stmt->execute()) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            }
+        
+            return false;
+        }
+        
         
     }
 ?>
