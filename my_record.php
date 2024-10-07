@@ -1,5 +1,22 @@
 <?php
     include_once("inc/userDashboardHeader.php");
+
+    //get patient id 
+    $patient_id = $appointment->get_patientid_by_member_id($member_id);
+    // Initialize $patient_allergies as an empty array
+    $patient_allergies = [];
+    // Initialize the $patient_medical_conditions variable as an empty array
+    $patient_medical_conditions = [];
+
+
+     if ($patient_id) {
+         $patientRecords = $userDashboard->get_all_patient_record($patient_id);
+         $patient_allergies = $userDashboard->get_patient_allergies($patient_id) ?: [];
+         $patient_medical_conditions = $userDashboard->get_patient_medical_conditions($patient_id) ?: []; // Default to empty array if null
+ 
+         // Assuming that you are fetching only one patient's record
+         $patient = !empty($patientRecords) ? $patientRecords[0] : null;
+     }
 ?>
     <div class="container-fluid page-body-wrapper">
       <?php include_once("inc/search_header.php"); ?>
@@ -14,6 +31,7 @@
                             <form action="controller/myRecord.php" method="POST" class="forms-sample"  enctype="multipart/form-data">
                                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                                 <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($member_id) ? $member_id : '' ?>">
+                                <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
                                 <div class="row">
                                 <!-- Personal Information -->
                                     <div class="form-group col-sm-4">
@@ -26,17 +44,17 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="middle_name">Middle Name</label>
-                                        <input type="text" class="form-control" id="middle_name" name="middle_name" value="<?= isset($middle_name) ? $middle_name : '' ?>">
+                                        <input type="text" class="form-control" id="middle_name" name="middle_name" value="<?= isset($patient['middle_name']) ? $patient['middle_name'] : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="birthdate">Birthdate</label>
-                                        <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                                        <input type="date" class="form-control" id="birthdate" name="birthdate" value="<?= isset($patient['birthdate']) ? $patient['birthdate'] : '' ?>" required>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="age">Age</label>
-                                        <input type="number" class="form-control" id="age" name="age">
+                                        <input type="number" class="form-control" id="age" name="age" value="<?= isset($patient['age']) ? $patient['age'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Sex</label>
@@ -49,15 +67,15 @@
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="nickname">Nickname</label>
-                                        <input type="text" class="form-control" id="nickname" name="nickname">
+                                        <input type="text" class="form-control" id="nickname" name="nickname" value="<?= isset($patient['nickname']) ? $patient['nickname'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="religion">Religion</label>
-                                        <input type="text" class="form-control" id="religion" name="religion">
+                                        <input type="text" class="form-control" id="religion" name="religion" value="<?= isset($patient['religion']) ? $patient['religion'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="nationality">Nationality</label>
-                                        <input type="text" class="form-control" id="nationality" name="nationality">
+                                        <input type="text" class="form-control" id="nationality" name="nationality" value="<?= isset($patient['nationality']) ? $patient['nationality'] : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -71,31 +89,31 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="home_address">Home Address</label>
-                                        <input type="text" class="form-control" id="home_address" name="home_address" value="<?= isset($address) ? $address : '' ?>" disabled>
+                                        <input type="text" class="form-control" id="home_address" name="home_address" value="<?= isset($patient['home_address']) ? $patient['home_address'] : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="occupation">Occupation</label>
-                                        <input type="text" class="form-control" id="occupation" name="occupation">
+                                        <input type="text" class="form-control" id="occupation" name="occupation" value="<?= isset($patient['occupation']) ? $patient['occupation'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="guardian_name">Parent/Guardian's Name (if minor)</label>
-                                        <input type="text" class="form-control" id="guardian_name" name="guardian_name">
+                                        <input type="text" class="form-control" id="guardian_name" name="guardian_name" value="<?= isset($patient['guardian_name']) ? $patient['guardian_name'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="guardian_occupation">Parent/Guardian's Occupation</label>
-                                        <input type="text" class="form-control" id="guardian_occupation" name="guardian_occupation">
+                                        <input type="text" class="form-control" id="guardian_occupation" name="guardian_occupation" value="<?= isset($patient['guardian_occupation']) ? $patient['guardian_occupation'] : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="referral_source">Whom may we thank for referring you?</label>
-                                        <input type="text" class="form-control" id="referral_source" name="referral_source">
+                                        <input type="text" class="form-control" id="referral_source" name="referral_source" value="<?= isset($patient['referral_source']) ? $patient['referral_source'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="reason_for_consultation">Reason for consultation</label>
-                                        <input type="text" class="form-control" id="reason_for_consultation" name="reason_for_consultation">
+                                        <input type="text" class="form-control" id="reason_for_consultation" name="reason_for_consultation" value="<?= isset($patient['reason_for_consultation']) ? $patient['reason_for_consultation'] : '' ?>">
                                     </div>
                                 </div>
                                 
@@ -104,11 +122,11 @@
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="previous_dentist">Previous Dentist</label>
-                                        <input type="text" class="form-control" id="previous_dentist" name="previous_dentist">
+                                        <input type="text" class="form-control" id="previous_dentist" name="previous_dentist" value="<?= isset($patient['previous_dentist']) ? $patient['previous_dentist'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="last_dental_visit">Last Dental Visit</label>
-                                        <input type="date" class="form-control" id="last_dental_visit" name="last_dental_visit">
+                                        <input type="date" class="form-control" id="last_dental_visit" name="last_dental_visit" value="<?= isset($patient['last_dental_visit']) ? $patient['last_dental_visit'] : '' ?>">
                                     </div>
                                 </div>
                                 
@@ -117,21 +135,21 @@
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="physician_name">Physician Name</label>
-                                        <input type="text" class="form-control" id="physician_name" name="physician_name">
+                                        <input type="text" class="form-control" id="physician_name" name="physician_name" value="<?= isset($patient['physician_name']) ? $patient['physician_name'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="physician_specialty">Specialty</label>
-                                        <input type="text" class="form-control" id="physician_specialty" name="physician_specialty">
+                                        <input type="text" class="form-control" id="physician_specialty" name="physician_specialty" value="<?= isset($patient['physician_specialty']) ? $patient['physician_specialty'] : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
                                         <label for="physician_address">Office Address</label>
-                                        <input type="text" class="form-control" id="physician_address" name="physician_address">
+                                        <input type="text" class="form-control" id="physician_address" name="physician_address" value="<?= isset($patient['physician_address']) ? $patient['physician_address'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label for="physician_phone_no">Office Number</label>
-                                        <input type="text" class="form-control" id="physician_phone_no" name="physician_phone_no">
+                                        <input type="text" class="form-control" id="physician_phone_no" name="physician_phone_no" value="<?= isset($patient['physician_phone_no']) ? $patient['physician_phone_no'] : '' ?>">
                                     </div>
                                 </div>
                                 
@@ -141,51 +159,51 @@
                                     <div class="form-group col-sm-4">
                                         <label>Are you in good health?</label>
                                         <select class="form-control" name="good_health">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Are you under medical treatment now?</label>
                                         <select class="form-control" name="under_medical_treatment">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Have you had a serious illness or operation?</label>
                                         <select class="form-control" name="serious_illness">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                         <label>If yes, what illness/operation?</label>
-                                        <input type="text" class="form-control" name="illness_details">
+                                        <input type="text" class="form-control" name="illness_details" value="<?= isset($patient['illness_details']) ? $patient['illness_details'] : '' ?>">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label>Have you been hospitalized?</label>
                                         <select class="form-control" name="hospitalization">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                         <label>If yes, why?</label>
-                                        <input type="text" class="form-control" name="hospitalization_reason">
+                                        <input type="text" class="form-control" name="hospitalization_reason" value="<?= isset($patient['hospitalization_reason']) ? $patient['hospitalization_reason'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Are you taking any prescription/non-prescription medication?</label>
                                         <select class="form-control" name="taking_medication">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                         <label>If yes, what medication?</label>
-                                        <input type="text" class="form-control" name="medication_details">
+                                        <input type="text" class="form-control" name="medication_details" value="<?= isset($patient['medication_details']) ? $patient['medication_details'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Do you use tobacco products?</label>
                                         <select class="form-control" name="use_tobacco">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -193,40 +211,40 @@
                                     <div class="form-group col-sm-6">
                                         <label>Do you use alcohol or other dangerous drugs?</label>
                                         <select class="form-control" name="use_drugs">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label>Are you allergic to any of the following?</label>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Local Anesthetic">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Local Anesthetic" <?= in_array("Local Anesthetic", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Local Anesthetic (e.g. Lidocaine)</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Penicillin">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Penicillin" <?= in_array("Penicillin", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Penicillin</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Antibiotics">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Antibiotics" <?= in_array("Antibiotics", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Antibiotics</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Sulfa Drugs">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Sulfa Drugs" <?= in_array("Sulfa Drugs", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Sulfa Drugs</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Aspirin">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Aspirin" <?= in_array("Aspirin", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Aspirin</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Latex">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Latex" <?= in_array("Latex", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Latex</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Others">
+                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Others" <?= in_array("Others", $patient_allergies) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Others</label>
-                                            <input type="text" class="form-control mt-2" name="other_allergies">
+                                            <input type="text" class="form-control mt-2" name="other_allergies" value="<?= (in_array("Others", $patient_allergies) ? htmlspecialchars($other_allergies_value) : '') ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -237,22 +255,22 @@
                                     <div class="form-group col-sm-6">
                                         <label>Are you pregnant?</label>
                                         <select class="form-control" name="pregnant">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label>Are you nursing?</label>
                                         <select class="form-control" name="nursing">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label>Are you taking birth control pills?</label>
                                         <select class="form-control" name="birth_control">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -261,28 +279,28 @@
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="blood_type">Blood Type</label>
-                                        <input type="text" class="form-control" id="blood_type" name="blood_type">
+                                        <input type="text" class="form-control" id="blood_type" name="blood_type" value="<?= isset($patient['blood_type']) ? $patient['blood_type'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="blood_pressure">Blood Pressure</label>
-                                        <input type="text" class="form-control" id="blood_pressure" name="blood_pressure">
+                                        <input type="text" class="form-control" id="blood_pressure" name="blood_pressure" value="<?= isset($patient['blood_pressure']) ? $patient['blood_pressure'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label>Check if you have or had any of the following:</label>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="High Blood Pressure">
+                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="High Blood Pressure" <?= in_array("High Blood Pressure", $patient_medical_conditions) ? 'checked' : '' ?>>
                                             <label class="form-check-label">High Blood Pressure</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="Heart Diseases">
+                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="Heart Diseases" <?= in_array("Heart Diseases", $patient_medical_conditions) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Heart Diseases</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="Cancer">
+                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="Cancer" <?= in_array("Cancer", $patient_medical_conditions) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Cancer/Tumors</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="Diabetes">
+                                            <input type="checkbox" class="form-check-input" name="medical_conditions[]" value="Diabetes" <?= in_array("Diabetes", $patient_medical_conditions) ? 'checked' : '' ?>>
                                             <label class="form-check-label">Diabetes</label>
                                         </div>
                                         <!-- Add additional medical condition checkboxes as needed -->
