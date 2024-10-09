@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['display_message'] = "Medical Record updated successfully!";
     } else {
         // Error message
-        $_SESSION['message_type'] = "error";
+        $_SESSION['message_type'] = "danger";
         $_SESSION['display_message'] = "Error updating medical record.";
     }
 

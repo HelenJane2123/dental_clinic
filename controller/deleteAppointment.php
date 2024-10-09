@@ -17,7 +17,7 @@
         } else {
             // Failure
             $_SESSION['display_message'] = "Error deleting appointment.";
-            $_SESSION['message_type'] = "error";
+            $_SESSION['message_type'] = "danger";
         }
     
         // Redirect back to the appointments page

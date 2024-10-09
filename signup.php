@@ -76,14 +76,14 @@ include_once('inc/header.php');
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="form-group row">
+                  <div class="form-group row position-relative">
                     <div class="col-sm-6 mb-3 mb-sm-0">
                       <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
-                      <i class="fa fa-eye" aria-hidden="true" id="showhidepassword"></i>
+                      <i class="fa fa-eye position-absolute" aria-hidden="true" id="showhidepassword" style="cursor: pointer; right: 10px; top: 50%; transform: translateY(-50%);"></i>
                     </div>
                     <div class="col-sm-6 mb-3 mb-sm-0">
                       <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
-                      <i class="fa fa-eye" aria-hidden="true" id="confirm_showhidepassword"></i>
+                      <i class="fa fa-eye position-absolute" aria-hidden="true" id="confirm_showhidepassword" style="cursor: pointer; right: 10px; top: 50%; transform: translateY(-50%);"></i>
                     </div>
                   </div>
                 </div>

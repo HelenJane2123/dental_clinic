@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_user'])) {
 
     if (!$is_authenticated) {
         $_SESSION['message'] = 'Invalid username or password.';
-        $_SESSION['message_type'] = "error";
+        $_SESSION['message_type'] = "danger";
         header('Location: ../login.php');
         exit();
     } else {

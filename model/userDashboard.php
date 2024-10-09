@@ -30,7 +30,7 @@
                 if ($appointmentType === 'newPatient') {
         
                     // Insert new patient details under the same member ID (using alt_patient_id)
-                    $stmt = $this->db->prepare("INSERT INTO patients (member_id, first_name, last_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
+                    $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
                     $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
         
                     if (!$stmt->execute()) {
@@ -45,7 +45,7 @@
             } else {
                 // No existing patient found, insert a new patient
                 $stmt->close();
-                $stmt = $this->db->prepare("INSERT INTO patients (member_id, first_name, last_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
+                $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
                 $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
 
                 if (!$stmt->execute()) {
@@ -775,6 +775,33 @@
             }
         
             return []; // Return an empty array if no conditions found
+        }
+
+        public function get_current_password($member_id) {
+            $query = "SELECT password FROM accounts WHERE member_id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("i", $member_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc(); // Fetch the password from the result row
+                return $row['password']; // Return the password from the database
+            }
+
+            return false; // Return false if no password is found (e.g., member_id doesn't exist)
+        }
+
+        public function update_password($member_id, $new_password) {
+        
+            // SQL query to update the password for the given member_id
+            $update_query = "UPDATE accounts SET password = ? WHERE member_id = ?";
+            $update_stmt = $this->db->prepare($update_query); // Use $this->db for the database connection
+            $update_stmt->bind_param("si", $new_password, $member_id); // Bind the hashed password and member_id
+            $result = $update_stmt->execute(); // Execute the query
+
+            return $result; // Return true if the update was successful, false otherwise
         }
         
         

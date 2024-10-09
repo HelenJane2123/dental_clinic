@@ -46,11 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // File successfully uploaded, save the path
                 $profilePicPath = "public/profile_picture/{$member_id}/" . $newFileName;
             } else {
-                $_SESSION['message_type'] = "error";
+                $_SESSION['message_type'] = "danger";
                 $_SESSION['display_message'] = "There was an error moving the uploaded file.";
             }
         } else {
-            $_SESSION['message_type'] = "error";
+            $_SESSION['message_type'] = "danger";
             $_SESSION['display_message'] = "Invalid file extension. Only JPG, PNG, GIF files are allowed.";
         }
     }
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message_type'] = "success";
         $_SESSION['display_message'] = "Profile updated successfully!";
     } else {
-        $_SESSION['message_type'] = "error";
+        $_SESSION['message_type'] = "danger";
         $_SESSION['display_message'] = "Error updating profile.";
     }
 

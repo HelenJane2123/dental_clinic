@@ -22,7 +22,7 @@
         } else {
             // Set error message
             $_SESSION['display_message'] = "Error updating appointment.";
-            $_SESSION['message_type'] = "error";
+            $_SESSION['message_type'] = "danger";
         }
     
         // Redirect back to the appointments page

@@ -42,7 +42,7 @@ if (isset($_POST['appointmentType'])) {
         exit();
     } else {
         $_SESSION['display_message'] = "Error booking appointment. Please try again.";
-        $_SESSION['message_type'] = "error";
+        $_SESSION['message_type'] = "danger";
         header('Location: ../my_appointments.php');
         exit();
     }

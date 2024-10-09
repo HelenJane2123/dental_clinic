@@ -19,18 +19,16 @@
         $date_created     = date("Y-m-d h:i:sa");
         $fourRandomDigit  = rand(0001,9999);
         $member_id        = "M-".$fourRandomDigit;
-
-        //validate email address
-        if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
-            $_SESSION['message'] = "The email address '$email_address' is not valid.";
-            $_SESSION['message_type'] = "error";
-            header('Location: ../signup.php');
-            exit();
-        }
         
         //validate password
         if ($password_1 != $password_2) {
             $_SESSION['message'] =  "The two passwords do not match";
+            $_SESSION['message_type'] = "danger";
+            header('Location: ../signup.php');
+            exit();
+        }  //validate email address
+        else if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
+            $_SESSION['message'] = "The email address '$email_address' is not valid.";
             $_SESSION['message_type'] = "error";
             header('Location: ../signup.php');
             exit();
@@ -40,7 +38,7 @@
          $password_regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).{8,}$/";
          if (!preg_match($password_regex, $password_1)) {
              $_SESSION['message'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
-             $_SESSION['message_type'] = "error";
+             $_SESSION['message_type'] = "danger";
              header('Location: ../signup.php');
              exit();
          }
@@ -57,7 +55,7 @@
         }
         else {
           $_SESSION['message'] = 'Registration failed. Email or Username already exists, please try again.';
-          $_SESSION['message_type'] = "error";
+          $_SESSION['message_type'] = "danger";
           header('Location:../signup.php');
           exit();
         }

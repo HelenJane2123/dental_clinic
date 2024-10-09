@@ -21,4 +21,21 @@ Process:
             - Verify valid email address
 
     Contact Number: 
+        Logic:
+            - Validates number only
+
+2. User Login
+    Example:
+        User: HeartJasmine
+        Password: P@@swoord1223
+    Logic:
+        - Validates invalid username and password
+
+3. User Dashboard
+    - Dashboard
+    
+    - My Appointments
+    - My Record
+    - My Profile
+    - Change Password
 
