@@ -1,22 +1,26 @@
 <?php
     include_once("inc/userDashboardHeader.php");
 
-    //get patient id 
-    $patient_id = $appointment->get_patientid_by_member_id($member_id);
-    // Initialize $patient_allergies as an empty array
+
+    $patient_record = $appointment->get_patientid_by_member_id($member_id);
     $patient_allergies = [];
-    // Initialize the $patient_medical_conditions variable as an empty array
     $patient_medical_conditions = [];
+    if (!empty($patient_record)) {
+
+        if ($patient_record['patient_id']) {
+
+            $patientRecords = $appointment->get_all_patient_record($patient_record['patient_id']) ?: [];
+            // Example: Initialize $patient_allergies
+            $patient_allergies = $appointment->get_patient_allergies($patient_record['patient_id']);
+
+            $patient_medical_conditions = $appointment->get_patient_medical_conditions($patient_record['patient_id']); // Default to empty array if null
 
 
-     if ($patient_id) {
-         $patientRecords = $userDashboard->get_all_patient_record($patient_id);
-         $patient_allergies = $userDashboard->get_patient_allergies($patient_id) ?: [];
-         $patient_medical_conditions = $userDashboard->get_patient_medical_conditions($patient_id) ?: []; // Default to empty array if null
- 
-         // Assuming that you are fetching only one patient's record
-         $patient = !empty($patientRecords) ? $patientRecords[0] : null;
-     }
+            // Assuming that you are fetching only one patient's record
+            $patient = !empty($patientRecords) ? $patientRecords[0] : null;
+        }
+    }
+   
 ?>
     <div class="container-fluid page-body-wrapper">
       <?php include_once("inc/search_header.php"); ?>
@@ -28,19 +32,31 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Patient Information Record</h4>
+                            <?php
+                                if (isset($_SESSION['display_message'])) {
+                                    $message = $_SESSION['display_message'];
+                                    $message_type = $_SESSION['message_type'];
+                                    
+                                    echo "<div class='alert alert-{$message_type}'>{$message}</div>";
+                                    
+                                    // Unset the message so it doesn't persist on page reload
+                                    unset($_SESSION['display_message']);
+                                    unset($_SESSION['message_type']);
+                                }
+                            ?>
                             <form action="controller/myRecord.php" method="POST" class="forms-sample"  enctype="multipart/form-data">
                                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                                 <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($member_id) ? $member_id : '' ?>">
-                                <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
+                                <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_record['patient_id']) ? $patient_record['patient_id'] : '' ?>">
                                 <div class="row">
                                 <!-- Personal Information -->
                                     <div class="form-group col-sm-4">
                                         <label for="last_name">Last Name</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?= isset($lastname) ? $lastname : '' ?>" disabled required>
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?= isset($lastname) ? $lastname : '' ?>"  required>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="first_name">First Name</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?= isset($firstname) ? $firstname : '' ?>" disabled required>
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?= isset($firstname) ? $firstname : '' ?>" required>
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="middle_name">Middle Name</label>
@@ -59,8 +75,8 @@
                                     <div class="form-group col-sm-4">
                                         <label>Sex</label>
                                         <select class="form-control" id="sex" name="sex">
-                                            <option value="male" <?= isset($gender) && $gender == 'male' ? 'selected' : '' ?>>Male</option>
-                                            <option value="female" <?= isset($gender) && $gender == 'female' ? 'selected' : '' ?>>Female</option>
+                                            <option value="M" <?= isset($patient['sex']) && $patient['sex'] == 'M' ? 'selected' : '' ?>>Male</option>
+                                            <option value="F" <?= isset($patient['sex']) && $patient['sex'] == 'F' ? 'selected' : '' ?>>Female</option>
                                         </select>
                                     </div>
                                 </div>
@@ -81,11 +97,11 @@
                                 <div class="row">
                                     <div class="form-group col-sm-4">
                                         <label for="cellphone_no">Cellphone No.</label>
-                                        <input type="text" class="form-control" id="cellphone_no" name="cellphone_no" value="<?= isset($contact_number) ? $contact_number : '' ?>" disabled>
+                                        <input type="text" class="form-control" id="cellphone_no" name="cellphone_no" value="<?= isset($contact_number) ? $contact_number : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="email">Email Address</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="<?= isset($email) ? $email : '' ?>" disabled>
+                                        <input type="email" class="form-control" id="email" name="email" value="<?= isset($email) ? $email : '' ?>" >
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="home_address">Home Address</label>
@@ -193,8 +209,8 @@
                                     <div class="form-group col-sm-4">
                                         <label>Are you taking any prescription/non-prescription medication?</label>
                                         <select class="form-control" name="taking_medication">
-                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
+                                            <option value="1" <?= isset($patient['under_medical_treatment']) && $patient['under_medical_treatment'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['under_medical_treatment']) && $patient['under_medical_treatment'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                         <label>If yes, what medication?</label>
                                         <input type="text" class="form-control" name="medication_details" value="<?= isset($patient['medication_details']) ? $patient['medication_details'] : '' ?>">
@@ -202,8 +218,8 @@
                                     <div class="form-group col-sm-4">
                                         <label>Do you use tobacco products?</label>
                                         <select class="form-control" name="use_tobacco">
-                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
+                                            <option value="1" <?= isset($patient['use_tobacco']) && $patient['use_tobacco'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['use_tobacco']) && $patient['use_tobacco'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                 </div>
@@ -211,8 +227,8 @@
                                     <div class="form-group col-sm-6">
                                         <label>Do you use alcohol or other dangerous drugs?</label>
                                         <select class="form-control" name="use_drugs">
-                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
+                                            <option value="1" <?= isset($patient['use_drugs']) && $patient['use_drugs'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['use_drugs']) && $patient['use_drugs'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
@@ -255,22 +271,22 @@
                                     <div class="form-group col-sm-6">
                                         <label>Are you pregnant?</label>
                                         <select class="form-control" name="pregnant">
-                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
+                                            <option value="1" <?= isset($patient['pregnant']) && $patient['pregnant'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['pregnant']) && $patient['pregnant'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label>Are you nursing?</label>
                                         <select class="form-control" name="nursing">
-                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
+                                            <option value="1" <?= isset($patient['nursing']) && $patient['nursing'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['nursing']) && $patient['nursing'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label>Are you taking birth control pills?</label>
                                         <select class="form-control" name="birth_control">
-                                            <option value="1" <?= isset($patient['good_health']) && $patient['good_health'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                            <option value="0" <?= isset($patient['good_health']) && $patient['good_health'] == 0 ? 'selected' : '' ?>>No</option>
+                                            <option value="1" <?= isset($patient['birth_control']) && $patient['birth_control'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                            <option value="0" <?= isset($patient['birth_control']) && $patient['birth_control'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                 </div>

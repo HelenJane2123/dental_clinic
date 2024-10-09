@@ -131,6 +131,10 @@
             }
         },
         dateClick: function(info) {
+            if (info.date.getDay() === 6) {
+                alert('Appointments cannot be booked on Saturdays. Please select another date.');
+                return; // Prevent the modal from opening
+            }
             if (info.date >= new Date()) {
                 document.getElementById('appointmentDate').value = info.date.toISOString().split('T')[0];
                 $('#appointmentModal').modal('show');
@@ -275,6 +279,7 @@
         }
         document.getElementById('age').value = age;
     });
+
   </script>
 </body>
 

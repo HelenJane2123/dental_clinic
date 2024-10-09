@@ -11,24 +11,26 @@
 			}
 		}
 
-        public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes) {
-            // Check for existing patient by member ID
-            $stmt = $this->db->prepare("SELECT patient_id, status FROM patients WHERE member_id = ? and patient_id = ?");
-            $stmt->bind_param("ss", $member_id, $patient_id);
+        public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id) {
+             // Check if the patient already exists in the patients table
+            $stmt = $this->db->prepare("SELECT patient_id FROM patients WHERE member_id = ?");
+            $stmt->bind_param("s", $member_id);
             $stmt->execute();
             $stmt->store_result();
         
             if ($stmt->num_rows > 0) {
                 // Existing patient found
-                $stmt->bind_result($patient_id, $existing_status);
+                $stmt->bind_result($existing_patient_id);
                 $stmt->fetch();
-        
+                $stmt->close();
+                
+                // Use the existing patient ID for the appointment
+                $patient_id = $existing_patient_id;
+
                 if ($appointmentType === 'newPatient') {
-                    // New patient but existing member ID: insert as an alternate patient with status 'new'
-                    $stmt->close(); // Close the previous statement
         
                     // Insert new patient details under the same member ID (using alt_patient_id)
-                    $stmt = $this->db->prepare("INSERT INTO patients (member_id, first_name, last_name, contact_number, email, status) VALUES (?, ?, ?, ?, ?, 'new')");
+                    $stmt = $this->db->prepare("INSERT INTO patients (member_id, first_name, last_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
                     $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
         
                     if (!$stmt->execute()) {
@@ -38,44 +40,28 @@
                     }
         
                     // Get the new alternate patient_id for the appointment
-                    $alt_patient_id = $this->db->insert_id;
-                } else {
-                    // Existing patient, use the existing patient_id
-                    $alt_patient_id = $patient_id;
-        
-                    // Update the status to 'old' if the appointment type is 'old'
-                    if ($appointmentType === 'old') {
-                        $updateStmt = $this->db->prepare("UPDATE patients SET status = 'old' WHERE patient_id = ?");
-                        $updateStmt->bind_param("s", $alt_patient_id);
-                        if (!$updateStmt->execute()) {
-                            echo "Error updating patient status: " . $updateStmt->error;
-                        }
-                        $updateStmt->close();
-                    }
-                }
+                    $patient_id = $this->db->insert_id;
+                } 
             } else {
-                // No existing patient found, insert new patient
+                // No existing patient found, insert a new patient
                 $stmt->close();
-                $status = 'new';
-                $stmt = $this->db->prepare("INSERT INTO patients (member_id, first_name, last_name, contact_number, email, status) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $status);
-        
+                $stmt = $this->db->prepare("INSERT INTO patients (member_id, first_name, last_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
+
                 if (!$stmt->execute()) {
                     echo "Error inserting new patient: " . $stmt->error;
                     $stmt->close();
                     return false;
                 }
-        
+
                 // Get the newly inserted patient ID
-                $alt_patient_id = $this->db->insert_id;
+                $patient_id = $this->db->insert_id;
+                $stmt->close();
             }
         
-            // Close the previous statement before inserting the appointment
-            $stmt->close();
-        
             // Insert appointment record using the new or existing patient ID
-            $stmt = $this->db->prepare("INSERT INTO appointments (patient_id, member_id, appointment_date, appointment_time, services, notes, status) VALUES (?, ?, ?, ?, ?, ?, 'Pending')");
-            $stmt->bind_param("ssssss", $alt_patient_id, $member_id, $appointmentDate, $appointmentTime, $services, $notes);
+            $stmt = $this->db->prepare("INSERT INTO appointments (patient_id,appointment_date, appointment_time, services, status, notes) VALUES (?, ?, ?, ?, 'Pending', ?)");
+            $stmt->bind_param("sssss", $patient_id, $appointmentDate, $appointmentTime, $services, $notes);
         
             if ($stmt->execute()) {
                 return true; // Return true if the appointment is successfully inserted
@@ -90,10 +76,10 @@
         
         public function get_all_appointments_by_member_id($member_id) {
             // Prepare the SQL statement
-            $query = "SELECT a.*, p.first_name, p.last_name 
+            $query = "SELECT a.*, p.first_name, p.last_name, p.member_id
                             FROM appointments AS a
                             JOIN patients AS p ON a.patient_id = p.patient_id
-                            WHERE a.member_id = ?";
+                            WHERE p.member_id = ?";
 
             // Initialize the statement
             $stmt = $this->db->prepare($query); // Use $this->db instead of $this->conn
@@ -212,7 +198,9 @@
 
        // Method to get count of confirmed appointments
         public function get_confirmed_appointments_count($member_id) {
-            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Confirmed' AND member_id = '$member_id'";
+            $query = "SELECT COUNT(*) as count FROM appointments
+                     LEFT JOIN patients p ON p.patient_id = appointments.patient_id
+                     WHERE status = 'Confirmed' AND p.member_id = '$member_id'";
             $result = $this->db->query($query);
             $row = $result->fetch_assoc();
             return $row['count']; // Return the count of confirmed appointments
@@ -220,7 +208,9 @@
 
         // Method to get count of canceled appointments
         public function get_canceled_appointments_count($member_id) {
-            $query = "SELECT COUNT(*) as count FROM appointments WHERE status = 'Canceled' AND member_id = '$member_id'";
+            $query = "SELECT COUNT(*) as count FROM appointments 
+                    LEFT JOIN patients p ON p.patient_id = appointments.patient_id
+                    WHERE status = 'Canceled' AND p.member_id = '$member_id'";
             $result = $this->db->query($query);
             $row = $result->fetch_assoc();
             return $row['count']; // Return the count of canceled appointments
@@ -229,6 +219,7 @@
         // Your existing method for getting upcoming appointments
         public function get_upcoming_appointments($member_id) {
             $query = "SELECT appointment_date, appointment_time, services FROM appointments 
+                  LEFT JOIN patients p ON p.patient_id = appointments.patient_id
                   WHERE appointment_date = CURDATE() + INTERVAL 2 DAY 
                   AND status = 'Confirmed' AND member_id = '$member_id'";
             $result = $this->db->query($query);
@@ -240,7 +231,8 @@
             // Define the query to select today's confirmed appointments
             $query = "SELECT appointment_date, appointment_time, notes, services
                       FROM appointments 
-                      WHERE appointment_date = CURDATE() AND status = 'Confirmed' AND member_id = '$member_id'";
+                      LEFT JOIN patients p ON p.patient_id = appointments.patient_id
+                      WHERE appointment_date = CURDATE() AND status = 'Confirmed' AND p.member_id = '$member_id'";
         
             // Execute the query
             $result = $this->db->query($query);
@@ -335,21 +327,24 @@
                 $guardianData = [
                     'guardian_name' => $data['guardian_name'],
                     'guardian_occupation' => $data['guardian_occupation'],
+                    'patient_id' => $data['patient_id']
                 ];
                 
                 // Consultation data
                 $consultationData = [
+                    'referral_source' => $data['referral_source'],
                     'reason_for_consultation' => $data['reason_for_consultation'],
                     'previous_dentist' => $data['previous_dentist'],
                     'last_dental_visit' => $data['last_dental_visit'],
-                    'physician_name' => $data['physician_name'],
-                    'physician_specialty' => $data['physician_specialty'],
-                    'physician_address' => $data['physician_address'],
-                    'physician_phone_no' => $data['physician_phone_no'],
+                    'patient_id' => $data['patient_id']
                 ];
                 
                 // Medical history data
                 $medicalHistoryData = [
+                    'physician_name' => $data['physician_name'],
+                    'physician_specialty' => $data['physician_specialty'],
+                    'physician_address' => $data['physician_address'],
+                    'physician_phone_no' => $data['physician_phone_no'],
                     'good_health' => $data['good_health'],
                     'under_medical_treatment' => $data['under_medical_treatment'],
                     'medical_condition_treated' => $data['medical_condition_treated'],
@@ -368,7 +363,32 @@
                     'blood_type' => $data['blood_type'],
                     'blood_pressure' => $data['blood_pressure'],
                     'illness_conditions' => $data['medical_conditions'],
+                    'patient_id' => $data['patient_id']
                 ];
+
+                 // Ensure all values are set, use default values if not
+                 $physician_name = $medicalHistoryData['physician_name'] ?? null;
+                 $physician_specialty = $medicalHistoryData['physician_specialty'] ?? null;
+                 $physician_address = $medicalHistoryData['physician_address'] ?? null;
+                 $physician_phone_no = $medicalHistoryData['physician_phone_no'] ?? null;
+                 $good_health = $medicalHistoryData['good_health'] ?? 0; // Default to 0 if not set
+                 $under_medical_treatment = $medicalHistoryData['under_medical_treatment'] ?? 0; // Default to 0 if not set
+                 $medical_condition_treated = $medicalHistoryData['medical_condition_treated'] ?? ''; // Default to empty string
+                 $serious_illness = $medicalHistoryData['serious_illness'] ?? 0; // Default to 0 if not set
+                 $illness_details = $medicalHistoryData['illness_details'] ?? ''; // Default to empty string
+                 $hospitalization = $medicalHistoryData['hospitalization'] ?? 0; // Default to 0 if not set
+                 $hospitalization_reason = $medicalHistoryData['hospitalization_reason'] ?? ''; // Default to empty string
+                 $taking_medication = $medicalHistoryData['taking_medication'] ?? 0; // Default to 0 if not set
+                 $medication_details = $medicalHistoryData['medication_details'] ?? ''; // Default to empty string
+                 $use_tobacco = $medicalHistoryData['use_tobacco'] ?? 0; // Default to 0 if not set
+                 $use_drugs = $medicalHistoryData['use_drugs'] ?? 0; // Default to 0 if not set
+                 $allergic_medicine = $medicalHistoryData['allergic_medicine'] ?? ''; // Default to empty string
+                 $pregnant = $medicalHistoryData['pregnant'] ?? 0; // Default to 0 if not set
+                 $nursing = $medicalHistoryData['nursing'] ?? 0; // Default to 0 if not set
+                 $taking_birth_control = $medicalHistoryData['taking_birth_control'] ?? 0; // Default to 0 if not set
+                 $blood_type = $medicalHistoryData['blood_type'] ?? ''; // Default to empty string
+                 $blood_pressure = $medicalHistoryData['blood_pressure'] ?? ''; // Default to empty string
+                 $illness_conditions = $medicalHistoryData['illness_conditions'] ?? ''; // Default to empty string
         
                 if ($stmt->num_rows > 0) {
                     // Step 2: Record exists, perform updates
@@ -390,7 +410,7 @@
                         email = ?, 
                         home_address = ?, 
                         occupation = ? 
-                    WHERE patient_info_id = ?"; 
+                    WHERE patient_id = ?"; 
         
                     $stmt = $this->db->prepare($updatePatientQuery);
                     $stmt->bind_param(
@@ -409,7 +429,7 @@
                         $data['email'],
                         $data['home_address'],  
                         $data['occupation'],
-                        $_SESSION['user_id']  // Assuming this is the patient ID
+                        $data['patient_id']  // Assuming this is the patient ID
                     );
                     $stmt->execute();
                     
@@ -430,31 +450,29 @@
         
                     // Update consultation details
                     $updateConsultationQuery = "UPDATE consultations SET 
+                        referral_source = ?, 
                         reason_for_consultation = ?, 
                         previous_dentist = ?, 
-                        last_dental_visit = ?, 
-                        physician_name = ?, 
-                        physician_specialty = ?, 
-                        physician_address = ?, 
-                        physician_phone_no = ? 
+                        last_dental_visit = ?
                     WHERE patient_id = ?"; 
                     
                     $stmt = $this->db->prepare($updateConsultationQuery);
                     $stmt->bind_param(
-                        'sssssssi',
+                        'ssssi',
+                        $consultationData['referral_source'],
                         $consultationData['reason_for_consultation'],
                         $consultationData['previous_dentist'],
                         $consultationData['last_dental_visit'],
-                        $consultationData['physician_name'],
-                        $consultationData['physician_specialty'],
-                        $consultationData['physician_address'],
-                        $consultationData['physician_phone_no'],
-                        $consultationData['patient_id']
+                        $consultationData['patient_id'],
                     );
                     $stmt->execute();
         
                     // Update medical history
                     $updateMedicalHistoryQuery = "UPDATE medical_history SET 
+                        physician_name = ?, 
+                        physician_specialty = ?, 
+                        physician_address = ?, 
+                        physician_phone_no = ?, 
                         good_health = ?, 
                         under_medical_treatment = ?, 
                         medical_condition_treated = ?, 
@@ -476,8 +494,13 @@
                     WHERE patient_id = ?"; 
                     
                     $stmt = $this->db->prepare($updateMedicalHistoryQuery);
+                    // Bind parameters
                     $stmt->bind_param(
-                        'iiissssssssssssssi',
+                        'ssssiisisisisiisiiisssi',
+                        $medicalHistoryData['physician_name'],
+                        $medicalHistoryData['physician_specialty'],
+                        $medicalHistoryData['physician_address'],
+                        $medicalHistoryData['physician_phone_no'],
                         $medicalHistoryData['good_health'],
                         $medicalHistoryData['under_medical_treatment'],
                         $medicalHistoryData['medical_condition_treated'],
@@ -496,7 +519,7 @@
                         $medicalHistoryData['blood_type'],
                         $medicalHistoryData['blood_pressure'],
                         $medicalHistoryData['illness_conditions'],
-                        $medicalHistoryData['patient_id']
+                        $medicalHistoryData['patient_id'] 
                     );
                     $stmt->execute();
         
@@ -580,30 +603,6 @@
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = $this->db->prepare($insertMedicalHistoryQuery);
 
-                    // Ensure all values are set, use default values if not
-                    $physician_name = $medicalHistoryData['physician_name'] ?? null;
-                    $physician_specialty = $medicalHistoryData['physician_specialty'] ?? null;
-                    $physician_address = $medicalHistoryData['physician_address'] ?? null;
-                    $physician_phone_no = $medicalHistoryData['physician_phone_no'] ?? null;
-                    $good_health = $medicalHistoryData['good_health'] ?? 0; // Default to 0 if not set
-                    $under_medical_treatment = $medicalHistoryData['under_medical_treatment'] ?? 0; // Default to 0 if not set
-                    $medical_condition_treated = $medicalHistoryData['medical_condition_treated'] ?? ''; // Default to empty string
-                    $serious_illness = $medicalHistoryData['serious_illness'] ?? 0; // Default to 0 if not set
-                    $illness_details = $medicalHistoryData['illness_details'] ?? ''; // Default to empty string
-                    $hospitalization = $medicalHistoryData['hospitalization'] ?? 0; // Default to 0 if not set
-                    $hospitalization_reason = $medicalHistoryData['hospitalization_reason'] ?? ''; // Default to empty string
-                    $taking_medication = $medicalHistoryData['taking_medication'] ?? 0; // Default to 0 if not set
-                    $medication_details = $medicalHistoryData['medication_details'] ?? ''; // Default to empty string
-                    $use_tobacco = $medicalHistoryData['use_tobacco'] ?? 0; // Default to 0 if not set
-                    $use_drugs = $medicalHistoryData['use_drugs'] ?? 0; // Default to 0 if not set
-                    $allergic_medicine = $medicalHistoryData['allergic_medicine'] ?? ''; // Default to empty string
-                    $pregnant = $medicalHistoryData['pregnant'] ?? 0; // Default to 0 if not set
-                    $nursing = $medicalHistoryData['nursing'] ?? 0; // Default to 0 if not set
-                    $taking_birth_control = $medicalHistoryData['taking_birth_control'] ?? 0; // Default to 0 if not set
-                    $blood_type = $medicalHistoryData['blood_type'] ?? ''; // Default to empty string
-                    $blood_pressure = $medicalHistoryData['blood_pressure'] ?? ''; // Default to empty string
-                    $illness_conditions = $medicalHistoryData['illness_conditions'] ?? ''; // Default to empty string
-                    
                     // Bind parameters
                     $stmt->bind_param(
                         'issssiisisisisiisiiisss',
@@ -634,8 +633,8 @@
                     
                     // Execute the statement
                     if ($stmt->execute()) {
-                        // Success
-                    } else {
+                        return true;
+                    } else { 
                         // Handle error
                         echo "Error: " . $stmt->error;
                     }
@@ -649,22 +648,46 @@
             $query = "
                 SELECT 
                     p.patient_id,
+                    p.member_id,
                     p.first_name,
                     p.last_name,
                     p.middle_name,
                     p.birthdate,
+                    p.age,
                     p.sex,
+                    p.nickname,
+                    p.religion,
+                    p.nationality,
                     p.cellphone_no,
                     p.email,
                     p.home_address,
                     p.occupation,
                     g.guardian_name,
-                    g.guardian_phone,
+                    g.guardian_occupation,
                     mh.physician_name,
                     mh.physician_specialty,
+                    mh.physician_address,
+                    mh.physician_phone_no,
+                    mh.good_health,
+                    mh.under_medical_treatment,
+                    mh.medical_condition_treated,
+                    mh.serious_illness,
+                    mh.illness_details,
+                    mh.hospitalization,
                     mh.hospitalization_reason,
-                    c.consultation_date,
-                    c.consultation_notes
+                    mh.taking_medication,
+                    mh.medication_details,
+                    mh.use_tobacco,
+                    mh.use_drugs,
+                    mh.pregnant,
+                    mh.nursing,
+                    mh.taking_birth_control,
+                    mh.blood_type,
+                    mh.blood_pressure,
+                    c.referral_source,
+                    c.reason_for_consultation,
+                    c.previous_dentist,
+                    c.last_dental_visit
                 FROM patients p
                 LEFT JOIN guardians g ON p.patient_id = g.patient_id
                 LEFT JOIN medical_history mh ON p.patient_id = mh.patient_id
@@ -731,11 +754,11 @@
         
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                // Assuming allergies are stored as a serialized array or comma-separated values
-                return explode(',', $row['allergic_medicine']); // Adjust if your format is different
+                // Decode JSON data into a PHP array
+                return json_decode($row['allergic_medicine'], true); 
             }
         
-            return []; // Return an empty array if no allergies found
+            return []; // Return an empty array if no conditions found
         }
 
         public function get_patient_medical_conditions($patient_id) {
@@ -747,12 +770,13 @@
         
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
-                // Assuming allergies are stored as a serialized array or comma-separated values
-                return explode(',', $row['illness_conditions']); // Adjust if your format is different
+                // Decode JSON data into a PHP array
+                return json_decode($row['illness_conditions'], true); 
             }
         
-            return []; // Return an empty array if no allergies found
+            return []; // Return an empty array if no conditions found
         }
+        
         
     }
 ?>

@@ -25,6 +25,7 @@
                     <input type="hidden" name="old_firstname" class="form-control" value="<?=$_SESSION['firstname']?>" id="old_firstname">
                     <input type="hidden" name="old_lastname" class="form-control" value="<?=$_SESSION['lastname']?>" id="old_lastname">
                     <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>" id="member_id">
+                    <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
                     <div id="nameFields">
                         <div class="row">
                             <div class="form-group col-sm-6">
@@ -36,16 +37,16 @@
                                 <input type="text" name="lastname" class="form-control" id="lastName" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label for="contactNumber">Contact Number</label>
-                            <input type="text" name="contactnumber" class="form-control" id="contactNumber" required>
-                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="contactNumber">Contact Number</label>
+                                <input type="text" name="contactnumber" class="form-control" id="contactNumber" required>
+                            </div>
 
-                        <div class="form-group col-sm-6">
-                            <label for="emailAddress">Email Address</label>
-                            <input type="email" name="emailaddress" class="form-control" id="emailAddress" required>
+                            <div class="form-group col-sm-6">
+                                <label for="emailAddress">Email Address</label>
+                                <input type="email" name="emailaddress" class="form-control" id="emailAddress" required>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -198,4 +199,31 @@
             </div>
         </div>
     </div>
-</div
+</div>
+
+<script>
+    // Function to check if the selected date is a Saturday
+    document.getElementById("appointmentDate").addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+
+        console.log(selectedDate.getDay());
+        
+        // Check if the selected date is a Saturday (getDay() returns 6 for Saturday)
+        if (selectedDate.getDay() === 6) {
+            alert("Appointments cannot be scheduled on Saturdays. Please choose another date.");
+            this.value = ''; // Clear the selected date
+        }
+    });
+
+    document.getElementById("edit_appointment_date").addEventListener("change", function() {
+        var selectedDate = new Date(this.value);
+
+        console.log(selectedDate.getDay());
+        
+        // Check if the selected date is a Saturday (getDay() returns 6 for Saturday)
+        if (selectedDate.getDay() === 6) {
+            alert("Appointments cannot be scheduled on Saturdays. Please choose another date.");
+            this.value = ''; // Clear the selected date
+        }
+    });
+</script>

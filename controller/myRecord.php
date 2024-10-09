@@ -9,8 +9,8 @@ $user_dashboard = new UserDashboard();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Collecting form data
     $formData = [
-        'member_id' => $_POST['member_id'] ?? '',
         'patient_id' => $_POST['patient_id'] ?? '',
+        'member_id' => $_POST['member_id'] ?? '',
         'last_name' => $_POST['last_name'] ?? '',
         'first_name' => $_POST['first_name'] ?? '',
         'middle_name' => $_POST['middle_name'] ?? '',

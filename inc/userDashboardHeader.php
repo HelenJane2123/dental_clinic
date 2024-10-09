@@ -48,7 +48,6 @@
       $email = $userDetails['email'];
       $contact_number = $userDetails['contactnumber'];
       $gender = $userDetails['gender'];
-      $address = $userDetails['address'];
       $remarks = $userDetails['remarks'];
       $profile_picture = $userDetails['profile_picture'];
   }
