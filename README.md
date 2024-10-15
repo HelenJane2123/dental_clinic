@@ -39,3 +39,11 @@ Process:
     - My Profile
     - Change Password
 
+4. Admin Dashboard
+    - Dashboard
+    - Patient Records
+    - Appointment Records
+    - Doctors Profile
+    - My Profile
+    - Change Password
+

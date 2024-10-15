@@ -79,7 +79,7 @@ include_once('inc/header.php');
 
           <div class="row mb-4 mt-3">
             <div class="col">
-              <p><a href="#">Forgot password?</a></p>
+              <p><a href="forgetpass.php">Forgot password?</a></p>
             </div>
             <div class="col">
               <p>Not a member? <a href="signup.php">Register</a></p>
