@@ -161,8 +161,8 @@
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select class="form-control" id="status" name="status" required>
-                            <option value="Cancelled">Cancelled</option>
-                            <option value="Rescheduled">Rescheduled</option>
+                            <option value="Canceled">Cancelled</option>
+                            <option value="Re-Schedule">Rescheduled</option>
                             <option value="Pending">Pending</option>
                         </select>
                     </div>

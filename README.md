@@ -47,3 +47,10 @@ Process:
     - My Profile
     - Change Password
 
+2. Admin Login
+    Example:
+        User: HeartAdmin
+        Password: P@@swoord1223
+    Logic:
+        - Validates invalid username and password
+

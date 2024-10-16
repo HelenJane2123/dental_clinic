@@ -8,8 +8,21 @@
             </div>
             <h1 class="auth-title">Sign Up</h1>
             <p class="auth-subtitle mb-5">Input your data to register to our website.</p>
+             <!-- Error Message Display -->
+             <?php if (isset($_SESSION['message'])) : ?>
+                <?php 
+                    $message_type = $_SESSION['message_type'] ?? 'info'; 
+                    $alert_class = ($message_type === 'error') ? 'alert-danger' : 
+                                   (($message_type === 'success') ? 'alert-success' : 
+                                   (($message_type === 'warning') ? 'alert-warning' : 'alert-info'));
+                ?>
+                <div class="alert <?php echo htmlspecialchars($alert_class, ENT_QUOTES, 'UTF-8'); ?> fade show" role="alert">
+                    <span><?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    <?php unset($_SESSION['message'], $_SESSION['message_type']); ?>
+                </div>
+            <?php endif ?>
 
-            <form action="RegisterAdmin.php" name="register" method="post" class="needs-validation-registration" novalidate enctype="multipart/form-data">
+            <form action="controller/RegisterAdmin.php" name="register" method="post" class="needs-validation-registration" novalidate enctype="multipart/form-data">
                 <div class="form-group position-relative has-icon-left mb-4">
                     <input type="text" class="form-control form-control-xl" id="firstname" name="firstname" placeholder="First Name" required>
                     <div class="form-control-icon">
@@ -34,25 +47,36 @@
                         <i class="bi bi-phone"></i>
                     </div>
                 </div>
+                <!-- Dropdown for Admin or Super Admin -->
                 <div class="form-group position-relative has-icon-left mb-4">
-                    <input type="text" class="form-control form-control-xl" placeholder="Username">
+                    <select class="form-control form-control-xl" id="user_type" name="user_type" required>
+                        <option value="" disabled selected>Select User Type</option>
+                        <option value="admin">Admin</option>
+                        <option value="super_admin">Super Admin</option>
+                    </select>
+                    <div class="form-control-icon">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                </div>
+                <div class="form-group position-relative has-icon-left mb-4">
+                    <input type="text" class="form-control form-control-xl" id="username" name="username" placeholder="Username">
                     <div class="form-control-icon">
                         <i class="bi bi-person"></i>
                     </div>
                 </div>
                 <div class="form-group position-relative has-icon-left mb-4">
-                    <input type="password" class="form-control form-control-xl" placeholder="Password">
+                    <input type="password" class="form-control form-control-xl" id="password" name="password" placeholder="Password">
                     <div class="form-control-icon">
                         <i class="bi bi-shield-lock"></i>
                     </div>
                 </div>
                 <div class="form-group position-relative has-icon-left mb-4">
-                    <input type="password" class="form-control form-control-xl" placeholder="Confirm Password">
+                    <input type="password" class="form-control form-control-xl" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                     <div class="form-control-icon">
                         <i class="bi bi-shield-lock"></i>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Sign Up</button>
+                <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" name="register" type="submit">Sign Up</button>
             </form>
             <div class="text-center mt-5 text-lg fs-4">
                 <p class='text-gray-600'>Already have an account? <a href="index.php"
