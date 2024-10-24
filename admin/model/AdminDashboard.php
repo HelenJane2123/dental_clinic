@@ -159,6 +159,94 @@
             return $row['count'];
         }
 
+        public function get_notifications() {
+            // Query to select all notifications
+            $query = "SELECT * FROM notifications  ORDER BY created_at DESC LIMIT 2";
+            
+            if ($stmt = $this->db->prepare($query)) {
+                // Execute the query
+                $stmt->execute();
+                
+                // Fetch the result
+                $result = $stmt->get_result();
+                
+                // Initialize an array to store notifications
+                $notifications = [];
+                
+                // Loop through the result and add each notification to the array
+                while ($row = $result->fetch_assoc()) {
+                    $notifications[] = $row;
+                }
+                
+                // Close the statement
+                $stmt->close();
+                
+                // Return the array of notifications
+                return $notifications;
+            } else {
+                // If the query preparation fails, return an empty array
+                return [];
+            }
+        }
+
+        public function update_notification($notificationId) {
+            // Prepare the SQL statement to update the notification
+            $stmt = $this->db->prepare("UPDATE notifications SET is_read = 1 WHERE id = ?");
+            
+            // Check if statement preparation was successful
+            if (!$stmt) {
+                echo "Error preparing statement: " . $this->db->error;
+                return false; // Return false if the statement could not be prepared
+            }
+        
+            // Bind the notification ID
+            $stmt->bind_param("i", $notificationId);
+        
+            // Execute the statement and check for success
+            if ($stmt->execute()) {
+                $stmt->close(); // Close the statement
+                return true; // Return true if the notification is successfully updated
+            } else {
+                // If there was an error, output the error message for debugging
+                echo "Error updating notification: " . $stmt->error;
+                $stmt->close(); // Close the statement
+                return false; // Return false if there's an error
+            }
+        }
+
+        public function get_all_notifications() {
+            // SQL query to get patient details along with member ID, first name, and last name
+                $query = "SELECT p.*, a.member_id, a.first_name AS first_name, a.last_name AS last_name, a.patient_id
+                FROM notifications p
+                LEFT JOIN patients a ON p.user_id = a.patient_id";
+
+            // Prepare the SQL statement
+            if ($stmt = $this->db->prepare($query)) {
+            // Execute the query
+            $stmt->execute();
+
+            // Fetch the result
+            $result = $stmt->get_result();
+
+            // Initialize an array to store the patients with details
+            $patients_with_details = [];
+
+            // Loop through the result and add each patient to the array
+            while ($row = $result->fetch_assoc()) {
+            $patients_with_details[] = $row;
+            }
+
+            // Close the statement
+            $stmt->close();
+
+            // Return the array of patients with details
+            return $patients_with_details;
+            } else {
+            // If the query preparation fails, return an empty array
+            return [];
+            }
+        }
+
 
 	}
 ?>

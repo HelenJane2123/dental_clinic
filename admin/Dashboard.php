@@ -1,9 +1,7 @@
 <?php
     include_once('inc/headerDashboard.php');
+    include_once('inc/sidebarMenu.php');
 ?>
-        <?php
-            include_once('inc/sidebarMenu.php');
-        ?>
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -142,7 +140,12 @@
                                     <?php foreach ($notifications as $notification): ?>
                                         <div class="notification-item d-flex justify-content-between align-items-center px-4 py-2">
                                             <div class="notification-message">
-                                                <h6 class="mb-0"><a href="#"><?php echo htmlspecialchars($notification['message']); ?></a></h6>
+                                                <!-- Use a standard anchor link and JavaScript to trigger the modal -->
+                                                <h6 class="mb-0">
+                                                    <a href="javascript:void(0);" class="<?php echo $notification['is_read'] ? 'notification-read' : 'notification-unread'; ?>" data-id="<?php echo $notification['id']; ?>" data-message="<?php echo htmlspecialchars($notification['message']); ?>">
+                                                        <?php echo htmlspecialchars($notification['message']); ?>
+                                                    </a>
+                                                </h6>
                                                 <small class="text-muted"><?php echo date('F j, Y, g:i A', strtotime($notification['created_at'])); ?></small>
                                             </div>
                                         </div>
@@ -150,7 +153,7 @@
                                     <?php endforeach; ?>
                                 </div>
                                 <div class="px-4">
-                                    <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>View All Notifications</button>
+                                    <a href="notifications.php" class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>View All Notifications</a>
                                 </div>
                             </div>
                         </div>
@@ -210,6 +213,8 @@
                     </div>
                 </section>
             </div>
+    
+    
     <?php
         include_once('inc/footerDashboard.php');
     ?>

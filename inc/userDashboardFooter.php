@@ -255,12 +255,15 @@
       document.getElementById('appointment_id').value = appointmentId;
     }
 
-    function openEditModal(id, date, time, notes, status) {
+    function openEditModal(id, date, time, notes, status, first_name, last_name, member_id) {
         document.getElementById('edit_appointment_id').value = id;
         document.getElementById('edit_appointment_date').value = date ? date : ''; // Set date or leave empty
         document.getElementById('edit_appointment_time').value = time ? time : ''; // Set time or leave empty
         document.getElementById('edit_notes').value = notes ? notes : ''; // Set notes or leave empty
         document.getElementById('status').value = status; // Set the current status
+        document.getElementById('first_name').value = first_name;
+        document.getElementById('last_name').value = last_name;
+        document.getElementById('member_id').value = member_id;
         $('#editAppointmentModal').modal('show'); // Show the modal
 
         // Attach an event listener to the close button

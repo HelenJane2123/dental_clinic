@@ -149,6 +149,9 @@
             <form action="controller/editAppointment.php" method="POST">
                 <div class="modal-body">
                     <input type="hidden" name="appointment_id" id="edit_appointment_id">
+                    <input type="hidden" id="first_name" name="first_name">
+                    <input type="hidden" id="last_name" name="last_name">
+                    <input type="hidden" id="member_id" name="member_id" value="<?=$member_id?>">
                     
                     <div class="form-group">
                         <label for="edit_appointment_date">New Appointment Date (Leave empty to keep the same)</label>

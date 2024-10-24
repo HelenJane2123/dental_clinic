@@ -70,7 +70,7 @@
                                                         <button class="btn btn-info btn-sm" onclick="window.location.href='my_appointments.php?id=<?= $appointment['id'] ?>'" title="View">
                                                           <i class="mdi mdi-eye"></i>
                                                         </button>
-                                                        <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>')" title="Edit">
+                                                        <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>', '<?= htmlspecialchars($appointment['first_name']) ?>', '<?= htmlspecialchars($appointment['last_name']) ?>','<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
                                                             <i class="mdi mdi-pencil"></i>
                                                         </button>
                                                         <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">

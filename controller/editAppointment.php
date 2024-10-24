@@ -13,9 +13,12 @@
         $appointmentTime = $_POST['appointment_time'];
         $status = $_POST['status'];
         $notes = $_POST['notes'];
+        $firstname = $_POST['first_name'];
+        $lastname = $_POST['last_name'];
+        $member_id = $_POST['member_id'];
     
         // Call the update appointment method
-        if ($user_dashboard->update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes)) {
+        if ($user_dashboard->update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes, $firstname, $lastname, $member_id)) {
             // Set success message
             $_SESSION['display_message'] = "Appointment successfully updated.";
             $_SESSION['message_type'] = "success";

@@ -12,12 +12,12 @@
 		}
 
         public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id) {
-             // Check if the patient already exists in the patients table
+            // Check if the patient already exists in the patients table
             $stmt = $this->db->prepare("SELECT patient_id FROM patients WHERE member_id = ?");
             $stmt->bind_param("s", $member_id);
             $stmt->execute();
             $stmt->store_result();
-        
+
             if ($stmt->num_rows > 0) {
                 // Existing patient found
                 $stmt->bind_result($existing_patient_id);
@@ -28,17 +28,16 @@
                 $patient_id = $existing_patient_id;
 
                 if ($appointmentType === 'newPatient') {
-        
                     // Insert new patient details under the same member ID (using alt_patient_id)
                     $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
                     $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
-        
+
                     if (!$stmt->execute()) {
                         echo "Error inserting new alternate patient: " . $stmt->error;
                         $stmt->close();
                         return false;
                     }
-        
+
                     // Get the new alternate patient_id for the appointment
                     $patient_id = $this->db->insert_id;
                 } 
@@ -58,20 +57,34 @@
                 $patient_id = $this->db->insert_id;
                 $stmt->close();
             }
-        
+
             // Insert appointment record using the new or existing patient ID
-            $stmt = $this->db->prepare("INSERT INTO appointments (patient_id,appointment_date, appointment_time, services, status, notes) VALUES (?, ?, ?, ?, 'Pending', ?)");
+            $stmt = $this->db->prepare("INSERT INTO appointments (patient_id, appointment_date, appointment_time, services, status, notes) VALUES (?, ?, ?, ?, 'Pending', ?)");
             $stmt->bind_param("sssss", $patient_id, $appointmentDate, $appointmentTime, $services, $notes);
-        
-            if ($stmt->execute()) {
-                return true; // Return true if the appointment is successfully inserted
-            } else {
+
+            if (!$stmt->execute()) {
                 echo "Error inserting appointment: " . $stmt->error;
-                return false; // Return false if there's an error
+                return false;
             }
-        
+
+            // If appointment is successfully created, register notification
+            $appointment_id = $this->db->insert_id;
+            $message = "Appointment created for " . $first_name . " " . $last_name . " on " . $appointmentDate . " at " . $appointmentTime ." and is now pending for approval.";
+
+            $stmt = $this->db->prepare("INSERT INTO notifications (user_id, message, type, is_read, created_at) VALUES (?, ?, ?, ?, NOW())");
+            $status = 0;  // Assuming the default status for a notification is 'unread'
+            $type = 'appointment';
+            $stmt->bind_param("issi", $patient_id, $message, $type, $status);
+
+            if (!$stmt->execute()) {
+                echo "Error inserting notification: " . $stmt->error;
+                $stmt->close();
+                return false;
+            }
+
             // Close the statement
             $stmt->close();
+            return true;  // Return true after all operations are successful
         }
         
         public function get_all_appointments_by_member_id($member_id) {
@@ -160,13 +173,13 @@
             return false; // Error preparing the query
         }
 
-        public function update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes) {
+        public function update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes, $firstname, $lastname, $member_id) {
             $query = "UPDATE appointments SET 
                         appointment_date = ?, 
                         appointment_time = ?, 
                         status = ?, 
                         notes = ? 
-                      WHERE id = ?";
+                    WHERE id = ?";
             
             // Prepare and execute the statement
             if ($stmt = $this->db->prepare($query)) {
@@ -176,8 +189,37 @@
                 // Execute the statement and check if successful
                 $result = $stmt->execute();
                 $stmt->close(); // Close the statement
-        
-                return $result; // Return the result of the execute (true on success, false on failure)
+
+                if ($result) {
+                    // If the appointment was successfully updated, insert a notification
+
+                    // Retrieve patient_id associated with the appointment (assuming you have a foreign key relationship)
+                    $stmt = $this->db->prepare("SELECT patient_id FROM appointments WHERE id = ?");
+                    $stmt->bind_param("i", $appointmentId);
+                    $stmt->execute();
+                    $stmt->bind_result($patient_id);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    // Prepare the notification message
+                     $message = "Appointment for " . $firstname . " " . $lastname . " on " . $appointmentDate . " at " . $appointmentTime . " has been updated. Status: " . $status . "Reason: " .$notes;
+
+                    // Insert notification
+                    $stmt = $this->db->prepare("INSERT INTO notifications (user_id, message, type, is_read, created_at) VALUES (?, ?, ?, ?, NOW())");
+                    $notificationType = 'appointment_update';
+                    $is_read = 0; // Assuming unread notifications have a value of 0
+
+                    // Bind and execute the notification insert
+                    $stmt->bind_param("issi", $patient_id, $message, $notificationType, $is_read);
+
+                    if (!$stmt->execute()) {
+                        echo "Error inserting notification: " . $stmt->error;
+                    }
+
+                    $stmt->close(); // Close the notification statement
+                }
+
+                return $result; // Return the result of the update (true on success, false on failure)
             } else {
                 return false; // Return false if the statement could not be prepared
             }

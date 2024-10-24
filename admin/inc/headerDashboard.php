@@ -18,21 +18,8 @@
     $getAllBookings = $appointment_admin->get_bookings_count();
     $getAllPatient = $appointment_admin->get_patient_count();
 
-     // Sample notifications array - replace this with a real database query
-     $notifications = [
-        [
-            'message' => 'Your appointment is confirmed.',
-            'created_at' => '2024-10-20 10:00:00'
-        ],
-        [
-            'message' => 'A new patient has registered.',
-            'created_at' => '2024-10-19 15:30:00'
-        ],
-        [
-            'message' => 'Your profile has been updated successfully.',
-            'created_at' => '2024-10-18 08:20:00'
-        ]
-    ];
+    $notifications = $appointment_admin->get_notifications();
+    $notification_lists = $appointment_admin->get_all_notifications();
 ?>
 
 <!DOCTYPE html>
@@ -41,13 +28,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Mazer Admin Dashboard</title>
+    <title>Dashboard - Roselle Santander Dental Clinic Admin Dashboard</title>
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.css">
 
-    <link rel="stylesheet" href="vendors/iconly/bold.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
 
     <link rel="stylesheet" href="vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="vendors/bootstrap-icons/bootstrap-icons.css">
