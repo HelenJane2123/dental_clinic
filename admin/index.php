@@ -51,10 +51,10 @@
                 <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit" name="login_user">Log in</button>
             </form>
             <div class="text-center mt-5 text-lg fs-4">
-                <p class="text-gray-600">Don't have an account? <a href="register.php"
+                <!-- <p class="text-gray-600">Don't have an account? <a href="register.php"
                         class="font-bold">Sign
-                        up</a>.</p>
-                <p><a class="font-bold" href="forgot-password.php">Forgot password?</a>.</p>
+                        up</a>.</p> -->
+                <p><a class="font-bold" href="forgot-password.php">Forgot password?</a></p>
             </div>
         </div>
     </div>

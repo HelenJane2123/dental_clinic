@@ -1,5 +1,6 @@
 <?php
-	require_once ("../../lib/authenticate.php");
+    require_once(__DIR__ . '/../../lib/config.php'); 
+    require_once(BASE_DIR . '/lib/authenticate.php');
 	class Admin {
 		public $db;
 		public function __construct(){
@@ -115,6 +116,49 @@
         public function __destruct() {
             $this->db->close();
         }
+
+        public function get_confirmed_appointment_count() {
+            $query = "SELECT COUNT(*) as count 
+            FROM appointments 
+            WHERE status = 'confirmed'";
+  
+            $result = $this->db->query($query);
+            $row = $result->fetch_assoc();
+            
+            return $row['count'];
+        }
+
+        public function get_canceled_appointment_count() {
+            $query = "SELECT COUNT(*) as count 
+            FROM appointments 
+            WHERE status = 'canceled'";
+  
+            $result = $this->db->query($query);
+            $row = $result->fetch_assoc();
+            
+            return $row['count'];
+        }
+
+        public function get_bookings_count() {
+            $query = "SELECT COUNT(*) as count 
+            FROM appointments";
+  
+            $result = $this->db->query($query);
+            $row = $result->fetch_assoc();
+            
+            return $row['count'];
+        }
+
+        public function get_patient_count() {
+            $query = "SELECT COUNT(*) as count 
+            FROM patients";
+  
+            $result = $this->db->query($query);
+            $row = $result->fetch_assoc();
+            
+            return $row['count'];
+        }
+
 
 	}
 ?>

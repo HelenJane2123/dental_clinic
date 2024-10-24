@@ -9,6 +9,30 @@
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
+
+    require_once ('model/AdminDashboard.php');
+    $appointment_admin = new Admin();
+
+    $getConfirmedAppointments = $appointment_admin->get_confirmed_appointment_count();
+    $getCanceledAppointments = $appointment_admin->get_canceled_appointment_count();
+    $getAllBookings = $appointment_admin->get_bookings_count();
+    $getAllPatient = $appointment_admin->get_patient_count();
+
+     // Sample notifications array - replace this with a real database query
+     $notifications = [
+        [
+            'message' => 'Your appointment is confirmed.',
+            'created_at' => '2024-10-20 10:00:00'
+        ],
+        [
+            'message' => 'A new patient has registered.',
+            'created_at' => '2024-10-19 15:30:00'
+        ],
+        [
+            'message' => 'Your profile has been updated successfully.',
+            'created_at' => '2024-10-18 08:20:00'
+        ]
+    ];
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +62,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo" srcset=""></a>
+                            <a href="index.html">Roselle Santander's Dental Clinic</a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
