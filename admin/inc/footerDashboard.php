@@ -38,6 +38,7 @@
     </form>
     <script src="vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
@@ -45,6 +46,128 @@
     <script src="js/pages/dashboard.js"></script>
 
     <script>
+        // Simple Datatable
+        document.addEventListener("DOMContentLoaded", function() {
+            const dataTableElement = document.getElementById("table1");
+            const dataTable = new simpleDatatables.DataTable(dataTableElement);
+        });
+
+        function toggleStatus(button, notificationId) {
+            // Confirm the action if needed
+            if (confirm("Are you sure you want to mark this notification as read?")) {
+                fetch(`controller/updateNotification.php?notification_id=${notificationId}`, {
+                            method: 'GET',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Expect JSON response
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Update your UI as needed, e.g., marking the notification as read
+                        button.innerText = "Marked as Read";
+                        button.classList.remove("btn-success");
+                        button.classList.add("btn-secondary");
+                        button.disabled = true; // Disable the button to prevent re-clicks
+
+                        location.reload();
+                    } else {
+                        console.error(data.message); // Log the error message
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            }
+        }
+
+        const username = '<?= $_SESSION['username'] ?>';
+        const memberId = <?= json_encode($member_id_admin) ?>;
+        const userId = <?= json_encode($user_id_admin) ?>;
+
+        function approveAppointment(appointmentId) {
+            const notes = document.getElementById(`approveNotes${appointmentId}`).value;
+
+            // Use memberId and userId in your request body
+            fetch('controller/updateAppointmentStatus.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    appointment_id: appointmentId, 
+                    notes: notes,
+                    updated_by: userId, // Send the user ID
+                    member_id: memberId  // Send the member ID
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to approve appointment.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function rescheduleAppointment(appointmentId) {
+            const newDate = document.getElementById(`newDate${appointmentId}`).value;
+            const newTime = document.getElementById(`newTime${appointmentId}`).value;
+            const notes = document.getElementById(`rescheduleNotes${appointmentId}`).value;
+
+            // Use memberId and userId in your request body
+            fetch('controller/updateAppointmentStatus.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    appointment_id: appointmentId, 
+                    new_date: newDate, 
+                    new_time: newTime, 
+                    notes: notes,
+                    updated_by: userId, // Send the user ID
+                    member_id: memberId  // Send the member ID
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to reschedule appointment.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function cancelAppointment(appointmentId) {
+            const notes = document.getElementById(`cancelNotes${appointmentId}`).value;
+
+            // Use memberId and userId in your request body
+            fetch('controller/updateAppointmentStatus.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    appointment_id: appointmentId, 
+                    notes: notes,
+                    updated_by: userId, // Send the user ID
+                    member_id: memberId  // Send the member ID
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to cancel appointment.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
         document.addEventListener('DOMContentLoaded', function () {
             // Event delegation to handle dynamic content
             document.querySelector('.notification-list').addEventListener('click', function (event) {
@@ -106,45 +229,6 @@
         document.querySelector('.modal .close-btn').addEventListener('click', function () {
             $('#notificationModal').modal('hide'); // Hide the modal
         });
-
-        // Simple Datatable
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM fully loaded and parsed");
-            const dataTableElement = document.getElementById("table1");
-            console.log(dataTableElement); // This should not be null
-            const dataTable = new simpleDatatables.DataTable(dataTableElement);
-        });
-
-        function toggleStatus(button, notificationId) {
-            // Confirm the action if needed
-            if (confirm("Are you sure you want to mark this notification as read?")) {
-                fetch(`controller/updateNotification.php?notification_id=${notificationId}`, {
-                            method: 'GET',
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json(); // Expect JSON response
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        // Update your UI as needed, e.g., marking the notification as read
-                        button.innerText = "Marked as Read";
-                        button.classList.remove("btn-success");
-                        button.classList.add("btn-secondary");
-                        button.disabled = true; // Disable the button to prevent re-clicks
-
-                        location.reload();
-                    } else {
-                        console.error(data.message); // Log the error message
-                    }
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-            }
-        }
     </script>
       
       <script src="js/main.js"></script>

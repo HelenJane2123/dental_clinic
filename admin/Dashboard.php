@@ -159,53 +159,70 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-12">
-                        <div class="row">
-                            <div class="col-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>Appointments</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-lg">
-                                                <thead>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Today's Appointments</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-lg">
+                                        <thead>
+                                            <tr>
+                                                <th>Patient Name</th>
+                                                <th>Status</th>
+                                                <th>Appointment Date</th>
+                                                <th>Appointment Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (!empty($get_recent_appointments)) : ?>
+                                                <?php foreach ($get_recent_appointments as $appointment) : ?>
                                                     <tr>
-                                                        <th>Name</th>
-                                                        <th>Comment</th>
+                                                        <td class="col-6">
+                                                            <?= htmlspecialchars($appointment['patient_first_name']) . " " . htmlspecialchars($appointment['patient_last_name']); ?>
+                                                        </td>
+                                                        <td class="col-4">
+                                                            <?php
+                                                            $status = htmlspecialchars($appointment['status']);
+                                                            if ($status === 'Confirmed') {
+                                                                echo '<span class="badge bg-success">Confirmed</span>';
+                                                            } elseif ($status === 'Pending') {
+                                                                echo '<span class="badge bg-warning text-dark">Pending</span>';
+                                                            } elseif ($status === 'Canceled') {
+                                                                echo '<span class="badge bg-danger">Canceled</span>';
+                                                            } elseif ($status === 'Re-scheduled') {
+                                                                echo '<span class="badge bg-info">Re-Scheduled</span>';
+                                                            } else {
+                                                                echo '<span class="badge bg-secondary">Unknown</span>';
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                                // Format the appointment date using date() and strtotime()
+                                                                if($appointments['appointment_date'] != "") {
+                                                                    echo date('F j, Y', strtotime($appointments['updated_at'])); // Format as "Month Day, Year"
+                                                                } 
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php
+                                                                // Format the appointment time using date() and strtotime()
+                                                                echo date('h:i A', strtotime($appointments['appointment_time'])); // Format as "Hour:Minute AM/PM"
+                                                            ?>
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="col-3">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-md">
-                                                                    <img src="assets/images/faces/5.jpg">
-                                                                </div>
-                                                                <p class="font-bold ms-3 mb-0">Si Cantik</p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="col-auto">
-                                                            <p class=" mb-0">Congratulations on your graduation!</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-3">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-md">
-                                                                    <img src="assets/images/faces/2.jpg">
-                                                                </div>
-                                                                <p class="font-bold ms-3 mb-0">Si Ganteng</p>
-                                                            </div>
-                                                        </td>
-                                                        <td class="col-auto">
-                                                            <p class=" mb-0">Wow amazing design! Can you make another
-                                                                tutorial for
-                                                                this design?</p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <tr>
+                                                    <td colspan="4" class="text-center">No recent appointments found.</td>
+                                                </tr>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
+                                    <!-- Link to full appointment bookings page -->
+                                    <div class="text-center mt-3">
+                                        <a href="appointment_bookings.php" class="btn btn-primary">View All Appointments</a>
                                     </div>
                                 </div>
                             </div>

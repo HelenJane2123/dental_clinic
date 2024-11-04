@@ -20,7 +20,7 @@
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">DataTable</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Notifications</li>
                                 </ol>
                             </nav>
                         </div>
@@ -29,7 +29,6 @@
                 <section class="section">
                     <div class="card">
                         <div class="card-header">
-                            Simple Datatable
                         </div>
                         <div class="card-body">
                             <table class="table table-striped" id="table1">
