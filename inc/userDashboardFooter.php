@@ -36,7 +36,7 @@
   <!-- Custom js for this page-->
   <script src="js/dashboard/dashboard.js"></script>
   <!-- End custom js for this page-->
-  <script src="js/jquery-3.3.1.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
@@ -44,9 +44,11 @@
   <script src='vendors/fullcalendar/packages/core/main.js'></script>
   <script src='vendors/fullcalendar/packages/interaction/main.js'></script>
   <script src='vendors/fullcalendar/packages/daygrid/main.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/parsleyjs@2.9.2/dist/parsley.min.js"></script>
 
   <!-- DataTables JS -->
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+  
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -298,6 +300,73 @@
         }
     }
 
+    function toggleStatus(button, notificationId) {
+        // Send an AJAX request to update the notification status
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "controller/readNotification.php?id=" + notificationId, true);
+        xhr.onload = function() {
+            if (xhr.status == 200) {
+                // On success, change the button text and style
+                button.innerHTML = "Read";
+                button.disabled = true; // Disable the button after it's clicked
+                button.classList.remove("btn-warning");
+                button.classList.add("btn-success");
+            } else {
+                alert("Error updating notification.");
+            }
+        };
+        xhr.send();
+    }
+
+    //initialize validation
+    $('#my_record_form').parsley();
+
+    $(document).ready(function() {
+        // Function to show or hide the details group based on selection
+        function toggleVisibility(selectId, groupId) {
+            var value = $('#' + selectId).val();  // Get the selected value
+            if (value == "1") {
+                $('#' + groupId).show();  // Show the details input if "Yes"
+            } else {
+                $('#' + groupId).hide();  // Hide it if "No"
+            }
+        }
+
+        // Initial check when the page loads
+        toggleVisibility('serious_illness', 'serious_illness_group');
+        toggleVisibility('hospitalization', 'hospitalization_details_group');
+        toggleVisibility('taking_medication', 'medication_details_group');
+
+        // Event listeners for each select element to toggle visibility based on selection
+        $('#serious_illness').change(function() {
+            toggleVisibility('serious_illness', 'serious_illness_group');
+        });
+
+        $('#hospitalization').change(function() {
+            toggleVisibility('hospitalization', 'hospitalization_details_group');
+        });
+
+        $('#taking_medication').change(function() {
+            toggleVisibility('taking_medication', 'medication_details_group');
+        });
+    });
+
+    function printFormRecord() {
+        // Create a new window
+        var printWindow = window.open('', '', 'width=800,height=600');
+        
+        // Get the HTML content of the form container
+        var formContent = document.getElementById('my_record_form').innerHTML;
+        
+        // Set the content of the new window
+        printWindow.document.write('<html><head><title>Print Form</title></head><body>');
+        printWindow.document.write(formContent);  // Add form content
+        printWindow.document.write('</body></html>');
+        
+        // Close the document and trigger the print dialog
+        printWindow.document.close();
+        printWindow.print();
+    }
   </script>
 </body>
 

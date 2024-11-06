@@ -289,6 +289,7 @@
 .card .card-header h4 {
     font-size: 1.2rem;
     font-weight: 700;
+    color: #000;
 }
 .card .card-header ~ .card-body {
     padding-top: 0;
@@ -812,7 +813,7 @@
     display: block;
 }
 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
-    background-color: #435ebe;
+    background-color: #57c7d4;
 }
 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link span {
     color: #fff;

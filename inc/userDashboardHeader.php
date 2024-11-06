@@ -52,6 +52,9 @@
       $profile_picture = $userDetails['profile_picture'];
   }
 
+    // Get recent notifications (up to 3)
+    $recentNotifications = $appointment->get_recent_notifications_by_member($member_id, 3);
+    $notification_lists = $appointment->get_all_notifications($member_id);
 ?>
 <head>
   <!-- Required meta tags -->
@@ -97,6 +100,12 @@
           <a class="nav-link" href="my_appointments.php">
             <i class="mdi mdi-grid-large menu-icon"></i>
             <span class="menu-title">My Appointments</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="notifications.php">
+            <i class="mdi mdi-bell menu-icon"></i>
+            <span class="menu-title">Notificatons</span>
           </a>
         </li>
         <li class="nav-item">

@@ -1,5 +1,5 @@
 <footer>
-                <div class="footer clearfix mb-0 text-muted">
+                <div class="footer clearfix mb-0 text-sub-muted">
                     <div class="float-start">
                         <p>2024 &copy; Roselle Santander's Dental Clinic</p>
                     </div>

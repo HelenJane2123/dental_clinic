@@ -203,6 +203,23 @@
         </div>
     </div>
 </div>
+<!-- Modal for viewing the notification -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Notification Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalMessageContent">
+                <!-- Notification message will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     // Function to check if the selected date is a Saturday
@@ -228,5 +245,34 @@
             alert("Appointments cannot be scheduled on Saturdays. Please choose another date.");
             this.value = ''; // Clear the selected date
         }
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Listen for clicks on the notification link
+        const notificationLinks = document.querySelectorAll('.notification-link');
+        notificationLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const notificationId = this.getAttribute('data-id');
+                const notificationMessage = this.getAttribute('data-message');
+
+                // Update the modal content with the notification message
+                document.getElementById('modalMessageContent').innerText = notificationMessage;
+
+                // Make AJAX request to update the notification as read
+                fetch('controller/readNotification.php?id=' + notificationId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Update the link color to gray to indicate that the notification is read
+                            link.style.color = 'gray';
+                        } else {
+                            console.error('Failed to update notification');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating notification:', error);
+                    });
+            });
+        });
     });
 </script>

@@ -56,8 +56,34 @@
             <div class="col-lg-4 grid-margin stretch-card"> <!-- New column for notifications -->
               <div class="card">
                   <div class="card-body">
-                      <h4 class="card-title">Appointment Notifications</h4>
+                      <h4 class="card-title">Appointment Notifications</h4> 
                       <ul class="list-group">
+                        <?php if (!empty($recentNotifications)) : ?>
+                            <?php foreach ($recentNotifications as $notification) : ?>
+                                <li class="list-group-item">
+                                    <!-- Link to trigger modal with notification ID -->
+                                    <a href="javascript:void(0);" 
+                                        class="notification-link" 
+                                        data-id="<?= $notification['id'] ?>"
+                                        style="color: <?= $notification['is_read'] ? 'gray' : 'blue' ?>;"
+                                        data-message="<?= htmlspecialchars($notification['message']) ?>"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#notificationModal">
+                                        <?= htmlspecialchars(substr($notification['message'], 0, 50)) ?>...
+                                    </a>
+                                    <small class="text-muted"><?= date('F j, Y, g:i A', strtotime($notification['created_at'])) ?></small>
+                                </li>
+                            <?php endforeach; ?>
+                            <?php else : ?>
+                                <li class="list-group-item">No notifications available.</li>
+                            <?php endif; ?>
+                        </ul>
+                        <!-- "View All Notifications" link -->
+                        <div class="mt-3 text-center">
+                            <a href="notifications.php" class="btn btn-primary">View All Notifications</a>
+                        </div>
+                        <br/>
+                        <ul class="list-group">
                           <?php 
                           $serviceNames = [
                               'cleaning' => 'Teeth Cleaning',
@@ -128,8 +154,8 @@
                               <span class="badge bg-danger rounded-pill"><?= $canceledAppointmentsCount ?></span>
                           </li>
                       </ul>
-                  </div>
-              </div>
+                </div>
+            </div>
           </div>
           <!-- row end -->
             <div class="row">

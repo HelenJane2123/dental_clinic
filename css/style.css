@@ -9346,3 +9346,26 @@ textarea.form-control {
       right: 0; /* Aligns the dropdown to the right */
     }
     
+
+     /* Position the print button in the top-right corner */
+     .form-container {
+      position: relative; /* Ensure the container is the reference for absolute positioning */
+  }
+
+  .print-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+  }
+
+  /* Style for the form (optional) */
+  .form-sample {
+      margin-top: 40px; /* Add space for the button */
+  }

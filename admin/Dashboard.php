@@ -119,7 +119,7 @@
                                         <img src="assets/images/faces/1.jpg" alt="Face 1">
                                     </div>
                                     <div class="ms-3">
-                                        <h6 class="font-bold">Welcome back,</h6>
+                                        <h6 class="font-bold text-muted">Welcome back,</h6>
                                         <h6 class="text-muted mb-0"><?php echo htmlspecialchars($_SESSION['username']); ?></h6>
                                     </div>
                                 </div>

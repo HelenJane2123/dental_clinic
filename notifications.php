@@ -1,38 +1,24 @@
 <?php
-    include_once('inc/headerDashboard.php');
-    include_once('inc/sidebarMenu.php');
+    include_once("inc/userDashboardHeader.php");
 ?>
-        <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
-            </header>
-
-            <div class="page-heading">
-                <div class="page-title">
-                    <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Notifications</h3>
-                            <p class="text-subtitle text-sub-muted">List of all Notifications</p>
-                        </div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Notifications</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped" id="table1">
-                                <thead>
+    <div class="container-fluid page-body-wrapper">
+      <?php  include_once("inc/search_header.php"); ?>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Notifications</h4>
+                    <div class="content">
+                      <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                          <div class="card-body">
+                            <h4 class="card-title">My Notifcation Lists</h4>
+                            <div class="table-responsive">
+                              <table id="appointmentTable" class="table table-hover">
+                                  <thead>
                                     <tr>
                                         <th>Name</th>
                                         <th>Patient ID</th>
@@ -41,8 +27,8 @@
                                         <th>Type</th>
                                         <th>Status</th>
                                     </tr>
-                                </thead>
-                                <tbody>
+                                  </thead>
+                                  <tbody>
                                       <?php if (!empty($notification_lists)) : ?>
                                           <?php foreach ($notification_lists as $notification) : ?>
                                               <tr>
@@ -67,16 +53,14 @@
                                                     <?php
                                                         if($notification['is_read'] == 1) {
                                                     ?>
-                                                    <span class="badge bg-success">Marked as Read</span>
+                                                    <span class="badge bg-success">Read</span>
                                                     <?php
-                                                        }
-                                                        else {
+                                                        } else {
                                                     ?>
-                                                        <button class="btn btn-warning btn-sm" 
-                                                            onclick="toggleStatus(this, <?= $notification['id'] ?>)">
-                                                            Mark as Read
-                                                        </button>
-
+                                                    <button class="btn btn-warning btn-sm" 
+                                                        onclick="toggleStatus(this, <?= $notification['id'] ?>)">
+                                                        Mark as Read
+                                                    </button>
                                                     <?php
                                                         }
                                                     ?>
@@ -85,17 +69,22 @@
                                           <?php endforeach; ?>
                                       <?php else : ?>
                                           <tr>
-                                              <td colspan="8" class="text-center">No notifications   found.</td>
+                                              <td colspan="8" class="text-center">No notification/s found.</td>
                                           </tr>
                                       <?php endif; ?>
                                   </tbody>
-                            </table>
+                              </table>
+                            </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
-
-                </section>
+                </div>
+              </div>
             </div>
-
+          </div>
+          <!-- row end -->
 <?php
-    include_once('inc/footerDashboard.php');
+    include_once("inc/myAppointmentModal.php");
+    include_once("inc/userDashboardFooter.php");
 ?>

@@ -846,6 +846,83 @@
             return $result; // Return true if the update was successful, false otherwise
         }
         
+        public function get_recent_notifications_by_member($member_id, $limit = 3) {
+            $stmt = $this->db->prepare("
+                SELECT notifications.*, patients.member_id
+                FROM notifications
+                JOIN patients ON notifications.notif_to = patients.patient_id
+                WHERE patients.member_id = ?
+                ORDER BY notifications.created_at DESC
+                LIMIT ?
+            ");
+            
+            // Bind parameters: `member_id` and `limit`
+            $stmt->bind_param("ii", $member_id, $limit);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        
+       
+        public function update_notification_read($notificationId) {
+            $stmt = $this->db->prepare("UPDATE notifications SET is_read = 1 WHERE id = ?");
+            $stmt->bind_param("i", $notificationId);
+            return $stmt->execute();
+        }
+
+        // Get notification by ID to display in the modal
+        public function get_notification_by_id($notificationId) {
+            $stmt = $this->db->prepare("SELECT * FROM notifications WHERE id = ?");
+            $stmt->bind_param("i", $notificationId);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_assoc();
+        }
+
+        public function get_all_notifications($member_id = null) {
+            // SQL query to get notifications along with patient and account details
+            $query = "
+                SELECT p.*, a.member_id, a.first_name AS first_name, a.last_name AS last_name, a.patient_id
+                FROM notifications p
+                LEFT JOIN patients a ON p.notif_to = a.patient_id";
+            
+            // Add condition to filter notifications for a specific member_id if provided
+            if ($member_id !== null) {
+                $query .= " WHERE a.member_id = ?";
+            }
+        
+            // Prepare the SQL statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind the member_id parameter if it's provided
+                if ($member_id !== null) {
+                    $stmt->bind_param("i", $member_id);
+                }
+                
+                // Execute the query
+                $stmt->execute();
+                
+                // Fetch the result
+                $result = $stmt->get_result();
+                
+                // Initialize an array to store the notifications with details
+                $notifications_with_details = [];
+                
+                // Loop through the result and add each notification to the array
+                while ($row = $result->fetch_assoc()) {
+                    $notifications_with_details[] = $row;
+                }
+                
+                // Close the statement
+                $stmt->close();
+                
+                // Return the array of notifications with details
+                return $notifications_with_details;
+            } else {
+                // If the query preparation fails, return an empty array
+                return [];
+            }
+        }
+        
         
     }
 ?>
