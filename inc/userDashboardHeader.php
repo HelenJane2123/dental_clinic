@@ -17,6 +17,7 @@
 
     // Fetch appointments for the logged-in member
     $member_id = $_SESSION['member_id']; // Get the member ID from session
+    $user_id_admin = $_SESSION['user_id'];
     $appointments = $appointment->get_all_appointments_by_member_id($member_id); // Fetch appointments
 
     if (isset($_GET['id'])) {
@@ -73,6 +74,7 @@
   <link href='vendors/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
   <!-- DataTables CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.css">
 
   <!-- endinject -->
   <link rel="shortcut icon" href="img/images/favicon.png" />

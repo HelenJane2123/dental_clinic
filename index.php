@@ -33,19 +33,15 @@
     <section class="ftco-intro">
     	<div class="container">
     		<div class="row no-gutters">
-    			<div class="col-md-3 color-2 p-4">
+    			<div class="col-md-6 color-2 p-4">
     				<h3 class="mb-4">Opening Hours</h3>
     				<p class="openinghours d-flex">
-    					<span>Monday - Friday</span>
-    					<span>8:00 - 19:00</span>
+    					<span>Tuesdayy - Friday</span>
+    					<span>9:00 AM - 5:00 PM</span>
     				</p>
     				<p class="openinghours d-flex">
-    					<span>Saturday</span>
-    					<span>10:00 - 17:00</span>
-    				</p>
-    				<p class="openinghours d-flex">
-    					<span>Sunday</span>
-    					<span>10:00 - 16:00</span>
+    					<span>Saturday and Sunday</span>
+    					<span>(by Appointment)</span>
     				</p>
     			</div>
     		</div>
@@ -231,16 +227,6 @@
                     </div>
             </div>
     	</div>
-    </section>
-    <section class="ftco-gallery">
-        <h2>Find Us</h2>
-        <p>We are conveniently located in the heart of Smile City. Visit us for exceptional dental care.</p>
-        <div class="map-container">
-            <!-- Replace the src with the iframe embed code from Google Maps -->
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.2794415107775!2d-122.419418!3d37.774929!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085808c2b4e4b57%3A0x1d6d8b43a3c5d80!2sYour%20Clinic%20Name!5e0!3m2!1sen!2sus!4v1619266462340!5m2!1sen!2sus"
-                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
     </section>
 <?php
     include_once('inc/footer.php');

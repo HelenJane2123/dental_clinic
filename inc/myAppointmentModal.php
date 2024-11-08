@@ -9,9 +9,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="controller/setAppointment.php" method="POST" name="appointmentForm" novalidate enctype="multipart/form-data" id="appointmentForm">
+                <form action="controller/setAppointment.php" method="POST" id="addappointmentForm" name="appointmentForm" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="appointmentType">Appointment For:</label>
+                        <label class="required" for="appointmentType">Appointment For:</label>
                         <div>
                             <label>
                                 <input type="radio" name="appointmentType" value="myself" onclick="toggleNameFields(this)" checked> For Myself
@@ -25,33 +25,35 @@
                     <input type="hidden" name="old_firstname" class="form-control" value="<?=$_SESSION['firstname']?>" id="old_firstname">
                     <input type="hidden" name="old_lastname" class="form-control" value="<?=$_SESSION['lastname']?>" id="old_lastname">
                     <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>" id="member_id">
+                    <input type="hidden" name="user_admin_id" class="form-control" value="<?=$_SESSION['user_id']?>" id="user_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
-                    <div id="nameFields">
+                    
+                    <div id="nameFields" style="display: none;">
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="userName">First Name</label>
-                                <input type="text" name="firstname" class="form-control" id="userName" required>
+                                <label class="required" for="userName">First Name</label>
+                                <input type="text" name="firstname" class="form-control" id="userName" data-parsley-required-message="This field is required if booking for a new patient.">
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" name="lastname" class="form-control" id="lastName" required>
+                                <label class="required" for="lastName">Last Name</label>
+                                <input type="text" name="lastname" class="form-control" id="lastName" data-parsley-required-message="This field is required if booking for a new patient.">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="contactNumber">Contact Number</label>
-                                <input type="text" name="contactnumber" class="form-control" id="contactNumber" required>
+                                <label class="required" for="contactNumber">Contact Number</label>
+                                <input type="number" name="contactnumber" class="form-control" id="contactNumber" data-parsley-required-message="This field is required if booking for a new patient.">
                             </div>
-
                             <div class="form-group col-sm-6">
-                                <label for="emailAddress">Email Address</label>
-                                <input type="email" name="emailaddress" class="form-control" id="emailAddress" required>
+                                <label class="required" for="emailAddress">Email Address</label>
+                                <input type="email" name="emailaddress" class="form-control" id="emailAddress" data-parsley-required-message="This field is required if booking for a new patient.">
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="services">Dental Services</label>
-                        <select class="form-control" id="services" name="services" required>
+                        <label class="required" for="services">Dental Services</label>
+                        <select class="form-control" id="services" name="services" required data-parsley-required-message="Please select a service.">
                             <option value="" disabled selected>Select a service</option>
                             <option value="cleaning">Teeth Cleaning</option>
                             <option value="extraction">Tooth Extraction</option>
@@ -63,19 +65,21 @@
                             <option value="brace_installation">Dental Braces Installation</option>
                         </select>
                     </div>
+
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <label for="appointmentDate">Appointment Date</label>
-                            <input type="date" class="form-control" name="appointmentDate" id="appointmentDate" required>
+                            <label class="required" for="appointmentDate">Appointment Date</label>
+                            <input type="date" class="form-control" name="appointmentDate" id="appointmentDate" required data-parsley-required-message="Please select an appointment date.">
                         </div>
                         <div class="form-group col-sm-6">
-                            <label for="appointmentTime">Appointment Time</label>
-                            <input type="time" class="form-control" name="appointmentTime" id="appointmentTime" required>
+                            <label class="required" for="appointmentTime">Appointment Time</label>
+                            <input type="time" class="form-control" name="appointmentTime" id="appointmentTime" required data-parsley-required-message="Please select an appointment time.">
                         </div>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="notes">Additional Notes</label>
-                        <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
+                        <label class="required" for="notes">Additional Notes</label>
+                        <textarea class="form-control" name="notes" id="notes" rows="3" required data-parsley-required-message="Please add any notes."></textarea>
                     </div>
                 </form>
             </div>
@@ -146,34 +150,44 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="controller/editAppointment.php" method="POST">
+            <form action="controller/editAppointment.php" method="POST" id="editAppointmentForm" data-parsley-validate>
                 <div class="modal-body">
+                    <!-- Hidden Fields -->
                     <input type="hidden" name="appointment_id" id="edit_appointment_id">
                     <input type="hidden" id="first_name" name="first_name">
                     <input type="hidden" id="last_name" name="last_name">
                     <input type="hidden" id="member_id" name="member_id" value="<?=$member_id?>">
-                    
+
+                    <!-- Appointment Date -->
                     <div class="form-group">
-                        <label for="edit_appointment_date">New Appointment Date (Leave empty to keep the same)</label>
-                        <input type="date" class="form-control" id="edit_appointment_date" name="appointment_date">
+                        <label class="required" for="edit_appointment_date">New Appointment Date (Leave empty to keep the same)</label>
+                        <input type="date" class="form-control" id="edit_appointment_date" name="appointment_date" required data-parsley-required-message="This field is required.">
                     </div>
+
+                    <!-- Appointment Time -->
                     <div class="form-group">
-                        <label for="edit_appointment_time">New Appointment Time (Leave empty to keep the same)</label>
-                        <input type="time" class="form-control" id="edit_appointment_time" name="appointment_time">
+                        <label class="required" for="edit_appointment_time">New Appointment Time (Leave empty to keep the same)</label>
+                        <input type="time" class="form-control" id="edit_appointment_time" name="appointment_time" required data-parsley-required-message="This field is required.">
                     </div>
+
+                    <!-- Status -->
                     <div class="form-group">
-                        <label for="status">Status</label>
-                        <select class="form-control" id="status" name="status" required>
+                        <label class="required" for="status">Status</label>
+                        <select class="form-control" id="status" name="status" required data-parsley-required-message="This field is required.">
                             <option value="Canceled">Cancelled</option>
                             <option value="Re-Schedule">Rescheduled</option>
                             <option value="Pending">Pending</option>
                         </select>
                     </div>
+
+                    <!-- Notes -->
                     <div class="form-group">
-                        <label for="edit_notes">Notes</label>
-                        <textarea class="form-control" id="edit_notes" name="notes" rows="3"></textarea>
+                        <label class="required" for="edit_notes">Notes</label>
+                        <textarea class="form-control" id="edit_notes" name="notes" rows="3" required data-parsley-required-message="This field is required."></textarea>
                     </div>
                 </div>
+
+                <!-- Modal Footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
@@ -182,6 +196,7 @@
         </div>
     </div>
 </div>
+
 <!-- Appointment Details Modal -->
 <div class="modal fade" id="appointmentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -275,4 +290,44 @@
             });
         });
     });
+    // Initialize Parsley validation
+    $(document).ready(function() {
+        $('#addappointmentForm').parsley();
+
+        // Check the selected radio button on page load and set field visibility
+        const appointmentType = document.querySelector('input[name="appointmentType"]:checked');
+        if (appointmentType) {
+            toggleNameFields(appointmentType);
+        }
+    });
+
+    // Function to toggle visibility and requirement of name fields
+    function toggleNameFields(element) {
+        const nameFields = document.getElementById("nameFields");
+        const firstName = document.getElementById("userName");
+        const lastName = document.getElementById("lastName");
+        const contactNumber = document.getElementById("contactNumber");
+        const emailAddress = document.getElementById("emailAddress");
+
+        if (element.value === "myself") {
+            // Hide name fields for "For Myself" and remove Parsley validation
+            nameFields.style.display = "none";
+            firstName.removeAttribute("required");
+            lastName.removeAttribute("required");
+            contactNumber.removeAttribute("required");
+            emailAddress.removeAttribute("required");
+            $(firstName).parsley().reset();
+            $(lastName).parsley().reset();
+            $(contactNumber).parsley().reset();
+            $(emailAddress).parsley().reset();
+        } else {
+            // Show name fields for "New Patient" and add Parsley validation
+            nameFields.style.display = "block";
+            firstName.setAttribute("required", "true");
+            lastName.setAttribute("required", "true");
+            contactNumber.setAttribute("required", "true");
+            emailAddress.setAttribute("required", "true");
+        }
+    }
+        
 </script>

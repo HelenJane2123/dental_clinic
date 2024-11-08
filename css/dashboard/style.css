@@ -22400,3 +22400,19 @@ dl li {
     color: red; /* Set the text color of the error messages to red */
     font-size: 12px; /* Optional: adjust the font size */
   }
+
+  .form-control {
+    border: 1px solid #958a8a !important;
+  }
+
+  /* Style for error messages */
+.parsley-error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+/* Ensure the error containers are visible and properly spaced */
+#current_password_error, #new_password_error, #confirm_password_error {
+  margin-top: 5px;
+}

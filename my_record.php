@@ -248,7 +248,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-sm-6">
+                                    <div class="form-group col-sm-4">
                                         <label class="required">Do you use alcohol or other dangerous drugs?</label>
                                         <select class="form-control" name="use_drugs" required data-parsley-required-message="This field is required.">
                                             <option value="">--Please Select--</option>
@@ -259,31 +259,45 @@
                                     <div class="form-group col-sm-6">
                                         <label class="required">Are you allergic to any of the following?</label>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Local Anesthetic" <?= in_array("Local Anesthetic", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Local Anesthetic" 
+                                                <?= in_array("Local Anesthetic", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Local Anesthetic (e.g. Lidocaine)</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Penicillin" <?= in_array("Penicillin", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Penicillin" 
+                                                <?= in_array("Penicillin", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Penicillin</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Antibiotics" <?= in_array("Antibiotics", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Antibiotics" 
+                                                <?= in_array("Antibiotics", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Antibiotics</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Sulfa Drugs" <?= in_array("Sulfa Drugs", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Sulfa Drugs" 
+                                                <?= in_array("Sulfa Drugs", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Sulfa Drugs</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Aspirin" <?= in_array("Aspirin", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Aspirin" 
+                                                <?= in_array("Aspirin", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Aspirin</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Latex" <?= in_array("Latex", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Latex" 
+                                                <?= in_array("Latex", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Latex</label>
                                         </div>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="allergies[]" value="Others" <?= in_array("Others", $patient_allergies) ? 'checked' : '' ?>>
+                                            <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Others" 
+                                                <?= in_array("Others", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                data-parsley-required-message="Please choose at least one allergy.">
                                             <label class="form-check-label">Others</label>
                                             <input type="text" class="form-control mt-2" name="other_allergies" value="<?= (in_array("Others", $patient_allergies) ? htmlspecialchars($other_allergies_value) : '') ?>">
                                         </div>

@@ -8,6 +8,7 @@ $user_dashboard = new UserDashboard();
 
 if (isset($_POST['appointmentType'])) {
     // Get the form values
+    $user_id = $_POST['user_admin_id'];
     $appointmentType = $_POST['appointmentType'];
     $appointmentDate = isset($_POST['appointmentDate']) ? $_POST['appointmentDate'] : null;
     $appointmentTime = isset($_POST['appointmentTime']) ? $_POST['appointmentTime'] : null;
@@ -32,7 +33,7 @@ if (isset($_POST['appointmentType'])) {
     }
 
     // Insert appointment details
-    $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id);
+    $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id,$user_id);
     
     if ($query) {
         $_SESSION['success'] = true;

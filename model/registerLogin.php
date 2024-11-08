@@ -99,7 +99,7 @@
         }
             
         public function getUserByUsername($username) {
-            $sql = "SELECT firstname, lastname, member_id, email, contactnumber FROM accounts WHERE username = ?";
+            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber FROM accounts WHERE username = ?";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('s', $username);
             $stmt->execute();
