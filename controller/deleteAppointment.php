@@ -8,9 +8,11 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['appointment_id'])) {
         $appointmentId = intval($_POST['appointment_id']);
-    
+        $user_id = $_POST['user_id'];
+        $patient_id = $_POST['patient_id'];
+
         // Assuming $user_dashboard is an instance of the class that contains delete_appointment()
-        if ($user_dashboard->delete_appointment($appointmentId)) {
+        if ($user_dashboard->delete_appointment($appointmentId,$patient_id,$user_id)) {
             // Success
             $_SESSION['display_message'] = "Appointment successfully deleted.";
             $_SESSION['message_type'] = "success";

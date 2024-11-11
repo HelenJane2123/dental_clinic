@@ -23,7 +23,7 @@
             <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
               <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Modern Achieve Your Desired Perfect Smile</h1>
               <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              <p><a href="#" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
+              <p><a href="signup.php" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@
       </div>
       <div class="container-wrap mt-5">
       	<div class="row d-flex no-gutters">
-      		<div class="col-md-6 img" style="background-image: url(img/image_1.jpg);">
+      		<div class="col-md-6 img" style="background-image: url(img/IMG_6806.jpg);">
       		</div>
       		<div class="col-md-6 d-flex">
       			<div class="about-wrap">
@@ -145,7 +145,7 @@
       	</div>
       </div>
     </section>
-    <section class="ftco-section ftco-counter img" id="section-counter" style="background-image: url(img/bg_1.jpg);" data-stellar-background-ratio="0.5">
+    <!-- <section class="ftco-section ftco-counter img" id="section-counter" style="background-image: url(img/bg_1.jpg);" data-stellar-background-ratio="0.5">
     	<div class="container">
     		<div class="row d-flex align-items-center">
     			<div class="col-md-3 aside-stretch py-5">
@@ -192,13 +192,13 @@
 		      </div>
 	      </div>
     	</div>
-    </section>
+    </section> -->
 	
 	<section class="ftco-gallery">
     	<div class="container-wrap">
     		<div class="row no-gutters">
 					<div class="col-md-3 ftco-animate">
-						<a href="#" class="gallery img d-flex align-items-center" style="background-image: url(img/gallery-1.jpg);">
+						<a href="#" class="gallery img d-flex align-items-center" style="background-image: url(img/IMG_6808.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						<span class="icon-search"></span>
     					</div>
@@ -212,14 +212,14 @@
 						</a>
 					</div>
 					<div class="col-md-3 ftco-animate">
-						<a href="#" class="gallery img d-flex align-items-center" style="background-image: url(img/gallery-3.jpg);">
+						<a href="#" class="gallery img d-flex align-items-center" style="background-image: url(img/IMG_6809.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						<span class="icon-search"></span>
     					</div>
 						</a>
 					</div>
 					<div class="col-md-3 ftco-animate">
-						<a href="#" class="gallery img d-flex align-items-center" style="background-image: url(img/gallery-4.jpg);">
+						<a href="#" class="gallery img d-flex align-items-center" style="background-image: url(img/IMG_6812.jpg);">
 							<div class="icon mb-4 d-flex align-items-center justify-content-center">
     						    <span class="icon-search"></span>
                             </div>

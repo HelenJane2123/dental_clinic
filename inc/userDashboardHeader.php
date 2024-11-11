@@ -17,8 +17,11 @@
 
     // Fetch appointments for the logged-in member
     $member_id = $_SESSION['member_id']; // Get the member ID from session
-    $user_id_admin = $_SESSION['user_id'];
     $appointments = $appointment->get_all_appointments_by_member_id($member_id); // Fetch appointments
+
+    $user_id_admin = $appointment->get_doctor_admin();
+    $get_doctor_id = $appointment->get_doctor_details($user_id_admin);
+  
 
     if (isset($_GET['id'])) {
       $appointmentId = $_GET['id'];

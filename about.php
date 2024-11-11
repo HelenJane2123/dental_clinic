@@ -30,7 +30,8 @@
 		              <a class="nav-link" id="v-pills-mission-tab" data-toggle="pill" href="#v-pills-mission" role="tab" aria-controls="v-pills-mission" aria-selected="false">Our mission</a>
 
 		              <a class="nav-link" id="v-pills-goal-tab" data-toggle="pill" href="#v-pills-goal" role="tab" aria-controls="v-pills-goal" aria-selected="false">Our goal</a>
-		            </div>
+		            
+					</div>
 		          </div>
 		          <div class="col-md-12 d-flex align-items-center">
 		            
@@ -39,25 +40,30 @@
 		              <div class="tab-pane fade show active" id="v-pills-whatwedo" role="tabpanel" aria-labelledby="v-pills-whatwedo-tab">
 		              	<div>
 			                <h2 class="mb-4">We Offer High Quality Services</h2>
-			              	<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-			                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+			              	<p>Welcome to Roselle Santander —where your smile and oral health are our top priorities! Located in General Trias, Cavite, we’re a dedicated professionals passionate about providing the highest quality dental care in a warm and welcoming environment.</p>
 				            </div>
 		              </div>
 
 		              <div class="tab-pane fade" id="v-pills-mission" role="tabpanel" aria-labelledby="v-pills-mission-tab">
 		                <div>
 			                <h2 class="mb-4">To Accomodate All Patients</h2>
-			              	<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-			                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+			              	<p>At Roselle Santander Dental Clinic, we believe everyone deserves a healthy, beautiful smile. Our mission is to deliver personalized dental care that meets each patient’s unique needs, promoting lifelong oral health and confidence. Whether you're here for a routine check-up, cosmetic enhancement, or restorative treatment, we’re committed to making your experience comfortable and stress-free.</p>
 				            </div>
 		              </div>
 
 		              <div class="tab-pane fade" id="v-pills-goal" role="tabpanel" aria-labelledby="v-pills-goal-tab">
 		                <div>
-			                <h2 class="mb-4">Help Our Customers Needs</h2>
-			              	<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-			                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
-				            </div>
+			                <h2 class="mb-4">Why Choose Us</h2>
+			              	<p>With years of experience and a commitment to the latest in dental technology, our clinic is equipped to provide comprehensive dental services that prioritize safety, efficiency, and exceptional results. Our team continually updates their knowledge through ongoing training and education, ensuring we can offer the best solutions to your dental needs.</p>
+						</div>
+						<div>
+			                <h2 class="mb-4">Patient-Centered Care</h2>
+			              	<p>Your comfort and satisfaction are our priorities. From the moment you walk through our doors, you’ll notice our commitment to creating a relaxed and friendly atmosphere. We understand that visiting the dentist can be challenging for some, so we take special care to make every patient feel at ease.</p>
+						</div>
+						<div>
+			                <h2 class="mb-4">Visit Us Today</h2>
+			              	<p>We invite you to experience the difference at Roselle Santander. Contact us or book your appointment online. Let us help you achieve and maintain a healthy, beautiful smile for years to come!</p>
+						</div>
 		              </div>
 		            </div>
 		          </div>

@@ -25,7 +25,9 @@
                     <input type="hidden" name="old_firstname" class="form-control" value="<?=$_SESSION['firstname']?>" id="old_firstname">
                     <input type="hidden" name="old_lastname" class="form-control" value="<?=$_SESSION['lastname']?>" id="old_lastname">
                     <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>" id="member_id">
-                    <input type="hidden" name="user_admin_id" class="form-control" value="<?=$_SESSION['user_id']?>" id="user_id">
+                    <input type="hidden" name="emailaddress" class="form-control" value="<?=$_SESSION['email']?>" id="email">
+                    <input type="hidden" name="user_admin_id" class="form-control" value="<?=$user_id_admin?>" id="user_id">
+                    <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
                     
                     <div id="nameFields" style="display: none;">
@@ -132,6 +134,8 @@
         </div>
         <div class="modal-footer">
             <form method="POST" action="controller/deleteAppointment.php">
+                <input type="hidden" name="user_id" class="form-control" value="<?=$_SESSION['user_id']?>" id="user_id">
+                <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
                 <input type="hidden" name="appointment_id" id="appointment_id" value="">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                 <button type="submit" class="btn btn-danger">Yes, delete</button>
@@ -157,6 +161,9 @@
                     <input type="hidden" id="first_name" name="first_name">
                     <input type="hidden" id="last_name" name="last_name">
                     <input type="hidden" id="member_id" name="member_id" value="<?=$member_id?>">
+                    <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id?>" id="doctor_id">
+                    <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
+
 
                     <!-- Appointment Date -->
                     <div class="form-group">

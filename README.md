@@ -43,7 +43,7 @@ PATIENT SIDE:
 ADMIN/DENTIST SIDE
 1. Admin Login
     Example:
-        User: HeartAdmin
+        User: RoselleSantander
         Password: P@@swoord1223
     Logic:
         - Validates invalid username and password

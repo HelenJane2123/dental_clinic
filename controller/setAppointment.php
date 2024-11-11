@@ -8,7 +8,7 @@ $user_dashboard = new UserDashboard();
 
 if (isset($_POST['appointmentType'])) {
     // Get the form values
-    $user_id = $_POST['user_admin_id'];
+    $user_admin_id = $_POST['user_admin_id'];
     $appointmentType = $_POST['appointmentType'];
     $appointmentDate = isset($_POST['appointmentDate']) ? $_POST['appointmentDate'] : null;
     $appointmentTime = isset($_POST['appointmentTime']) ? $_POST['appointmentTime'] : null;
@@ -18,7 +18,7 @@ if (isset($_POST['appointmentType'])) {
     $contactNumber = isset($_POST['contactNumber']) ? $_POST['contactNumber'] : null;
     $emailAddress = isset($_POST['emailAddress']) ? $_POST['emailAddress'] : null;
     $patient_id = isset($_POST['patient_id']) ? $_POST['patient_id'] : null;
-
+  
     // Check if the appointment is for myself
     if ($appointmentType === 'myself') {
         // Use session data for first and last name
@@ -33,7 +33,7 @@ if (isset($_POST['appointmentType'])) {
     }
 
     // Insert appointment details
-    $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id,$user_id);
+    $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id,$user_admin_id);
     
     if ($query) {
         $_SESSION['success'] = true;

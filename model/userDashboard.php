@@ -11,13 +11,13 @@
 			}
 		}
 
-        public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id, $notif_to) {
+        public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id, $user_admin_id) {
             // Check if the patient already exists in the patients table
             $stmt = $this->db->prepare("SELECT patient_id FROM patients WHERE member_id = ?");
             $stmt->bind_param("s", $member_id);
             $stmt->execute();
             $stmt->store_result();
-        
+            
             if ($stmt->num_rows > 0) {
                 // Existing patient found
                 $stmt->bind_result($existing_patient_id);
@@ -31,13 +31,13 @@
                     // Insert new patient details under the same member ID (using alt_patient_id)
                     $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
                     $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
-        
+            
                     if (!$stmt->execute()) {
                         echo "Error inserting new alternate patient: " . $stmt->error;
                         $stmt->close();
                         return false;
                     }
-        
+            
                     // Get the new alternate patient_id for the appointment
                     $patient_id = $this->db->insert_id;
                 } 
@@ -46,13 +46,13 @@
                 $stmt->close();
                 $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
                 $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
-        
+            
                 if (!$stmt->execute()) {
                     echo "Error inserting new patient: " . $stmt->error;
                     $stmt->close();
                     return false;
                 }
-        
+            
                 // Get the newly inserted patient ID
                 $patient_id = $this->db->insert_id;
                 $stmt->close();
@@ -61,7 +61,7 @@
             // Insert appointment record using the new or existing patient ID
             $stmt = $this->db->prepare("INSERT INTO appointments (patient_id, appointment_date, appointment_time, services, status, notes) VALUES (?, ?, ?, ?, 'Pending', ?)");
             $stmt->bind_param("sssss", $patient_id, $appointmentDate, $appointmentTime, $services, $notes);
-        
+            
             if (!$stmt->execute()) {
                 echo "Error inserting appointment: " . $stmt->error;
                 return false;
@@ -70,17 +70,44 @@
             // If appointment is successfully created, register notification
             $appointment_id = $this->db->insert_id;
             $message = "Appointment created for " . $first_name . " " . $last_name . " on " . $appointmentDate . " at " . $appointmentTime ." and is now pending for approval.";
-        
+            
             // Include notification_to in the notification insertion
             $stmt = $this->db->prepare("INSERT INTO notifications (user_id, notif_to, message, type, is_read, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
             $status = 0;  // Assuming the default status for a notification is 'unread'
-            $type = 'appointment';
-            $stmt->bind_param("iissi", $patient_id, $notif_to, $message, $type, $status);
-        
+            $type = 'set_appointment';
+            $stmt->bind_param("iissi", $patient_id, $user_admin_id, $message, $type, $status);
+            
             if (!$stmt->execute()) {
                 echo "Error inserting notification: " . $stmt->error;
                 $stmt->close();
                 return false;
+            }
+        
+            // Get doctor's email
+            $get_doctor_email = $this->get_doctor_details($user_admin_id);
+        
+            // Message for the patient
+            $patientSubject = "Appointment Confirmation";
+            $patientMessage = "Dear $first_name $last_name,\n\nYour appointment has been scheduled for $appointmentDate at $appointmentTime.\nService(s): $services\n\nThank you for choosing our clinic!";
+            $patientHeaders = "From: Roselle Santander's Dental Clinic";
+            
+            // Send email to patient
+            if (mail($emailAddress, $patientSubject, $patientMessage, $patientHeaders)) {
+                echo "Email sent to patient successfully.";
+            } else {
+                echo "Error sending email to patient.";
+            }
+        
+            // Message for the doctor
+            $doctorSubject = "Appointment Pending Confirmation";
+            $doctorMessage = "Dear Doctor,\n\nA new appointment is pending confirmation.\n\nPatient: $first_name $last_name\nDate: $appointmentDate\nTime: $appointmentTime\nService(s): $services\n\nPlease review and confirm."; 
+            
+            // Headers for doctor email with patient’s name as the sender
+            $doctorHeaders = "From: \"$first_name $last_name\" ";
+            if (mail($get_doctor_email['email'], $doctorSubject, $doctorMessage, $doctorHeaders)) {
+                echo "Email sent to doctor successfully.";
+            } else {
+                echo "Error sending email to doctor.";
             }
         
             // Close the statement
@@ -157,31 +184,51 @@
 
         }
 
-        public function delete_appointment($appointmentId) {
+        public function delete_appointment($appointmentId, $patient_id, $notif_to) {
+            // Delete the appointment
             $query = "DELETE FROM appointments WHERE id = ?";
             
             if ($stmt = $this->db->prepare($query)) {
                 $stmt->bind_param("i", $appointmentId);
         
                 if ($stmt->execute()) {
-                    return true; // Appointment successfully deleted
-                } else {
-                    return false; // Error during deletion
-                }
+                    // Appointment successfully deleted
+                    $stmt->close();
         
-                $stmt->close();
+                    // Add a deletion notification
+                    $message = "Appointment with ID " . $appointmentId . " has been deleted.";
+                    $status = 0; // Assuming the default status for a notification is 'unread'
+                    $type = 'appointment_deletion';
+        
+                    $stmt = $this->db->prepare("INSERT INTO notifications (user_id, notif_to, message, type, is_read, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+                    $stmt->bind_param("iissi", $notif_to, $notif_to, $message, $type, $status);
+        
+                    if (!$stmt->execute()) {
+                        echo "Error inserting deletion notification: " . $stmt->error;
+                        $stmt->close();
+                        return false;
+                    }
+        
+                    // Close the statement
+                    $stmt->close();
+                    return true;
+                } else {
+                    // Error during deletion
+                    $stmt->close();
+                    return false;
+                }
             }
         
             return false; // Error preparing the query
         }
 
-        public function update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes, $firstname, $lastname, $member_id) {
+        public function update_appointment($appointmentId, $appointmentDate, $appointmentTime, $status, $notes, $firstname, $lastname, $member_id, $user_id) {
             $query = "UPDATE appointments SET 
                         appointment_date = ?, 
                         appointment_time = ?, 
                         status = ?, 
                         notes = ? 
-                    WHERE id = ?";
+                      WHERE id = ?";
             
             // Prepare and execute the statement
             if ($stmt = $this->db->prepare($query)) {
@@ -191,41 +238,44 @@
                 // Execute the statement and check if successful
                 $result = $stmt->execute();
                 $stmt->close(); // Close the statement
-
+        
                 if ($result) {
                     // If the appointment was successfully updated, insert a notification
-
-                    // Retrieve patient_id associated with the appointment (assuming you have a foreign key relationship)
+        
+                    // Retrieve patient_id associated with the appointment
                     $stmt = $this->db->prepare("SELECT patient_id FROM appointments WHERE id = ?");
                     $stmt->bind_param("i", $appointmentId);
                     $stmt->execute();
                     $stmt->bind_result($patient_id);
                     $stmt->fetch();
                     $stmt->close();
-
+        
                     // Prepare the notification message
-                     $message = "Appointment for " . $firstname . " " . $lastname . " on " . $appointmentDate . " at " . $appointmentTime . " has been updated. Status: " . $status . "Reason: " .$notes;
-
+                    $message = "Appointment for " . $firstname . " " . $lastname . " on " . $appointmentDate . " at " . $appointmentTime . " has been updated. Status: " . $status . ". Reason: " . $notes;
+        
                     // Insert notification
-                    $stmt = $this->db->prepare("INSERT INTO notifications (user_id, message, type, is_read, created_at) VALUES (?, ?, ?, ?, NOW())");
-                    $notificationType = 'appointment_update';
+                    $type = "appointment_update";
                     $is_read = 0; // Assuming unread notifications have a value of 0
-
+        
+                    // Fix the INSERT statement to match the columns and values correctly
+                    $stmt = $this->db->prepare("INSERT INTO notifications (user_id, notif_to, message, type, is_read, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
+        
                     // Bind and execute the notification insert
-                    $stmt->bind_param("issi", $patient_id, $message, $notificationType, $is_read);
-
+                    $stmt->bind_param("iissi", $patient_id, $user_id, $message, $type, $is_read);
+        
                     if (!$stmt->execute()) {
                         echo "Error inserting notification: " . $stmt->error;
                     }
-
+        
                     $stmt->close(); // Close the notification statement
                 }
-
+        
                 return $result; // Return the result of the update (true on success, false on failure)
             } else {
                 return false; // Return false if the statement could not be prepared
             }
         }
+        
 
         public function get_appointments_summary() {
             $query = "SELECT status, COUNT(*) as count FROM appointments WHERE appointment_date >= CURDATE() GROUP BY status";
@@ -924,7 +974,81 @@
                 return [];
             }
         }
+
+        public function get_doctor_details($id) {
+            // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID
+            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id FROM doctors WHERE account_id = ?");
+            
+            // Bind the input parameter (account_id)
+            $stmt->bind_param("i", $id);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Store the result
+            $stmt->store_result();
+            
+            // Check if the doctor exists
+            if ($stmt->num_rows > 0) {
+                // Bind the result to the variables (id, email, account_id)
+                $stmt->bind_result($doctor_id, $email, $account_id);
+                
+                // Fetch the data
+                $stmt->fetch();
+                
+                // Close the statement
+                $stmt->close();
+                
+                // Return the doctor details as an associative array
+                return array(
+                    'doctor_id' => $doctor_id,
+                    'email' => $email,
+                    'account_id' => $account_id
+                );
+            } else {
+                // Close the statement
+                $stmt->close();
+                
+                // Return false if no doctor is found with the given ID
+                return false;
+            }
+        }       
         
-        
+        public function get_doctor_admin() {
+            // Prepare the query to fetch the account id where user_type is 'super_admin'
+            $stmt = $this->db->prepare("SELECT id FROM accounts WHERE user_type = ?");
+            
+            // Bind the parameter 'super_admin' for user_type
+            $user_type = 'super_admin';
+            $stmt->bind_param("s", $user_type);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Store the result
+            $stmt->store_result();
+            
+            // Check if a record is found
+            if ($stmt->num_rows > 0) {
+                // Bind the result to the user_id variable
+                $stmt->bind_result($user_id);
+                
+                // Fetch the data
+                $stmt->fetch();
+                
+                // Close the statement
+                $stmt->close();
+                
+                // Return the user_id (not doctor_id)
+                return $user_id;
+            } else {
+                // Close the statement
+                $stmt->close();
+                
+                // Return false if no super_admin is found
+                return false;
+            }
+        }
+               
     }
 ?>
