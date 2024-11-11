@@ -111,15 +111,15 @@
       			<div class="about-wrap">
       				<div class="heading-section heading-section-white mb-5 ftco-animate">
 		            <h2 class="mb-2">Dental care with a personal touch</h2>
-		            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+		            <p>"Our clinic is committed to offering dental care with a personal touch, focusing on building trusting relationships with every patient. We believe that the best dental care happens when we take the time to understand your individual needs, so we can tailor our approach to provide the most comfortable, effective treatment possible."</p>
 		          </div>
       				<div class="list-services d-flex ftco-animate">
       					<div class="icon d-flex justify-content-center align-items-center">
       						<span class="icon-check2"></span>
       					</div>
-      					<div class="text">
-	      					<h3>Well Experience Dentist</h3>
-	      					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+						<div class="text">
+	      					<h3>Well-Experienced Dentist</h3>
+	      					<p>"Our lead dentist brings a wealth of experience and knowledge to every patient interaction, ensuring you receive personalized, top-quality care. With years of dedication to advanced training and patient-centered dentistry, our clinic offers a reliable choice for all your dental health needs."</p>
       					</div>
       				</div>
       				<div class="list-services d-flex ftco-animate">
@@ -127,8 +127,8 @@
       						<span class="icon-check2"></span>
       					</div>
       					<div class="text">
-	      					<h3>High Technology Facilities</h3>
-	      					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+	      					<h3>Well-Maintained Facility</h3>
+	      					<p>"Our clinic is equipped with well-maintained, modern facilities to ensure a clean, safe, and efficient environment for every visit. We take pride in offering a space where patients can feel comfortable and assured, knowing that their care is delivered in an organized and hygienic setting."</p>
       					</div>
       				</div>
       				<div class="list-services d-flex ftco-animate">
@@ -136,8 +136,8 @@
       						<span class="icon-check2"></span>
       					</div>
       					<div class="text">
-	      					<h3>Comfortable Clinics</h3>
-	      					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+	      					<h3>Comfortable Clinic</h3>
+	      					<p>"Your comfort is our priority. Our clinic environment is designed to feel welcoming and calm, with amenities to help you feel at ease from the moment you step in. Relax in a space dedicated to making your dental visits as comfortable and stress-free as possible."</p>
       					</div>
       				</div>
       			</div>

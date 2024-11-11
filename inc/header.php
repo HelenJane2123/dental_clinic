@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Roselle Santander's Dental Clinic</title>
+    <title>Roselle Santander Dental Clinic</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -22,17 +22,27 @@
     <link rel="stylesheet" href="css/jquery.timepicker.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.css">
 
     
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
-
+    <style>
+        .parsley-errors-list {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
   </head>
+  <?php
+    session_start();
+  ?>
   <body>
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
   <div class="container">
-    <a class="navbar-brand" href="index.php">Roselle Santander's <span>Dental Clinic</span></a>
+    <a class="navbar-brand" href="index.php">Roselle Santander <span>Dental Clinic</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="oi oi-menu"></span> Menu
     </button>
@@ -53,7 +63,6 @@
       <!-- User Dropdown -->
       <div class="ml-lg-3 d-flex align-items-center"> <!-- Add margin-left and center align -->
         <?php
-          session_start();
           if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) {
               // User is logged in, display their name and dropdown
               echo '<div class="dropdown">';

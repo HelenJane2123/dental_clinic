@@ -25,7 +25,7 @@
                     <input type="hidden" name="old_firstname" class="form-control" value="<?=$_SESSION['firstname']?>" id="old_firstname">
                     <input type="hidden" name="old_lastname" class="form-control" value="<?=$_SESSION['lastname']?>" id="old_lastname">
                     <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>" id="member_id">
-                    <input type="hidden" name="emailaddress" class="form-control" value="<?=$_SESSION['email']?>" id="email">
+                    <input type="hidden" name="old_emailaddress" class="form-control" value="<?=$_SESSION['email']?>" id="email">
                     <input type="hidden" name="user_admin_id" class="form-control" value="<?=$user_id_admin?>" id="user_id">
                     <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
@@ -161,7 +161,7 @@
                     <input type="hidden" id="first_name" name="first_name">
                     <input type="hidden" id="last_name" name="last_name">
                     <input type="hidden" id="member_id" name="member_id" value="<?=$member_id?>">
-                    <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id?>" id="doctor_id">
+                    <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
 
 
@@ -269,6 +269,44 @@
         }
     });
 
+    document.getElementById('appointmentTime').addEventListener('change', function() {
+        const time = this.value;  // Get the value from the time input field
+        
+        if (time) {
+            // Split the time value into hours and minutes
+            const [hours, minutes] = time.split(':').map(num => parseInt(num, 10));
+            const totalMinutes = hours * 60 + minutes; // Convert to minutes since midnight
+            
+            // Valid time range in minutes (9:00 AM is 540 minutes, 4:00 PM is 960 minutes)
+            const minTime = 9 * 60;   // 9:00 AM in minutes
+            const maxTime = 16 * 60;  // 4:00 PM in minutes
+            
+            if (totalMinutes < minTime || totalMinutes > maxTime) {
+                alert('Please select a time between 9:00 AM and 4:00 PM.');
+                this.value = '';  // Clear the input field if time is invalid
+            }
+        }
+    });
+
+    document.getElementById('edit_appointment_time').addEventListener('change', function() {
+        const time = this.value;  // Get the value from the time input field
+        
+        if (time) {
+            // Split the time value into hours and minutes
+            const [hours, minutes] = time.split(':').map(num => parseInt(num, 10));
+            const totalMinutes = hours * 60 + minutes; // Convert to minutes since midnight
+            
+            // Valid time range in minutes (9:00 AM is 540 minutes, 4:00 PM is 960 minutes)
+            const minTime = 9 * 60;   // 9:00 AM in minutes
+            const maxTime = 16 * 60;  // 4:00 PM in minutes
+            
+            if (totalMinutes < minTime || totalMinutes > maxTime) {
+                alert('Please select a time between 9:00 AM and 4:00 PM.');
+                this.value = '';  // Clear the input field if time is invalid
+            }
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function() {
         // Listen for clicks on the notification link
         const notificationLinks = document.querySelectorAll('.notification-link');
@@ -295,6 +333,35 @@
                         console.error('Error updating notification:', error);
                     });
             });
+        });
+
+
+        // Get today's date
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+
+        // Set the min attribute for appointment date to today's date
+        document.getElementById("appointmentDate").setAttribute("min", today);
+        document.getElementById("edit_appointment_date").setAttribute("min", today);
+
+        // Optional: Add a listener to alert if the date is in the past when changed manually
+        document.getElementById("appointmentDate").addEventListener("change", function() {
+            var selectedDate = new Date(this.value);
+            if (selectedDate < today) {
+                alert("You cannot set an appointment for a past date. Please choose a valid date.");
+                this.value = ''; // Clear the input field
+            }
+        });
+
+        document.getElementById("edit_appointment_date").addEventListener("change", function() {
+            var selectedDate = new Date(this.value);
+            if (selectedDate < today) {
+                alert("You cannot set an appointment for a past date. Please choose a valid date.");
+                this.value = ''; // Clear the input field
+            }
         });
     });
     // Initialize Parsley validation
@@ -336,5 +403,5 @@
             emailAddress.setAttribute("required", "true");
         }
     }
-        
+
 </script>

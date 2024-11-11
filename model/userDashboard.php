@@ -83,33 +83,6 @@
                 return false;
             }
         
-            // Get doctor's email
-            $get_doctor_email = $this->get_doctor_details($user_admin_id);
-        
-            // Message for the patient
-            $patientSubject = "Appointment Confirmation";
-            $patientMessage = "Dear $first_name $last_name,\n\nYour appointment has been scheduled for $appointmentDate at $appointmentTime.\nService(s): $services\n\nThank you for choosing our clinic!";
-            $patientHeaders = "From: Roselle Santander's Dental Clinic";
-            
-            // Send email to patient
-            if (mail($emailAddress, $patientSubject, $patientMessage, $patientHeaders)) {
-                echo "Email sent to patient successfully.";
-            } else {
-                echo "Error sending email to patient.";
-            }
-        
-            // Message for the doctor
-            $doctorSubject = "Appointment Pending Confirmation";
-            $doctorMessage = "Dear Doctor,\n\nA new appointment is pending confirmation.\n\nPatient: $first_name $last_name\nDate: $appointmentDate\nTime: $appointmentTime\nService(s): $services\n\nPlease review and confirm."; 
-            
-            // Headers for doctor email with patient’s name as the sender
-            $doctorHeaders = "From: \"$first_name $last_name\" ";
-            if (mail($get_doctor_email['email'], $doctorSubject, $doctorMessage, $doctorHeaders)) {
-                echo "Email sent to doctor successfully.";
-            } else {
-                echo "Error sending email to doctor.";
-            }
-        
             // Close the statement
             $stmt->close();
             return true;  // Return true after all operations are successful
@@ -1049,6 +1022,34 @@
                 return false;
             }
         }
+
+        public function get_patient_email($member_id) {
+            // Prepare the SQL query to fetch the patient's email using a positional placeholder
+            $query = "SELECT email FROM patients WHERE member_id = ?";
+        
+            // Prepare the statement
+            $stmt = $this->db->prepare($query);
+        
+            // Bind the member_id parameter to the query
+            $stmt->bind_param('s', $member_id); // 's' means string (use 'i' if it's an integer)
+        
+            // Execute the query
+            $stmt->execute();
+        
+            // Bind result variables
+            $stmt->bind_result($email);
+        
+            // Fetch the result
+            if ($stmt->fetch()) {
+                // Return the email if found
+                return $email;
+            } else {
+                // Return false if no result is found
+                return false;
+            }
+        }
+        
+        
                
     }
 ?>

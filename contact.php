@@ -1,5 +1,5 @@
 <?php
-    include_once('inc/header.php');
+  include_once('inc/header.php');
 ?>
 
 <section class="home-slider owl-carousel">
@@ -36,22 +36,30 @@
     
     <div class="row block-9">
       <div class="col-md-6">
-        <form action="#">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Your Name">
+        <!-- Display the message, if set -->
+        <?php if (isset($_SESSION['contact_message'])): ?>
+          <div class="alert alert-info">
+            <?= $_SESSION['contact_message']; ?>
           </div>
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Your Email">
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Subject">
-          </div>
-          <div class="form-group">
-            <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message"></textarea>
-          </div>
-          <div class="form-group">
-            <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
-          </div>
+          <?php unset($_SESSION['contact_message']); // Remove the message after displaying ?>
+        <?php endif; ?>
+
+        <form action="controller/sendContactEmail.php" method="POST" data-parsley-validate>
+            <div class="form-group">
+                <input type="text" name="name" class="form-control" placeholder="Your Name" required data-parsley-required-message="Please enter your name.">
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" class="form-control" placeholder="Your Email" required data-parsley-type="email" data-parsley-required-message="Please enter your email." data-parsley-type-message="Please enter a valid email address.">
+            </div>
+            <div class="form-group">
+                <input type="text" name="subject" class="form-control" placeholder="Subject" required data-parsley-required-message="Please enter a subject.">
+            </div>
+            <div class="form-group">
+                <textarea name="message" cols="30" rows="7" class="form-control" placeholder="Message" required data-parsley-required-message="Please enter your message."></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send Message" class="btn btn-primary py-3 px-5">
+            </div>
         </form>
       </div>
       <div class="col-md-6">

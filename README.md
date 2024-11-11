@@ -54,5 +54,7 @@ ADMIN/DENTIST SIDE
     - Doctors Profile
     - My Profile
     - Change Password
-
+3. Doctor
+    - Once added by Super Admin -> create account in account table with user_type = ádmin
+    - account id should be the same in doctor_id
 

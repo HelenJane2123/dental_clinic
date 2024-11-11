@@ -137,13 +137,25 @@
                 alert('Appointments cannot be booked on Saturdays. Please select another date.');
                 return; // Prevent the modal from opening
             }
+            
             if (info.date >= new Date()) {
-                document.getElementById('appointmentDate').value = info.date.toISOString().split('T')[0];
+                // Convert the selected date to the local timezone date string
+                const localDate = new Date(info.date);  // Get a copy of the date
+                const year = localDate.getFullYear();
+                const month = String(localDate.getMonth() + 1).padStart(2, '0');  // Get month and pad with leading zero if needed
+                const day = String(localDate.getDate()).padStart(2, '0');  // Get day and pad with leading zero if needed
+                
+                // Set the input's value in the format yyyy-mm-dd
+                const formattedDate = `${year}-${month}-${day}`;
+                document.getElementById('appointmentDate').value = formattedDate;
+
+                // Show the modal
                 $('#appointmentModal').modal('show');
 
+                // Attach event listeners to close modal
                 $('.close, .btn-secondary').on('click', function() {
-                $('#appointmentModal').modal('hide'); // Hide the modal
-            });
+                    $('#appointmentModal').modal('hide');
+                });
             } else {
                 alert('You cannot select past dates.');
             }

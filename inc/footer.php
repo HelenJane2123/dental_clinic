@@ -4,8 +4,8 @@
         <div class="row mb-5">
           <div class="col-md-3">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Roselle Santander's Dental Clinic</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              <h2 class="ftco-heading-2">Roselle Santander Dental Clinic</h2>
+              <p>"At Roselle Santander Dental Clinic, we are committed to providing personalized, high-quality dental care in a welcoming environment. Our experienced team is here to make your dental visit as comfortable and efficient as possible."</p>
             </div>
             <ul class="ftco-footer-social list-unstyled float-md-left float-lft ">
               <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
@@ -17,9 +17,9 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">Quick Links</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">About</a></li>
-                <li><a href="#" class="py-2 d-block">Services</a></li>
-                <li><a href="#" class="py-2 d-block">Contact</a></li>
+                <li><a href="about.php" class="py-2 d-block">About</a></li>
+                <li><a href="services.php" class="py-2 d-block">Services</a></li>
+                <li><a href="contact.php" class="py-2 d-block">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -30,7 +30,7 @@
 	              <ul>
 	                <li><span class="icon icon-map-marker"></span><span class="text"> 2nd flr. EDP Bldg. San Juan I Gen. Trias, Cavite</span></li>
 	                <li><a href="#"><span class="icon icon-phone"></span><span class="text"> 09954993703</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span> <span class="text">rossellesantanderdentalclinic@gmail.com</span></a></li>
+	                <li><a href="#"><span class="icon icon-envelope"></span> <span class="text"> rossellesantanderdentalclinic@gmail.com</span></a></li>
 	              </ul>
 	            </div>
             </div>
@@ -120,6 +120,8 @@
   <script src="js/main.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   <!-- Parsley JS -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"></script>
 
   <script type="text/javascript">
         document.getElementById("login_button").onclick = function () {
