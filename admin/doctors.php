@@ -13,72 +13,97 @@ include_once('inc/sidebarMenu.php');
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Patients</h3>
-                    <p class="text-subtitle text-sub-muted">List of all Patients</p>
+                    <h3>Doctors</h3>
+                    <p class="text-subtitle text-sub-muted">List of all Doctors</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Patients</li>
+                            <li class="breadcrumb-item active" aria-current="page">Doctors</li>
                         </ol>
                     </nav>
                 </div>
             </div>
         </div>
+        
         <section class="section">
+            <?php
+                // Display message if set
+                if (isset($_SESSION['display_message'])): ?>
+                    <div class="alert alert-<?= $_SESSION['message_type']; ?>" role="alert">
+                        <?= $_SESSION['display_message']; ?>
+                    </div>
+                    <?php 
+                    // Clear message after displaying it
+                    unset($_SESSION['display_message']);
+                    unset($_SESSION['message_type']);
+                endif;
+                ?>
+
             <div class="card">
                 <div class="card-header">
+                    <!-- Add Doctor Button -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDoctorModal" onclick="generatePassword()">
+                        Add Doctor
+                    </button>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped" id="table1">
                         <thead>
                             <tr>
-                                <th>Patient ID</th>
+                                <th>Doctor ID</th>
                                 <th>Member ID</th>
                                 <th>Name</th>
-                                <th>Birthday</th>
                                 <th>Gender</th>
-                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Contact Number</th>
+                                <th>Specialty</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                              <?php if (!empty($get_patients)) : ?>
-                                  <?php foreach ($get_patients as $patients) : ?>
-                                      <tr>
-                                        <td><?= htmlspecialchars($patients['patient_id']) ?></td>
-                                        <td><?= htmlspecialchars($patients['member_id']) ?></td>
-                                        <td><?= htmlspecialchars($patients['first_name'])." ".htmlspecialchars($patients['last_name']) ?></td>
+                            <?php if (!empty($get_doctors)) : ?>
+                                <?php foreach ($get_doctors as $doctors) : ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($doctors['doctor_id']) ?></td>
+                                        <td><?= htmlspecialchars($doctors['member_id']) ?></td>
+                                        <td><?= htmlspecialchars($doctors['first_name']) . " " . htmlspecialchars($doctors['last_name']) ?></td>
+                                        <td><?= htmlspecialchars($doctors['gender']) ?></td>
+                                        <td><?= htmlspecialchars($doctors['email']) ?></td>
+                                        <td><?= htmlspecialchars($doctors['contact_number']) ?></td>
+                                        <td><?= htmlspecialchars($doctors['specialty']) ?></td>
                                         <td>
-                                            <?php 
-                                                $birthdate = new DateTime($patients['birthdate']);
-                                                echo $birthdate->format('F j, Y'); // Format as "Month Day, Year"
-                                            ?>
+                                            <a href="assignedPatient.php" class="btn btn-primary btn-sm">Assign Patient</a>
+                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">Edit</button>
+                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDelete(<?= htmlspecialchars($doctors['doctor_id']) ?>)">Delete</button>
                                         </td>
-                                        <td>
-                                            <?= $patients['sex'] == "F" ? "Female" : "Male"; ?>
-                                        </td>
-                                        <td>
-                                            <?= $patients['age']?>
-                                        </td>
-                                        <td>
-                                            <a href="viewRecord.php?patient_id=<?= urlencode($patients['patient_id']) ?>" class="btn btn-primary btn-sm">View Record</a>
-                                        </td>
-                                      </tr>
-                                  <?php endforeach; ?>
-                              <?php else : ?>
-                                  <tr>
-                                      <td colspan="8" class="text-center">No Patient record found.</td>
-                                  </tr>
-                              <?php endif; ?>
-                          </tbody>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="8" class="text-center">No Doctor/s record found.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
+           <?php include_once('inc/actionModal.php')?>
         </section>
     </div>
+    <script>
+        // Function to generate a random password
+        function generatePassword() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            let password = "";
+            for (let i = 0; i < 10; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById("password").value = password;
+        }
+    </script>
 
 <?php
 include_once('inc/footerDashboard.php');

@@ -119,7 +119,8 @@
 
         /*** validate login details ***/
         public function check_login($username, $password) {
-            $sql = "SELECT password FROM accounts WHERE username = ?";
+            // Correct the SQL query to use AND instead of &
+            $sql = "SELECT password FROM accounts WHERE username = ? AND user_type != 'patient'";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('s', $username);
             $stmt->execute();
@@ -136,6 +137,7 @@
         
             return password_verify($password, $hashed_password); // Verify password
         }
+        
 
          /*** Get all user accounts ***/
         public function getAllUsers() {
@@ -154,7 +156,7 @@
         }
             
         public function getUserByUsername($username) {
-            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber FROM accounts WHERE username = ?";
+            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber, user_type FROM accounts WHERE username = ? AND user_type != 'patient'";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('s', $username);
             $stmt->execute();
@@ -593,6 +595,69 @@
             }
         }
 
+        public function get_doctor_details_with_account() {
+            $query = "
+                SELECT doctors.*, accounts.* 
+                FROM doctors
+                LEFT JOIN accounts ON accounts.id = doctors.doctor_id
+            ";
+            $doctorDetails = [];
+        
+            // Prepare the statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Execute the statement
+                $stmt->execute();
+        
+                // Get the result set from the query
+                $result = $stmt->get_result();
+        
+                // Fetch all rows and store them in an associative array
+                while ($row = $result->fetch_assoc()) {
+                    $doctorDetails[] = $row;
+                }
+        
+                // Close the statement
+                $stmt->close();
+            } else {
+                // Handle error if query preparation fails
+                return null;
+            }
+        
+            return $doctorDetails; // Return an array of doctor details with account info
+        }
+        
+        
+        public function reg_doctor($member_id, $first_name, $last_name, $mobile_number, $username, $hashed_password, $user_type, $email_address, $date_created, $specialty) {
+            // Insert into accounts table
+            $query_accounts = "INSERT INTO accounts (member_id, firstname, lastname, contactnumber, username, password, user_type, email, date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            if ($stmt_accounts = $this->db->prepare($query_accounts)) {
+                $stmt_accounts->bind_param("sssssssss", $member_id, $first_name, $last_name, $mobile_number, $username, $hashed_password, $user_type, $email_address, $date_created);
+                
+                if ($stmt_accounts->execute()) {
+                    $account_id = $stmt_accounts->insert_id;
+        
+                    // Insert into doctors table
+                    $query_doctors = "INSERT INTO doctors (account_id, first_name, last_name, email, contact_number, specialty, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    if ($stmt_doctors = $this->db->prepare($query_doctors)) {
+                        $stmt_doctors->bind_param("issssss", $account_id, $first_name, $last_name, $email_address, $mobile_number, $specialty, $date_created);
+                        
+                        if ($stmt_doctors->execute()) {
+                            $stmt_accounts->close();
+                            $stmt_doctors->close();
+                            return true;
+                        }
+                        $stmt_doctors->close();
+                    }
+                }
+                $stmt_accounts->close();
+            }
+            return false;
+        }
+        
+        
+        
+        
+                
         
 	}
 ?>

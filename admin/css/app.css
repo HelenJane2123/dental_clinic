@@ -716,6 +716,11 @@
 .modal .modal-header .close:hover {
     background: #dee2e6;
 }
+
+.modal-title {
+    color: #000 !important;
+}
+
 .modal .modal-header i,
 .modal .modal-header svg {
     font-size: 12px;

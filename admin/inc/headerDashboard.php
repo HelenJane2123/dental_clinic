@@ -30,6 +30,7 @@
 
     $get_appointments = $appointment_admin->get_all_appointment_bookings();
     $get_recent_appointments = $appointment_admin->get_today_appointments();
+    $get_doctors = $appointment_admin->get_doctor_details_with_account();
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +60,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="dashboard.php">Roselle Santander's Dental Clinic</a>
+                            <a href="dashboard.php">Roselle Santander Dental Clinic</a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>

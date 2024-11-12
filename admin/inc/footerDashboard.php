@@ -230,6 +230,12 @@
             $('#notificationModal').modal('hide'); // Hide the modal
         });
 
+        function doctorsubmitForm() {
+
+            // Now submit the form
+            document.getElementById('addDoctorForm').submit();
+        }
+
     </script>
       
       <script src="js/main.js"></script>
