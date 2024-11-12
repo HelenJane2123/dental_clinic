@@ -4,7 +4,7 @@
     <div class="col-lg-5 col-12">
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="index.php"><h5 class="auth-subtitle">Roselle Santander Dental Clinic (RSDC) - Admin</h5></a>
+                <a href="../index.php"><h5 class="auth-subtitle">Roselle Santander Dental Clinic (RSDC) - Admin</h5></a>
             </div>
             <h1 class="auth-title">Log in.</h1>
             <p class="auth-subtitle mb-5">Log in to Admin Panel.</p>

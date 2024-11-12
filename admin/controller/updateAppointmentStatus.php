@@ -15,6 +15,7 @@ if (!isset($_SESSION['username'])) {
 
 $updated_by = $_SESSION['username']; // Get the username from the session
 $user_id = $_POST['user_id_admin'];
+$patient_id = $_POST['patient_id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
     $appointment_id = intval($_POST['appointment_id']); // Use POST data
@@ -27,6 +28,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         $notes = isset($_POST['notes']) ? $_POST['notes'] : '';
         
         if ($funObj->reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id)) {
+           // Fetch patient's email after rescheduling
+           $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
+
+           // Prepare email content
+           $subject = "Your Appointment has been Rescheduled";
+           $message = "Dear Patient,\n\n";
+           $message .= "Your appointment has been rescheduled to:\n";
+           $message .= "New Date: " . $new_date . "\n";
+           $message .= "New Time: " . $new_time . "\n";
+           $message .= "Notes: " . $notes . "\n\n";
+           $message .= "If you have any questions, please feel free to contact us.\n\n";
+           $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
+
+           // Send email to patient
+           $headers = "From: no-reply@yourclinic.com\r\n" .
+                      "Reply-To: no-reply@yourclinic.com\r\n" .
+                      "X-Mailer: PHP/" . phpversion();
+
+           mail($patient_email, $subject, $message, $headers);
+           
             // Redirect to a success page
             header("Location: ../appointment_bookings.php");
             exit;
@@ -43,6 +64,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         if (isset($_POST['action']) && $_POST['action'] === 'cancel') {
             // Cancellation logic
             if ($funObj->cancel_appointment($appointment_id, $notes, $updated_by, $user_id)) {
+
+                // Fetch patient's email after cancelation
+                $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
+
+                // Prepare email content
+                $subject = "Your Appointment has been Canceled";
+                $message = "Dear Patient,\n\n";
+                $message .= "Your appointment has been canceld due to the following reason:\n";
+                $message .= " " . $notes . "\n\n";
+                $message .= "If you have any questions, please feel free to contact us.\n\n";
+                $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
+
+                // Send email to patient
+                $headers = "From: no-reply@yourclinic.com\r\n" .
+                            "Reply-To: no-reply@yourclinic.com\r\n" .
+                            "X-Mailer: PHP/" . phpversion();
+
+                mail($patient_email, $subject, $message, $headers);
                 // Redirect to a success page
                 header("Location: ../appointment_bookings.php");
                 exit;
@@ -53,6 +92,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         } else {
             // Approval logic
             if ($funObj->approve_appointment($appointment_id, $notes, $updated_by, $user_id)) { // Ensure user_id is included
+                
+                // Fetch patient's email after rescheduling
+                $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
+
+                // Prepare email content for the patient
+                $subject = "Your Appointment has been Approved";
+                $message = "Dear Patient,\n\n";
+                $message .= "We are pleased to inform you that your appointment has been approved.\n\n";
+                $message .= "Appointment Date: " . $appointment_date . "\n";
+                $message .= "Appointment Time: " . $appointment_time . "\n";
+                $message .= "Notes: " . $notes . "\n\n";
+                $message .= "If you have any questions or concerns, please feel free to contact us.\n\n";
+                $message .= "Best regards,\n";
+                $message .= "Your Roselle Santander Dental Clinic Team";
+
+                // Set the email headers
+                $headers = "From: no-reply@rosellesantanderdental.com" . "\r\n" .
+                    "Reply-To: no-reply@rosellesantanderdental.com" . "\r\n" .
+                    "X-Mailer: PHP/" . phpversion();
+
+                 mail($patient_email, $subject, $message, $headers);
+                
                 // Redirect to a success page
                 header("Location: ../appointment_bookings.php");
                 exit;

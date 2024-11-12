@@ -132,7 +132,7 @@ include_once('inc/sidebarMenu.php');
                                     <?php endforeach; ?>
                                 <?php else : ?>
                                     <tr>
-                                        <td colspan="8" class="text-center">No Patient record found.</td>
+                                        <td colspan="15" class="text-center">No Patient record found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>

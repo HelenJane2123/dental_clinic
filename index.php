@@ -9,7 +9,7 @@
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
             <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
               <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Modern Dentistry in a Calm and Relaxed Environment</h1>
-              <p class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              <p class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">We use the latest in dental innovations to make your visit as smooth and relaxing as possible.</p>
               <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><a href="#" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
             </div>
           </div>
@@ -21,8 +21,8 @@
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
             <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-              <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Modern Achieve Your Desired Perfect Smile</h1>
-              <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+              <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Achieve Your Desired Perfect Smile</h1>
+              <p class="mb-4">Our goal is to provide exceptional care while ensuring you feel at ease every step of the way.</p>
               <p><a href="signup.php" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
             </div>
           </div>

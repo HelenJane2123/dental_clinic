@@ -560,7 +560,39 @@
             return [];
         }
         
-        
+        // Assuming this function is inside your Admin or UserDashboard class
+        public function get_patient_email_by_appointment($patient_id) {
+            // Prepare the SQL query to get the patient's email by patient_id
+            $query = "SELECT email FROM patients WHERE patient_id = ?";
+            
+            // Prepare the statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind the patient_id to the prepared statement
+                $stmt->bind_param("s", $patient_id);  // Assuming patient_id is a string, use 'i' for integers
+                
+                // Execute the statement
+                $stmt->execute();
+
+                // Bind the result to a variable
+                $stmt->bind_result($email);
+
+                // Fetch the result
+                if ($stmt->fetch()) {
+                    // Return the email if found
+                    return $email;
+                } else {
+                    // Return null or an empty string if no result
+                    return null;
+                }
+
+                // Close the statement
+                $stmt->close();
+            } else {
+                // Handle error if query preparation fails
+                return null;
+            }
+        }
+
         
 	}
 ?>

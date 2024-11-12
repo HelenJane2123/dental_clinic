@@ -181,7 +181,7 @@
                     <div class="form-group">
                         <label class="required" for="status">Status</label>
                         <select class="form-control" id="status" name="status" required data-parsley-required-message="This field is required.">
-                            <option value="Canceled">Cancelled</option>
+                            <option value="Canceled">Canceled</option>
                             <option value="Re-Schedule">Rescheduled</option>
                             <option value="Pending">Pending</option>
                         </select>
@@ -347,7 +347,6 @@
         document.getElementById("appointmentDate").setAttribute("min", today);
         document.getElementById("edit_appointment_date").setAttribute("min", today);
 
-        // Optional: Add a listener to alert if the date is in the past when changed manually
         document.getElementById("appointmentDate").addEventListener("change", function() {
             var selectedDate = new Date(this.value);
             if (selectedDate < today) {

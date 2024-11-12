@@ -229,6 +229,7 @@
         document.querySelector('.modal .close-btn').addEventListener('click', function () {
             $('#notificationModal').modal('hide'); // Hide the modal
         });
+
     </script>
       
       <script src="js/main.js"></script>
