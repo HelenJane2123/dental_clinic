@@ -51,6 +51,7 @@
   
 
   <script>
+    var patientCount = <?php echo $patientCount; ?>;
     document.addEventListener('DOMContentLoaded', function() {
       const statusColors = {
           'Pending': '#FFC107',   // Yellow
@@ -133,6 +134,13 @@
             }
         },
         dateClick: function(info) {
+            if (patientCount === 0) {
+                // If patient record is not completed, show an alert and do not open modal
+                alert('You must complete your patient record before booking an appointment. Please complete your record first.');
+                window.location.href = 'my_record.php'; // Redirect to the record form
+                return; // Prevent modal from opening
+            }
+
             if (info.date.getDay() === 6) {
                 alert('Appointments cannot be booked on Saturdays. Please select another date.');
                 return; // Prevent the modal from opening
@@ -329,9 +337,6 @@
         xhr.send();
     }
 
-    //initialize validation
-    $('#my_record_form').parsley();
-
     $(document).ready(function() {
         // Function to show or hide the details group based on selection
         function toggleVisibility(selectId, groupId) {
@@ -378,6 +383,28 @@
         printWindow.document.close();
         printWindow.print();
     }
+
+    //initialize validation
+    $(document).ready(function() {
+        $('#my_record_form').parsley(); // Initialize Parsley
+
+       // Handle form submission
+        $('#my_record_form').on('submit', function(e) {
+            // Check if the form is valid
+            var parsleyInstance = $(this).parsley();
+
+            // Only submit the form if it is valid
+            if (!parsleyInstance.isValid()) {
+                // If the form is invalid, prevent submission
+                e.preventDefault();
+                // Optionally, you can add custom behavior if the form is invalid
+                alert('Please correct the errors before submitting the form.');
+            }
+            // If Parsley validation passes, the form will submit normally
+        });
+    });
+
+
   </script>
 </body>
 

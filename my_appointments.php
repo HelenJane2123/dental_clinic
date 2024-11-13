@@ -1,5 +1,6 @@
 <?php
     include_once("inc/userDashboardHeader.php");
+   
 ?>
     <div class="container-fluid page-body-wrapper">
       <?php  include_once("inc/search_header.php"); ?>
@@ -12,9 +13,17 @@
                 <div class="card-body">
                   <h4 class="card-title">Book an Appointment</h4>
                     <div style="text-align: right; margin-bottom: 20px;">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#appointmentModal">
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#appointmentModal" id="bookAppointmentBtn" <?php echo ($patientCount == 0) ? 'disabled' : ''; ?>>
                             Book an Appointment
                         </button>
+
+                        <?php if ($patientCount == 0): ?>
+                            <!-- Message for the user if patient record is incomplete -->
+                            <div class="alert alert-warning mt-3">
+                                You must complete your patient record before booking an appointment. 
+                                <a href="my_record.php" class="btn btn-link">Complete your record here.</a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="content">
                       <div class="col-lg-12 grid-margin stretch-card">
@@ -44,6 +53,7 @@
                                           <th>Patient ID</th>
                                           <th>Appointment Date</th>
                                           <th>Appointment Time</th>
+                                          <th>Assigned Doctor</th>
                                           <th>Status</th>
                                           <th>Notes</th>
                                           <th>Actions</th>
@@ -54,10 +64,11 @@
                                           <?php foreach ($appointments as $appointment) : ?>
                                               <tr>
                                                   <td><?= htmlspecialchars($appointment['member_id']) ?></td>
-                                                  <td><?= htmlspecialchars($appointment['first_name'])." ".htmlspecialchars($appointment['last_name']) ?></td>
+                                                  <td><?= htmlspecialchars($appointment['patient_first_name'])." ".htmlspecialchars($appointment['patient_last_name']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
+                                                  <td><?= htmlspecialchars($appointment['doctor_first_name'])." ".htmlspecialchars($appointment['doctor_last_name']) ?></td>
                                                   <td>
                                                     <label class="badge <?= htmlspecialchars($appointment['status'] == 'Canceled' ? 'badge-danger' : 
                                                         ($appointment['status'] == 'Confirmed' ? 'badge-success' : 
@@ -71,7 +82,7 @@
                                                           <i class="mdi mdi-eye"></i>
                                                         </button>
                                                         <?php if ($appointment['status'] !== 'Canceled') : ?>
-                                                          <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>', '<?= htmlspecialchars($appointment['first_name']) ?>', '<?= htmlspecialchars($appointment['last_name']) ?>','<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
+                                                          <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>', '<?= htmlspecialchars($appointment['patient_first_name']) ?>', '<?= htmlspecialchars($appointment['patient_last_name']) ?>','<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
                                                               <i class="mdi mdi-pencil"></i>
                                                           </button>
                                                           <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">

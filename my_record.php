@@ -50,11 +50,11 @@
                                 <button type="button" class="print-button" onclick="printFormRecord()">Print</button>
                                 <!-- Member ID Display -->
                                 <div class="member-id">
-                                    Member ID: <span id="member_id_display">12345</span>
+                                    Patient ID: <span id="member_id_display"><?=$member_id?></span>
                                 </div>
                             </div>
                             <br/><br/>
-                            <form action="controller/myRecord.php" method="POST" class="forms-sample" id="my_record_form" enctype="multipart/form-data">
+                            <form action="controller/myRecord.php" method="POST" class="forms-sample" name="my_record" id="my_record_form" enctype="multipart/form-data">
                                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                                 <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($member_id) ? $member_id : '' ?>">
                                 <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_record['patient_id']) ? $patient_record['patient_id'] : '' ?>">
@@ -148,8 +148,8 @@
                                 <h4>Dental History</h4>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <label for="previous_dentist">Previous Dentist</label>
-                                        <input type="text" class="form-control" id="previous_dentist" name="previous_dentist" value="<?= isset($patient['previous_dentist']) ? $patient['previous_dentist'] : '' ?>">
+                                        <label class="required" for="previous_dentist">Previous Dentist</label>
+                                        <input type="text" class="form-control" id="previous_dentist" name="previous_dentist" value="<?= isset($patient['previous_dentist']) ? $patient['previous_dentist'] : '' ?>" required data-parsley-required-message="This field is required.">
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="required" for="last_dental_visit">Last Dental Visit</label>
@@ -208,7 +208,7 @@
                                         </select>
                                         <div id="serious_illness_group" style="display: none;">
                                             <label class="required">If yes, what illness/operation?</label>
-                                            <input type="text" class="form-control" name="illness_details" value="<?= isset($patient['illness_details']) ? $patient['illness_details'] : '' ?>" required data-parsley-required-message="This field is required.">
+                                            <input type="text" class="form-control" name="illness_details" value="<?= isset($patient['illness_details']) ? $patient['illness_details'] : '' ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -223,7 +223,7 @@
                                         </select>
                                         <div id="hospitalization_details_group" style="display: none;">
                                             <label class="required">If yes, why?</label>
-                                            <input type="text" class="form-control" name="hospitalization_reason" value="<?= isset($patient['hospitalization_reason']) ? $patient['hospitalization_reason'] : '' ?>" required data-parsley-required-message="This field is required.">
+                                            <input type="text" class="form-control" name="hospitalization_reason" value="<?= isset($patient['hospitalization_reason']) ? $patient['hospitalization_reason'] : '' ?>">
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-4">
@@ -235,7 +235,7 @@
                                         </select>
                                         <div id="medication_details_group" style="display: none;">
                                             <label class="required">If yes, what medication?</label>
-                                            <input type="text" class="form-control" name="medication_details" value="<?= isset($patient['medication_details']) ? $patient['medication_details'] : '' ?>" required data-parsley-required-message="This field is required.">
+                                            <input type="text" class="form-control" name="medication_details" value="<?= isset($patient['medication_details']) ? $patient['medication_details'] : '' ?>">
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-4">
@@ -308,22 +308,25 @@
                                 <h4>For Women Only</h4>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <label>Are you pregnant?</label>
-                                        <select class="form-control" name="pregnant">
+                                        <label class="required">Are you pregnant?</label>
+                                        <select class="form-control" name="pregnant" required data-parsley-required-message="This field is required.">
+                                            <option value="">--Please Select--</option>
                                             <option value="1" <?= isset($patient['pregnant']) && $patient['pregnant'] == 1 ? 'selected' : '' ?>>Yes</option>
                                             <option value="0" <?= isset($patient['pregnant']) && $patient['pregnant'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        <label>Are you nursing?</label>
-                                        <select class="form-control" name="nursing">
+                                        <label class="required">Are you nursing?</label>
+                                        <select class="form-control" name="nursing" required data-parsley-required-message="This field is required.">
+                                            <option value="">--Please Select--</option>
                                             <option value="1" <?= isset($patient['nursing']) && $patient['nursing'] == 1 ? 'selected' : '' ?>>Yes</option>
                                             <option value="0" <?= isset($patient['nursing']) && $patient['nursing'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        <label>Are you taking birth control pills?</label>
-                                        <select class="form-control" name="birth_control">
+                                        <label class="required">Are you taking birth control pills?</label>
+                                        <select class="form-control" name="birth_control" required data-parsley-required-message="This field is required.">
+                                            <option value="">--Please Select--</option>
                                             <option value="1" <?= isset($patient['birth_control']) && $patient['birth_control'] == 1 ? 'selected' : '' ?>>Yes</option>
                                             <option value="0" <?= isset($patient['birth_control']) && $patient['birth_control'] == 0 ? 'selected' : '' ?>>No</option>
                                         </select>
@@ -371,6 +374,7 @@
                 </div>
             </div>
         </div>
+
 <?php
     include_once("inc/myAppointmentModal.php");
     include_once("inc/userDashboardFooter.php");

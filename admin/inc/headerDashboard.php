@@ -87,7 +87,7 @@
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
-                            <a href="dashboard.php">Roselle Santander Dental Clinic</a>
+                            <a href="dashboard.php"><img src="images/logo/logo.png" alt="Logo" style="height:113px;"></a>
                         </div>
                         <div class="toggler">
                             <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>

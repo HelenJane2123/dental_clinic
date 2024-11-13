@@ -59,6 +59,9 @@
     // Get recent notifications (up to 3)
     $recentNotifications = $appointment->get_recent_notifications_by_member($member_id, 3);
     $notification_lists = $appointment->get_all_notifications($member_id);
+
+    //check if member id is already in patient record
+    $patientCount = $appointment->patient_record_existence($member_id);
 ?>
 <head>
   <!-- Required meta tags -->

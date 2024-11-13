@@ -90,39 +90,53 @@
         
         
         public function get_all_appointments_by_member_id($member_id) {
-            // Prepare the SQL statement
-            $query = "SELECT a.*, p.first_name, p.last_name, p.member_id
-                            FROM appointments AS a
-                            JOIN patients AS p ON a.patient_id = p.patient_id
-                            WHERE p.member_id = ?";
-
+            // Prepare the SQL statement with a LEFT JOIN to get doctor details
+            $query = "
+                SELECT 
+                    a.*, 
+                    p.first_name AS patient_first_name, 
+                    p.last_name AS patient_last_name, 
+                    p.member_id,
+                    d.first_name AS doctor_first_name, 
+                    d.last_name AS doctor_last_name
+                FROM 
+                    appointments AS a
+                JOIN 
+                    patients AS p ON a.patient_id = p.patient_id
+                LEFT JOIN 
+                    doctors AS d ON p.assigned_doctor = d.account_id
+                WHERE 
+                    p.member_id = ?
+            ";
+        
             // Initialize the statement
-            $stmt = $this->db->prepare($query); // Use $this->db instead of $this->conn
+            $stmt = $this->db->prepare($query);
             if (!$stmt) {
                 throw new Exception("Database statement could not be prepared: " . $this->db->error);
             }
-
+        
             // Bind the member ID parameter
-            $stmt->bind_param("s", $member_id); // Change to "s" if member_id is a string
-
+            $stmt->bind_param("s", $member_id); // Use "s" for string parameter type
+        
             // Execute the statement
             if (!$stmt->execute()) {
                 throw new Exception("Database query failed: " . $stmt->error);
             }
-
+        
             // Get the result set
             $result = $stmt->get_result();
-
+        
             // Fetch all appointments as an associative array
             $appointments = $result->fetch_all(MYSQLI_ASSOC);
-
+        
             // Free the result set and close the statement
             $result->free();
             $stmt->close();
-
+        
             // Return the appointments
             return $appointments;
         }
+        
 
         public function view_appointment_by_id ($id) {
              // Prepare the SQL statement to fetch appointment details
@@ -1048,6 +1062,29 @@
                 return false;
             }
         }
+
+        public function patient_record_existence($member_id) {
+            // Query to check if patient record exists for the given member ID
+            $query = "SELECT COUNT(*) AS count FROM patients WHERE member_id = ?";
+        
+            // Prepare the statement
+            $stmt = $this->db->prepare($query);
+        
+            // Bind the member_id parameter (assuming it's a string; adjust type as needed)
+            $stmt->bind_param("s", $member_id);
+        
+            // Execute the query
+            $stmt->execute();
+        
+            // Get the result
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+        
+            // Return true if count is greater than 0, else false
+            return $row['count'];
+        }
+        
+        
         
         
                
