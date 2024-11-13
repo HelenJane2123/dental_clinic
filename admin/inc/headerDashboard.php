@@ -31,6 +31,21 @@
     $get_appointments = $appointment_admin->get_all_appointment_bookings();
     $get_recent_appointments = $appointment_admin->get_today_appointments();
     $get_doctors = $appointment_admin->get_doctor_details_with_account();
+
+     // Fetch user details
+    $userDetails = $appointment_admin->get_user_profile($member_id_admin);
+
+    if ($userDetails) {
+        $firstname = $userDetails['firstname'];
+        $lastname = $userDetails['lastname'];
+        $email = $userDetails['email'];
+        $contact_number = $userDetails['contactnumber'];
+        $gender = $userDetails['gender'];
+        $address = $userDetails['address'];
+        $remarks = $userDetails['remarks'];
+        $profile_picture = $userDetails['profile_picture'];
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +61,9 @@
     <link rel="stylesheet" href="css/bootstrap.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
+    <!-- Add Font Awesome (or use Bootstrap Icons if preferred) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
     <link rel="stylesheet" href="vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="vendors/bootstrap-icons/bootstrap-icons.css">

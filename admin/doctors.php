@@ -74,9 +74,13 @@ include_once('inc/sidebarMenu.php');
                                         <td><?= htmlspecialchars($doctors['contact_number']) ?></td>
                                         <td><?= htmlspecialchars($doctors['specialty']) ?></td>
                                         <td>
-                                            <a href="assignedPatient.php" class="btn btn-primary btn-sm">Assign Patient</a>
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">Edit</button>
-                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDelete(<?= htmlspecialchars($doctors['doctor_id']) ?>)">Delete</button>
+                                        <a href="assignedPatient.php" class="btn btn-primary btn-sm">Assign Patient</a>
+                                            <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">
+                                                <i class="fas fa-edit"></i>
+                                            </button> -->
+                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDoctorDelete(<?= htmlspecialchars($doctors['doctor_id']) ?>)">
+                                                <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
+                                            </button>                                        
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

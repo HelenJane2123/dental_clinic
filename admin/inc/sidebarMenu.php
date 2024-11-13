@@ -30,9 +30,9 @@
             <li class="sidebar-title">Profiles</li>
             <?php if ($_SESSION['user_type'] == 'super_admin'): ?>
                 <li class="sidebar-item <?= basename($_SERVER['PHP_SELF']) == 'doctor_profile.php' ? 'active' : '' ?>">
-                    <a href="doctor_profile.php" class='sidebar-link'>
+                    <a href="doctors.php" class='sidebar-link'>
                         <i class="bi bi-file-earmark-medical-fill"></i>
-                        <span>Doctor's Proflie</span>
+                        <span>Doctor's Profile</span>
                     </a>
                 </li>
             <?php endif; ?>
@@ -44,7 +44,7 @@
             </li>
 
             <li class="sidebar-item <?= basename($_SERVER['PHP_SELF']) == 'change_password.php' ? 'active' : '' ?>">
-                <a href="#change_password.php" class='sidebar-link'>
+                <a href="change_password.php" class='sidebar-link'>
                     <i class="bi bi-pen-fill"></i>
                     <span>Change Password</span>
                 </a>

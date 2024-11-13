@@ -198,6 +198,7 @@
     </div>
 </div>
 
+
 <script>
     // Validate time for each appointment time input
     document.querySelectorAll('.appointment_time').forEach(function(timeInput) {
@@ -232,5 +233,9 @@
             }
         });
     });
+
+    function confirmDoctorDelete(doctorId) {
+        document.getElementById('delete_doctor_id').value = doctorId;
+    }
 
 </script>

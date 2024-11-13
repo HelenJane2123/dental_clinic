@@ -600,6 +600,7 @@
                 SELECT doctors.*, accounts.* 
                 FROM doctors
                 LEFT JOIN accounts ON accounts.id = doctors.doctor_id
+                WHERE accounts.user_type = 'admin'
             ";
             $doctorDetails = [];
         
@@ -653,11 +654,129 @@
             }
             return false;
         }
+
+        public function delete_doctor($doctor_id) {
+            // Start a transaction to ensure both deletions succeed or fail together
+            $this->db->begin_transaction();
         
+            try {
+                // First, delete from the doctors table
+                $query1 = "DELETE FROM doctors WHERE doctor_id = ?";
+                $stmt1 = $this->db->prepare($query1);
+                $stmt1->bind_param("i", $doctor_id);
         
+                if (!$stmt1->execute()) {
+                    throw new Exception("Error deleting from doctors table.");
+                }
+                $stmt1->close();
         
+                // Next, delete from the accounts table
+                $query2 = "DELETE FROM accounts WHERE id = ?";
+                $stmt2 = $this->db->prepare($query2);
+                $stmt2->bind_param("i", $doctor_id);
         
-                
+                if (!$stmt2->execute()) {
+                    throw new Exception("Error deleting from accounts table.");
+                }
+                $stmt2->close();
+        
+                // Commit the transaction if both deletions are successful
+                $this->db->commit();
+                return true;
+        
+            } catch (Exception $e) {
+                // Roll back the transaction on error
+                $this->db->rollback();
+                error_log("Error deleting doctor: " . $e->getMessage());
+                return false;
+            }
+        }
+        
+        public function update_profile($firstname, $lastname, $contactnumber, $email, $gender, $address, $profilePicPath, $remarks, $member_id) {
+            $sql = "UPDATE accounts 
+                    SET firstname = ?, lastname = ?, contactnumber = ?, email = ?, gender = ?, address = ?, profile_picture = IFNULL(?, profile_picture), remarks = ?
+                    WHERE member_id = ?";
+            
+            $stmt = $this->db->prepare($sql);
+            if ($stmt === false) {
+                error_log("Error preparing statement: " . $this->db->error);
+                return false; // Handle error
+            }
+        
+            // Debugging output
+            error_log("Updating user with member_id: " . $member_id);
+        
+            // Bind parameters: 8 strings followed by 1 integer
+            $stmt->bind_param('ssissssss', $firstname, $lastname, $contactnumber, $email, $gender, $address, $profilePicPath, $remarks, $member_id);
+        
+            // Execute and check for errors
+            if ($stmt->execute()) {
+                $stmt->close();
+                return true;
+            } else {
+                error_log("Error executing update: " . $stmt->error); // Log SQL error
+                $stmt->close();
+                return false;
+            }
+        }
+        
+
+        public function get_user_profile($member_id) {
+            $sql = "SELECT * FROM accounts WHERE member_id = ?";
+            
+            // Prepare the statement
+            $stmt = $this->db->prepare($sql);
+            
+            if ($stmt === false) {
+                // Handle error in preparing statement
+                return false;
+            }
+            
+            // Bind the parameter (member_id)
+            $stmt->bind_param('s', $member_id);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Get the result
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                // Fetch the user data as an associative array
+                return $result->fetch_assoc();
+            } else {
+                // No user found
+                return false;
+            }
+        }
+
+        public function get_current_password($member_id) {
+            $query = "SELECT password FROM accounts WHERE member_id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("i", $member_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc(); // Fetch the password from the result row
+                return $row['password']; // Return the password from the database
+            }
+
+            return false; // Return false if no password is found (e.g., member_id doesn't exist)
+        }
+
+        public function update_password($member_id, $new_password) {
+        
+            // SQL query to update the password for the given member_id
+            $update_query = "UPDATE accounts SET password = ? WHERE member_id = ?";
+            $update_stmt = $this->db->prepare($update_query); // Use $this->db for the database connection
+            $update_stmt->bind_param("si", $new_password, $member_id); // Bind the hashed password and member_id
+            $result = $update_stmt->execute(); // Execute the query
+
+            return $result; // Return true if the update was successful, false otherwise
+        }
+    
         
 	}
 ?>
