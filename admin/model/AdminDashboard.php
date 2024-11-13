@@ -221,7 +221,7 @@
             
             // Add condition to exclude notifications based on the user ID, if provided
             if ($exclude_user_id !== null) {
-                $query .= " WHERE user_id != ?";
+                $query .= " WHERE notif_to = ?";
             }
             
             // Append the ordering and limit
@@ -293,7 +293,7 @@
             
             // Add a condition to exclude notifications for the specified user ID if provided
             if ($exclude_user_id !== null) {
-                $query .= " WHERE p.user_id != ?";
+                $query .= " WHERE p.notif_to = ?";
             }
             
             // Prepare the SQL statement
@@ -331,8 +331,9 @@
 
         public function get_all_patients() {
             // SQL query to get patient details along with member ID, first name, and last name
-            $query = "SELECT *
-                        FROM patients";
+            $query = "SELECT patients.*, doctors.first_name AS doctor_first_name, doctors.last_name AS doctor_last_name
+                        FROM patients
+                    LEFT JOIN doctors ON patients.assigned_doctor = doctors.account_id";
 
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -360,6 +361,52 @@
                 return [];
             }
         }
+
+        public function get_all_patients_per_doctor($doctor_id) {
+            // SQL query to get patient details along with assigned doctor details
+            $query = "
+                SELECT 
+                    patients.*, 
+                    doctors.first_name AS doctor_first_name, 
+                    doctors.last_name AS doctor_last_name
+                FROM 
+                    patients
+                LEFT JOIN 
+                    doctors ON patients.assigned_doctor = doctors.account_id
+                WHERE 
+                    doctors.account_id = ?
+            ";
+        
+            // Prepare the SQL statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind the doctor_id parameter to the query
+                $stmt->bind_param("i", $doctor_id);
+        
+                // Execute the query
+                $stmt->execute();
+        
+                // Fetch the result
+                $result = $stmt->get_result();
+        
+                // Initialize an array to store the patients with details
+                $patients_with_details = [];
+        
+                // Loop through the result and add each patient to the array
+                while ($row = $result->fetch_assoc()) {
+                    $patients_with_details[] = $row;
+                }
+        
+                // Close the statement
+                $stmt->close();
+        
+                // Return the array of patients with details
+                return $patients_with_details;
+            } else {
+                // If the query preparation fails, return an empty array
+                return [];
+            }
+        }
+        
 
         public function get_all_appointment_bookings() {
             // SQL query to get appointment details along with patient and admin details
@@ -420,6 +467,72 @@
                 return [];
             }
         }
+
+        public function get_all_appointment_bookings_per_doctor($doctor_id) {
+            // SQL query to get appointment details along with patient and admin details
+            $query = "
+                SELECT 
+                    appointments.id AS appointment_id,
+                    appointments.appointment_date,
+                    appointments.appointment_time,
+                    appointments.services,
+                    appointments.status,
+                    appointments.notes,
+                    patients.patient_id,
+                    patients.member_id AS patient_member_id,
+                    patients.first_name AS patient_first_name,
+                    patients.last_name AS patient_last_name,
+                    approved_admin.firstname AS approved_first_name,
+                    approved_admin.lastname AS approved_last_name,
+                    canceled_admin.firstname AS canceled_first_name,
+                    canceled_admin.lastname AS canceled_last_name,
+                    rescheduled_admin.firstname AS rescheduled_first_name,
+                    rescheduled_admin.lastname AS rescheduled_last_name,
+                    appointments.updated_at
+                FROM 
+                    appointments
+                LEFT JOIN 
+                    patients ON appointments.patient_id = patients.patient_id
+                LEFT JOIN 
+                    accounts AS approved_admin ON appointments.approved_by = approved_admin.id
+                LEFT JOIN 
+                    accounts AS canceled_admin ON appointments.canceled_by = canceled_admin.id
+                LEFT JOIN 
+                    accounts AS rescheduled_admin ON appointments.rescheduled_by = rescheduled_admin.id
+                WHERE 
+                    patients.assigned_doctor = ?
+            ";
+        
+            // Prepare the SQL statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind the doctor_id parameter
+                $stmt->bind_param("i", $doctor_id);
+        
+                // Execute the query
+                $stmt->execute();
+        
+                // Fetch the result
+                $result = $stmt->get_result();
+        
+                // Initialize an array to store the appointments with details
+                $appointments_with_details = [];
+        
+                // Loop through the result and add each appointment to the array
+                while ($row = $result->fetch_assoc()) {
+                    $appointments_with_details[] = $row;
+                }
+        
+                // Close the statement
+                $stmt->close();
+        
+                // Return the array of appointments with patient and admin details
+                return $appointments_with_details;
+            } else {
+                // If the query preparation fails, return an empty array
+                return [];
+            }
+        }
+        
 
         public function reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id) {
             // Logic to update the appointment and log the action
@@ -776,7 +889,73 @@
 
             return $result; // Return true if the update was successful, false otherwise
         }
-    
+
+        public function getMonthlyPatientCounts() {
+            $query = "
+                SELECT MONTH(appointment_date) AS month, COUNT(*) AS patient_count 
+                FROM appointments 
+                WHERE YEAR(appointment_date) = YEAR(CURDATE()) 
+                GROUP BY month 
+                ORDER BY month";
+            
+            // Prepare the SQL statement
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+        
+            // Get the result set from the query
+            $result = $stmt->get_result();  // Get the result set
+        
+            $monthlyCounts = array_fill(0, 12, 0); // Array for 12 months initialized to zero
+            
+            // Fetch the results one by one
+            while ($row = $result->fetch_assoc()) {  // Use fetch_assoc on the result object
+                $monthlyCounts[(int)$row['month'] - 1] = $row['patient_count']; // Adjust for 0-indexing
+            }
+            
+            return $monthlyCounts;
+        }
+
+        public function get_all_patients_without_doctor() {
+            // Assuming $db is your mysqli connection
+            $sql = "SELECT * FROM patients WHERE assigned_doctor IS NULL OR assigned_doctor = ''";
+            
+            // Prepare the statement
+            $stmt = $this->db->prepare($sql);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Get the result set
+            $result = $stmt->get_result();
+            
+            // Fetch all rows into an associative array
+            $patients = $result->fetch_all(MYSQLI_ASSOC);
+            
+            // Close the statement
+            $stmt->close();
+            
+            return $patients;
+        }
+
+        public function assign_patient($doctor_id, $patient_id) {
+            // Prepare the SQL statement
+            $sql = "UPDATE patients SET assigned_doctor = ? WHERE patient_id = ?";
+            $stmt = $this->db->prepare($sql);
+        
+            // Bind the doctor_id and patient_id to the SQL statement
+            $stmt->bind_param("ii", $doctor_id, $patient_id);
+        
+            // Execute the statement and check for success
+            if ($stmt->execute()) {
+                $stmt->close();
+                return true;
+            } else {
+                $stmt->close();
+                return false;
+            }
+        }
+        
+        
         
 	}
 ?>

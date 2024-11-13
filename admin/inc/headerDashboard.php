@@ -26,9 +26,14 @@
     $notifications = $appointment_admin->get_notifications($user_id_admin);
     $notification_lists = $appointment_admin->get_all_notifications($user_id_admin);
 
-    $get_patients = $appointment_admin->get_all_patients();
-
-    $get_appointments = $appointment_admin->get_all_appointment_bookings();
+    if ($_SESSION['user_type'] == 'super_admin') {
+        $get_appointments = $appointment_admin->get_all_appointment_bookings();
+        $get_patients = $appointment_admin->get_all_patients();
+    }
+    else {
+        $get_appointments = $appointment_admin->get_all_appointment_bookings_per_doctor($user_id_admin);
+        $get_patients = $appointment_admin->get_all_patients_per_doctor($user_id_admin);
+    }
     $get_recent_appointments = $appointment_admin->get_today_appointments();
     $get_doctors = $appointment_admin->get_doctor_details_with_account();
 
@@ -45,6 +50,10 @@
         $remarks = $userDetails['remarks'];
         $profile_picture = $userDetails['profile_picture'];
     }
+
+    //get patients monthly count
+    $monthlyPatientCounts =  $appointment_admin->getMonthlyPatientCounts();
+    $get_all_patients = $appointment_admin->get_all_patients_without_doctor();
 
 ?>
 

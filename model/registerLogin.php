@@ -46,6 +46,7 @@
                             termscondition='$agree_terms',
 							username = '$username',
                             password='$password_1',
+                            user_type='patient',
 							email='$email_address',
                             date_created='$date_created'";
                 $result = mysqli_query($this->db,$sql1) or die(mysqli_connect_errno()."Data cannot inserted");
@@ -64,7 +65,7 @@
 
         /*** validate login details ***/
         public function check_login($username, $password) {
-            $sql = "SELECT password FROM accounts WHERE username = ?";
+            $sql = "SELECT password FROM accounts WHERE username = ? and user_type = 'patient'";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('s', $username);
             $stmt->execute();

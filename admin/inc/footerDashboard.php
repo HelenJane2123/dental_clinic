@@ -42,7 +42,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
-    <script src="vendors/apexcharts/apexcharts.js"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/pages/dashboard.js"></script>
 
     <script>
@@ -234,6 +235,42 @@
 
             // Now submit the form
             document.getElementById('addDoctorForm').submit();
+        }
+
+        // Prepare data for the chart
+        const patientCounts = <?php echo json_encode(array_values($monthlyPatientCounts)); ?>;
+        const monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const currentYear = new Date().getFullYear(); // Get the current year
+
+        // Configure and display the chart
+        const ctx = document.getElementById('patientChart').getContext('2d');
+        const patientChart = new Chart(ctx, {
+            type: 'bar', // Choose 'bar' or 'line'
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Patients per Month (' + currentYear + ')',
+                    data: patientCounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)', // Light teal color
+                    borderColor: 'rgba(75, 192, 192, 1)', // Teal color
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+        function openPatientModal(doctorId) {
+            // Set the doctor ID in a hidden input within the modal
+            document.getElementById('doctorIdInput').value = doctorId;
         }
 
     </script>

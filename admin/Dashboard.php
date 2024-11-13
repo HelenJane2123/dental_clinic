@@ -37,7 +37,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Total <br/>Patients</h6>
-                                                <h6 class="font-extrabold mb-0"><?php echo $getAllPatient; ?></h6>
+                                                <h6 class="font-extrabold mb-0" style="color:#000;"><?php echo $getAllPatient; ?></h6>
                                             </div>
                                         </div>
                                     </div>
@@ -55,7 +55,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Total Bookings</h6>
-                                                <h6 class="font-extrabold mb-0"><?php echo $getAllBookings; ?></h6>
+                                                <h6 class="font-extrabold mb-0" style="color:#000;"><?php echo $getAllBookings; ?></h6>
                                             </div>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Confirmed Bookings</h6>
-                                                <h6 class="font-extrabold mb-0"><?php echo $getConfirmedAppointments; ?></h6>
+                                                <h6 class="font-extrabold mb-0" style="color:#000;"><?php echo $getConfirmedAppointments; ?></h6>
                                             </div>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                             </div>
                                             <div class="col-md-8">
                                                 <h6 class="text-muted font-semibold">Canceled Bookings</h6>
-                                                <h6 class="font-extrabold mb-0"><?php echo $getCanceledAppointments; ?></h6>
+                                                <h6 class="font-extrabold mb-0" style="color:#000;"><?php echo $getCanceledAppointments; ?></h6>
                                             </div>
                                         </div>
                                     </div>
@@ -102,10 +102,10 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Patient Statistics</h4>
+                                        <h4>Monthly Patient Statistics</h4>
                                     </div>
                                     <div class="card-body">
-                                        <div id="chart-profile-visit"></div>
+                                        <canvas id="patientChart"></canvas>
                                     </div>
                                 </div>
                             </div>

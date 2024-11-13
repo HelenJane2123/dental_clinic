@@ -40,6 +40,7 @@ include_once('inc/sidebarMenu.php');
                                 <th>Birthday</th>
                                 <th>Gender</th>
                                 <th>Age</th>
+                                <th>Assigned Doctor</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -62,6 +63,7 @@ include_once('inc/sidebarMenu.php');
                                         <td>
                                             <?= $patients['age']?>
                                         </td>
+                                        <td><?= htmlspecialchars($patients['doctor_first_name'])." ".htmlspecialchars($patients['doctor_last_name']) ?></td>
                                         <td>
                                             <a href="viewRecord.php?patient_id=<?= urlencode($patients['patient_id']) ?>" class="btn btn-primary btn-sm">View Record</a>
                                         </td>
@@ -69,7 +71,7 @@ include_once('inc/sidebarMenu.php');
                                   <?php endforeach; ?>
                               <?php else : ?>
                                   <tr>
-                                      <td colspan="8" class="text-center">No Patient record found.</td>
+                                      <td colspan="9" class="text-center">No Patient record found.</td>
                                   </tr>
                               <?php endif; ?>
                           </tbody>
