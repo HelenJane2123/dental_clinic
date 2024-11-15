@@ -199,8 +199,6 @@
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
       pendingAppointments.forEach(appointment => {
-        console.log(convertTo24Hour(appointment.time));
-        console.log(currentTime);
           if (appointment.start === today) {
               // Compare current time with appointment time
               if (currentTime > convertTo24Hour(appointment.time)) {  // Convert appointment time to 24-hour format for comparison
@@ -229,12 +227,80 @@
     }
 
   
-    function submitAppointment() {
-        // Add logic to handle form submission
-        //alert("Appointment booked successfully!");
-        $('#addappointmentModal').modal('hide');
-        document.getElementById('appointmentForm').reset();
+    async function submitAppointment() {
+        const appointmentDate = document.getElementById('appointmentDate').value;
+        const appointmentTime = document.getElementById('appointmentTime').value;
+        const doctorId = document.getElementById('doctor_id').value;
+
+        // Log the data to check it's correct
+        console.log('Sending Data:', { 
+            appointmentDate: appointmentDate, 
+            appointmentTime: appointmentTime, 
+            doctor_id: doctorId 
+        });
+
+        // Check if date and time are selected
+        if (!appointmentDate || !appointmentTime) {
+            alert("Please select both date and time.");
+            return;
+        }
+
+        try {
+            // Fetch existing appointments from the server (checkAppointmentAvailability.php)
+            const response = await fetch('controller/checkAppointmentAvailability.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    appointmentDate: appointmentDate,
+                    appointmentTime: appointmentTime,
+                    doctor_id: doctorId
+                })
+            });
+
+            // Check if the response is valid
+            const result = await response.json();
+
+            console.log("check", result);
+
+            // Check if the appointment is available
+            if (result.available) {
+                alert("Appointment successfully booked! Redirecting to the payment page...");
+               
+                // Submit the form if the slot is available
+                document.getElementById('addappointmentForm').submit();
+                $('#appointmentModal').modal('hide'); // Close modal
+
+                setTimeout(() => {
+                    window.location.href = 'payment.php'; // Redirect to the payment page
+                }, 5000); // 1-second delay before redirect
+
+            } else {
+                // Show an alert message if the time slot is already booked
+                alert("This time slot is already booked. Please choose another time.");
+            }
+
+        } catch (error) {
+            console.error('Error checking availability:', error);
+            // Show an alert if something goes wrong
+            alert('An error occurred while checking availability. Please try again later.');
+        }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#uploadProofModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var appointmentId = button.data('appointment-id'); // Extract appointment ID from data-* attribute
+            
+            if (appointmentId) {
+                var modal = $(this);
+                modal.find('#appointmentID').val(appointmentId); // Set the appointmentId in the modal input field
+            } else {
+                console.error("Appointment ID is not available.");
+            }
+        });
+    });
 
     function toggleNameFields(radio) {
       const nameFields = document.getElementById('nameFields');
@@ -247,12 +313,12 @@
         toggleNameFields(myselfRadio);
     });
 
-    function submitAppointment() {
-        const form = $('#addappointmentForm');
-        form.parsley().whenValidate().done(function() {
-            form[0].submit();
-        });
-    }
+    // function submitAppointment() {
+    //     const form = $('#addappointmentForm');
+    //     form.parsley().whenValidate().done(function() {
+    //         form[0].submit();
+    //     });
+    // }
 
     // Check if the appointment details exist
     <?php if (isset($appointmentDetails)): ?>
@@ -299,7 +365,59 @@
 
         // Attach event listener for closing the modal
         closeModalOnButtonClick();
+
+        // Attach event listeners to date and time fields for validation
+        document.getElementById('edit_appointment_date').addEventListener('change', checkAppointmentAvailabilityEdit);
+        document.getElementById('edit_appointment_time').addEventListener('change', checkAppointmentAvailabilityEdit);
     }
+
+    // Function to check appointment availability
+    async function checkAppointmentAvailabilityEdit() {
+        const appointmentDate = document.getElementById('edit_appointment_date').value;
+        const appointmentTime = document.getElementById('edit_appointment_time').value;
+        const doctorId = document.getElementById('doctor_id').value;
+
+        // Log the data to check it's correct
+        console.log('Sending Data:', { 
+            appointmentDate: appointmentDate, 
+            appointmentTime: appointmentTime, 
+            doctor_id: doctorId 
+        });
+
+        if (!appointmentDate || !appointmentTime) {
+            return; // If either date or time is empty, skip the validation
+        }
+
+        try {
+            // Perform the check via an API or server-side request
+            const response = await fetch('controller/checkAppointmentAvailability.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    appointmentDate: appointmentDate,
+                    appointmentTime: appointmentTime,
+                    doctor_id: doctorId
+                })
+            });
+
+            const result = await response.json();
+
+            console.log("Result:", result);
+
+            if (result.available === false) {
+                // Show error message if the time slot is already taken
+                alert('The selected date and time is already booked. Please choose another time.');
+                document.getElementById('edit_appointment_time').value = ''; // Clear the time field
+            }
+
+        } catch (error) {
+            console.error('Error checking availability:', error);
+            alert('An error occurred while checking availability. Please try again later.');
+        }
+    }
+
 
     // Separate function for closing the modal when close button is clicked
     function closeModalOnButtonClick() {
@@ -403,8 +521,12 @@
             // If Parsley validation passes, the form will submit normally
         });
     });
-
-
+    
+    function handleFormSubmit() {
+        // Custom validation or logic
+        document.getElementById('proofPayment').submit();  // Manually submit form
+        return false;  // Prevent default form submission
+    }
   </script>
 </body>
 

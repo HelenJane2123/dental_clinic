@@ -200,15 +200,15 @@
                                                         <td>
                                                             <?php
                                                                 // Format the appointment date using date() and strtotime()
-                                                                if($appointments['appointment_date'] != "") {
-                                                                    echo date('F j, Y', strtotime($appointments['updated_at'])); // Format as "Month Day, Year"
+                                                                if($appointment['appointment_date'] != "") {
+                                                                    echo date('F j, Y', strtotime($appointment['appointment_date'])); // Format as "Month Day, Year"
                                                                 } 
                                                             ?>
                                                         </td>
                                                         <td>
                                                             <?php
                                                                 // Format the appointment time using date() and strtotime()
-                                                                echo date('h:i A', strtotime($appointments['appointment_time'])); // Format as "Hour:Minute AM/PM"
+                                                                echo date('h:i A', strtotime($appointment['appointment_time'])); // Format as "Hour:Minute AM/PM"
                                                             ?>
                                                         </td>
                                                     </tr>

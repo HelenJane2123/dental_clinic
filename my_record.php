@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="age">Age</label>
-                                        <input type="number" class="form-control" id="age" name="age" value="<?= isset($patient['age']) ? $patient['age'] : '' ?>" disabled>
+                                        <input type="number" class="form-control" id="age" name="age" value="<?= isset($patient['age']) ? $patient['age'] : '' ?>">
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label class="required">Gender</label>

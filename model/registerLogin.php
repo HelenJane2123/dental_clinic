@@ -112,6 +112,29 @@
                 return false;
             }
         }
+
+        public function reset_password($token) {
+            // Prepare the SQL statement
+            $query = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration > NOW()");
+            // Bind the token as a parameter
+            $query->bind_param("s", $token);
+            // Execute the query
+            $query->execute();
+            // Get the result
+            $result = $query->get_result();
+            // Fetch the row if it exists
+            return $result->fetch_assoc();
+        }
+        
+        public function update_password($hashedPassword, $token) {
+            // Prepare the SQL statement
+            $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ?");
+            // Bind parameters (string, string)
+            $update->bind_param("ss", $hashedPassword, $token);
+            // Execute the update and return the result status
+            return $update->execute();
+        }
+
     
         public function __destruct() {
             $this->db->close();

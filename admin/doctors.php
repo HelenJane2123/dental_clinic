@@ -75,7 +75,7 @@ include_once('inc/sidebarMenu.php');
                                         <td><?= htmlspecialchars($doctors['specialty']) ?></td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patientListModal" 
-                                                onclick="openPatientModal(<?= htmlspecialchars($doctors['doctor_id']) ?>)">
+                                                onclick="openPatientModal(<?= htmlspecialchars($doctors['account_id']) ?>)">
                                                 Assign Patient
                                             </button>
                                             <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">

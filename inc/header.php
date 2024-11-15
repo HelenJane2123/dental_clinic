@@ -53,11 +53,11 @@
         <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
         <li class="nav-item"><a href="services.php" class="nav-link">Services</a></li>
         <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
-        <li class="nav-item cta">
+        <!-- <li class="nav-item cta">
           <a href="signup.php" class="nav-link">
             <span>Make an Appointment</span>
           </a>
-        </li>
+        </li> -->
       </ul>
 
       <!-- User Dropdown -->

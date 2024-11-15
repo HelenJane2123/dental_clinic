@@ -29,13 +29,14 @@
     if ($_SESSION['user_type'] == 'super_admin') {
         $get_appointments = $appointment_admin->get_all_appointment_bookings();
         $get_patients = $appointment_admin->get_all_patients();
+        $get_doctors = $appointment_admin->get_doctor_details_with_account();
     }
     else {
         $get_appointments = $appointment_admin->get_all_appointment_bookings_per_doctor($user_id_admin);
         $get_patients = $appointment_admin->get_all_patients_per_doctor($user_id_admin);
     }
     $get_recent_appointments = $appointment_admin->get_today_appointments();
-    $get_doctors = $appointment_admin->get_doctor_details_with_account();
+
 
      // Fetch user details
     $userDetails = $appointment_admin->get_user_profile($member_id_admin);

@@ -75,7 +75,18 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <label class="required" for="appointmentTime">Appointment Time</label>
-                            <input type="time" class="form-control" name="appointmentTime" id="appointmentTime" required data-parsley-required-message="Please select an appointment time.">
+                            <select class="form-control" name="appointmentTime" id="appointmentTime" required data-parsley-required-message="Please select an appointment time.">
+                                <option value="" disabled selected>Select a time</option>
+                                <!-- Time options from 9:00 AM to 4:00 PM in 30-minute intervals -->
+                                <option value="09:00:00">9:00 AM</option>
+                                <option value="10:00:00">10:00 AM</option>
+                                <option value="11:00:00">11:00 AM</option>
+                                <option value="12:00:00">12:00 PM</option>
+                                <option value="13:00:00">1:00 PM</option>
+                                <option value="14:00:00">2:00 PM</option>
+                                <option value="15:00:00">3:00 PM</option>
+                                <option value="16:00:00">4:00 PM</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -87,7 +98,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="submitAppointment()">Submit</button>
+                <button type="button" class="btn btn-primary" onclick="submitAppointment()">Submit</button>                
             </div>
         </div>
     </div>
@@ -174,7 +185,18 @@
                     <!-- Appointment Time -->
                     <div class="form-group">
                         <label class="required" for="edit_appointment_time">New Appointment Time (Leave empty to keep the same)</label>
-                        <input type="time" class="form-control" id="edit_appointment_time" name="appointment_time" required data-parsley-required-message="This field is required.">
+                        <select class="form-control" name="appointment_time" id="edit_appointment_time" required data-parsley-required-message="Please select an appointment time.">
+                            <option value="" disabled selected>Select a time</option>
+                            <!-- Time options from 9:00 AM to 4:00 PM in 30-minute intervals -->
+                            <option value="09:00:00">9:00 AM</option>
+                            <option value="10:00:00">10:00 AM</option>
+                            <option value="11:00:00">11:00 AM</option>
+                            <option value="12:00:00">12:00 PM</option>
+                            <option value="13:00:00">1:00 PM</option>
+                            <option value="14:00:00">2:00 PM</option>
+                            <option value="15:00:00">3:00 PM</option>
+                            <option value="16:00:00">4:00 PM</option>
+                        </select>
                     </div>
 
                     <!-- Status -->
@@ -247,8 +269,6 @@
     // Function to check if the selected date is a Saturday
     document.getElementById("appointmentDate").addEventListener("change", function() {
         var selectedDate = new Date(this.value);
-
-        console.log(selectedDate.getDay());
         
         // Check if the selected date is a Saturday (getDay() returns 6 for Saturday)
         if (selectedDate.getDay() === 6) {
@@ -259,8 +279,6 @@
 
     document.getElementById("edit_appointment_date").addEventListener("change", function() {
         var selectedDate = new Date(this.value);
-
-        console.log(selectedDate.getDay());
         
         // Check if the selected date is a Saturday (getDay() returns 6 for Saturday)
         if (selectedDate.getDay() === 6) {
@@ -403,4 +421,5 @@
         }
     }
 
+   
 </script>

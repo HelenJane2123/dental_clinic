@@ -29,8 +29,8 @@
         
                 if ($appointmentType === 'newPatient') {
                     // Insert new patient details under the same member ID (using alt_patient_id)
-                    $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
-                    $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
+                    $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email, assigned_doctor) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param("sssssi", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $user_admin_id);
             
                     if (!$stmt->execute()) {
                         echo "Error inserting new alternate patient: " . $stmt->error;
@@ -40,12 +40,25 @@
             
                     // Get the new alternate patient_id for the appointment
                     $patient_id = $this->db->insert_id;
+                }
+                else {
+                     // Update existing patient record with assigned doctor only
+                    $stmt = $this->db->prepare("UPDATE patients SET assigned_doctor = ? WHERE patient_id = ?");
+                    $stmt->bind_param("ii", $user_admin_id, $patient_id);
+                    
+                    if (!$stmt->execute()) {
+                        echo "Error updating existing patient: " . $stmt->error;
+                        $stmt->close();
+                        return false;
+                    }
+                    $stmt->close();
+
                 } 
             } else {
                 // No existing patient found, insert a new patient
                 $stmt->close();
-                $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("sssss", $member_id, $first_name, $last_name, $contactNumber, $emailAddress);
+                $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email, assigned_doctor) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("sssssi", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $user_admin_id);
             
                 if (!$stmt->execute()) {
                     echo "Error inserting new patient: " . $stmt->error;
@@ -1083,6 +1096,145 @@
             // Return true if count is greater than 0, else false
             return $row['count'];
         }
+
+        public function getBookedAppointments($appointmentDate, $appointmentTime, $doctorId) {
+            // SQL query to check if the appointment time is already booked
+            $query = "
+                SELECT a.appointment_date, a.appointment_time 
+                FROM appointments a
+                LEFT JOIN patients p ON a.patient_id = p.patient_id 
+                WHERE p.assigned_doctor = ? AND a.appointment_date = ? AND a.appointment_time = ?
+            ";
+        
+            // Prepare the SQL statement
+            $stmt = $this->db->prepare($query);
+        
+            // Check if the statement was prepared successfully
+            if ($stmt === false) {
+                die('MySQL prepare failed: ' . $this->db->error);
+            }
+        
+            // Bind parameters to the prepared statement
+            // $doctorId is an integer, $appointmentDate and $appointmentTime are strings
+            $stmt->bind_param("iss", $doctorId, $appointmentDate, $appointmentTime);
+        
+            // Execute the query
+            $stmt->execute();
+        
+            // Get the result
+            $result = $stmt->get_result();
+        
+            // Return the result
+            return $result;
+        }
+
+        public function getPaymentStatus($member_id) {
+            $sql = "
+               SELECT 
+                    a.id AS appointment_id,
+                    pt.member_id AS patient_member_id,
+                    COALESCE(pp.status, 'Pending') AS status,
+                    pp.file_name,
+                    COALESCE(pp.remarks, 'No payment uploaded') AS remarks
+                FROM 
+                    appointments a
+                LEFT JOIN 
+                    proof_of_payment pp ON a.id = pp.appointment_id
+                LEFT JOIN 
+                    patients pt ON a.patient_id = pt.patient_id
+                WHERE 
+                    pt.member_id = ?
+            ";
+        
+            $stmt = $this->db->prepare($sql);
+        
+            if ($stmt) {
+                $stmt->bind_param('s', $member_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+        
+                $data = [];
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+        
+                $stmt->close();
+                return $data;
+            } else {
+                error_log("Query failed: " . $this->db->error);
+                return [];
+            }
+        }
+        
+        
+        public function savePaymentProof($appointmentId, $member_id, $fileName, $remarks, $status) {
+            // Use NOW() for the current date/time when the proof is uploaded
+            $sql = "INSERT INTO proof_of_payment (appointment_id, member_id, file_name, uploaded_at, status, remarks) 
+                    VALUES (?, ?, ?, ?, ?, ?)";
+            
+            $stmt = $this->db->prepare($sql);
+            
+            if ($stmt) {
+                // Bind parameters: 
+                // - i for integer (appointmentId)
+                // - s for string (member_id, fileName, status)
+                // - s for string (remarks)
+                $currentDateTime = date('Y-m-d H:i:s');
+                $stmt->bind_param('isssss', $appointmentId, $member_id, $fileName, $currentDateTime, $status, $remarks);
+                
+                $result = $stmt->execute();  // Execute the statement
+                $stmt->close();  // Close the statement
+                return $result;  // Return true/false based on execution success
+            } else {
+                // Log any error during query preparation
+                error_log("Database query preparation failed: " . $this->db->error);
+                return false;
+            }
+        }
+        
+        
+        public function getAppointmentId($member_id) {
+                // SQL Query to fetch account ID using LEFT JOIN
+                $sql = "
+                    SELECT 
+                        pp.id
+                    FROM 
+                        patients pt
+                    LEFT JOIN 
+                        appointments pp ON pt.patient_id = pp.patient_id
+                    WHERE 
+                        pt.member_id = ?
+                ";
+
+            $stmt = $this->db->prepare($sql);
+
+            if ($stmt) {
+                // Bind the parameter
+                $stmt->bind_param('s', $member_id); // Assuming account_id is an integer
+
+                // Execute the query
+                $stmt->execute();
+
+                // Fetch the result
+                $result = $stmt->get_result();
+
+                // Initialize an array to store data
+                $data = [];
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+
+                // Close the statement
+                $stmt->close();
+
+                return $data; // Return fetched data
+            } else {
+                // Log the error if the query preparation fails
+                error_log("Database query preparation failed: " . $this->db->error);
+                return null;
+            }
+        }
+        
         
         
         

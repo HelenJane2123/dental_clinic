@@ -36,7 +36,6 @@
 
     if (isset($_GET['cancel'])) {
       $appointmentId = (int) $_GET['cancel']; // Get the appointment ID from the URL
-      $member_id = // Get the member ID based on your session or authentication method
   
       // Call the cancellation function
       $result = $appointment->automatic_cancel_appointment($member_id, $appointmentId);
@@ -62,6 +61,8 @@
 
     //check if member id is already in patient record
     $patientCount = $appointment->patient_record_existence($member_id);
+    $appointment_id = $appointment->getAppointmentId($member_id);
+    
 ?>
 <head>
   <!-- Required meta tags -->
@@ -132,6 +133,12 @@
           <a class="nav-link" href="change_password.php">
             <i class="mdi mdi-lock menu-icon"></i>
             <span class="menu-title">Change Password</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="payment.php">
+            <i class="mdi mdi-note menu-icon"></i>
+            <span class="menu-title">Payment</span>
           </a>
         </li>
         <li class="nav-item sidebar-category">

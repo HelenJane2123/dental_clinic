@@ -649,11 +649,11 @@
             $stmt = $this->db->prepare("
                 SELECT p.first_name AS patient_first_name, 
                        p.last_name AS patient_last_name, 
-                       a.status 
+                       a.status, a.appointment_date, a.appointment_time 
                 FROM appointments a
                 JOIN patients p ON a.patient_id = p.patient_id 
-                WHERE DATE(a.appointment_date) = ?  -- Filter by today's date
-                ORDER BY a.appointment_time ASC       -- Order by appointment time
+                WHERE DATE(a.appointment_date) = ? 
+                ORDER BY a.appointment_time ASC     
             ");
         
             // Bind the date parameter to the query
@@ -710,9 +710,9 @@
 
         public function get_doctor_details_with_account() {
             $query = "
-                SELECT doctors.*, accounts.* 
+                SELECT doctors.*, accounts.*, accounts.member_id
                 FROM doctors
-                LEFT JOIN accounts ON accounts.id = doctors.doctor_id
+                LEFT JOIN accounts ON accounts.id = doctors.account_id
                 WHERE accounts.user_type = 'admin'
             ";
             $doctorDetails = [];
@@ -727,6 +727,11 @@
         
                 // Fetch all rows and store them in an associative array
                 while ($row = $result->fetch_assoc()) {
+                    // Access the member_id here
+                    $memberId = $row['member_id'];
+                    
+                    // Add member_id to each doctor record
+                    $row['member_id'] = $memberId;
                     $doctorDetails[] = $row;
                 }
         

@@ -181,7 +181,7 @@
                                   <?php foreach ($appointments as $appointment) : ?>
                                       <tr>
                                           <td><?= htmlspecialchars($appointment['member_id']) ?></td>
-                                          <td><?= htmlspecialchars($appointment['first_name'])." ".htmlspecialchars($appointment['last_name']) ?></td>
+                                          <td><?= htmlspecialchars($appointment['patient_first_name'])." ".htmlspecialchars($appointment['patient_last_name']) ?></td>
                                           <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
                                           <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                           <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
