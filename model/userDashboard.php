@@ -111,13 +111,16 @@
                     p.last_name AS patient_last_name, 
                     p.member_id,
                     d.first_name AS doctor_first_name, 
-                    d.last_name AS doctor_last_name
+                    d.last_name AS doctor_last_name,
+                    ds.sub_category as service_name
                 FROM 
                     appointments AS a
                 JOIN 
                     patients AS p ON a.patient_id = p.patient_id
                 LEFT JOIN 
                     doctors AS d ON p.assigned_doctor = d.account_id
+                LEFT JOIN 
+                    dental_services AS ds ON a.services = ds.id 
                 WHERE 
                     p.member_id = ?
             ";
@@ -1135,7 +1138,8 @@
                     pt.member_id AS patient_member_id,
                     COALESCE(pp.status, 'Pending') AS status,
                     pp.file_name,
-                    COALESCE(pp.remarks, 'No payment uploaded') AS remarks
+                    COALESCE(pp.remarks, 'No payment uploaded') AS remarks,
+                    a.services
                 FROM 
                     appointments a
                 LEFT JOIN 
@@ -1234,6 +1238,74 @@
                 return null;
             }
         }
+
+        public function get_dental_services() {
+            $sql = "SELECT category, sub_category, id, price
+                    FROM dental_services 
+                    ORDER BY category, sub_category";
+            $result = $this->db->query($sql);
+    
+            $services = [];
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $services[$row['category']][] = [
+                        'id' => $row['id'],
+                        'sub_category' => $row['sub_category'],
+                        'price' => $row['price']
+                    ];
+                }
+            }
+            return $services; // Returns an associative array grouped by category
+        }
+        
+
+        public function getSelectedServicesAndPaymentDetails($appointment_id) {
+            $details = [];
+            
+            // Fetch the services, their prices, and total amount from the appointments table
+            $query = "
+                SELECT 
+                    ds.sub_category, 
+                    ds.price
+                FROM 
+                    appointments AS a
+                LEFT JOIN 
+                    dental_services AS ds 
+                ON 
+                    a.services = ds.id
+                WHERE 
+                    a.id = ?
+            ";
+        
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("i", $appointment_id);  // Bind appointment_id
+            $stmt->execute();
+            $servicesResult = $stmt->get_result();
+        
+            $services = [];
+            $totalPrice = 0;
+        
+            // Calculate the total price for all services
+            while ($service = $servicesResult->fetch_assoc()) {
+                $services[] = $service; // Collect service details
+                $totalPrice += $service['price'];  // Add service price to total price
+            }
+        
+            // Calculate 20% down payment
+            $downPayment = $totalPrice * 0.20;
+        
+            // Calculate the remaining balance to pay
+            $remainingBalance = $totalPrice - $downPayment;
+        
+            // Add services, total price, down payment, and remaining balance to the details array
+            $details['services'] = $services;
+            $details['total_price'] = $totalPrice;
+            $details['down_payment'] = number_format($downPayment, 2);  // Format to 2 decimal places for currency
+            $details['remaining_balance'] = number_format($remainingBalance, 2); // Format remaining balance to 2 decimal places
+        
+            return $details;  // Return the complete details
+        }
+        
         
         
         

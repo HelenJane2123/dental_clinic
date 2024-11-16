@@ -48,9 +48,9 @@
                               <table id="appointmentTable" class="table table-hover">
                                   <thead>
                                       <tr>
-                                          <th>Member ID</th>
-                                          <th>Name</th>
+                                          <th>Appointment ID</th>
                                           <th>Patient ID</th>
+                                          <th>Name</th>
                                           <th>Appointment Date</th>
                                           <th>Appointment Time</th>
                                           <th>Assigned Doctor</th>
@@ -63,9 +63,9 @@
                                       <?php if (!empty($appointments)) : ?>
                                           <?php foreach ($appointments as $appointment) : ?>
                                               <tr>
+                                                  <td><?= htmlspecialchars($appointment['id']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['member_id']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['patient_first_name'])." ".htmlspecialchars($appointment['patient_last_name']) ?></td>
-                                                  <td><?= htmlspecialchars($appointment['patient_id']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
                                                   <td><?= htmlspecialchars($appointment['doctor_first_name'])." ".htmlspecialchars($appointment['doctor_last_name']) ?></td>
@@ -82,7 +82,7 @@
                                                           <i class="mdi mdi-eye"></i>
                                                         </button>
                                                         <?php if ($appointment['status'] !== 'Canceled') : ?>
-                                                          <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>', '<?= htmlspecialchars($appointment['patient_first_name']) ?>', '<?= htmlspecialchars($appointment['patient_last_name']) ?>','<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
+                                                          <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['services']) ?>','<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>', '<?= htmlspecialchars($appointment['patient_first_name']) ?>', '<?= htmlspecialchars($appointment['patient_last_name']) ?>','<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
                                                               <i class="mdi mdi-pencil"></i>
                                                           </button>
                                                           <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">

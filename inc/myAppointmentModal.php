@@ -16,9 +16,9 @@
                             <label>
                                 <input type="radio" name="appointmentType" value="myself" onclick="toggleNameFields(this)" checked> For Myself
                             </label>
-                            <label>
+                            <!-- <label>
                                 <input type="radio" name="appointmentType" value="newPatient" onclick="toggleNameFields(this)"> New Patient
-                            </label>
+                            </label> -->
                         </div>
                     </div>
                     
@@ -52,22 +52,21 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="required" for="services">Dental Services</label>
                         <select class="form-control" id="services" name="services" required data-parsley-required-message="Please select a service.">
                             <option value="" disabled selected>Select a service</option>
-                            <option value="cleaning">Teeth Cleaning</option>
-                            <option value="extraction">Tooth Extraction</option>
-                            <option value="filling">Dental Filling</option>
-                            <option value="checkup">Dental Checkup</option>
-                            <option value="whitening">Teeth Whitening</option>
-                            <option value="brace_adjustment">Brace Adjustment</option>
-                            <option value="brace_consultation">Braces Consultation</option>
-                            <option value="brace_installation">Dental Braces Installation</option>
+                            <?php foreach ($dental_services as $category => $sub_categories): ?>
+                                <optgroup label="<?= htmlspecialchars($category) ?>">
+                                    <?php foreach ($sub_categories as $service): ?>
+                                        <option value="<?= htmlspecialchars($service['id']) ?>">
+                                            <?= htmlspecialchars($service['sub_category']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label class="required" for="appointmentDate">Appointment Date</label>
@@ -175,7 +174,21 @@
                     <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
 
-
+                    <div class="form-group">
+                        <label class="required" for="edit_services">Dental Services</label>
+                        <select class="form-control" id="edit_services" name="services" required>
+                            <option value="" disabled>Select a service</option>
+                            <?php foreach ($dental_services as $category => $sub_categories): ?>
+                                <optgroup label="<?= htmlspecialchars($category) ?>">
+                                    <?php foreach ($sub_categories as $service): ?>
+                                        <option value="<?= htmlspecialchars($service['id']) ?>">
+                                            <?= htmlspecialchars($service['sub_category']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </optgroup>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <!-- Appointment Date -->
                     <div class="form-group">
                         <label class="required" for="edit_appointment_date">New Appointment Date (Leave empty to keep the same)</label>

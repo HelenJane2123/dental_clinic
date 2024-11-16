@@ -51,7 +51,6 @@
   <script src="js/dashboard/dashboard.js"></script>
   <!-- End custom js for this page-->
  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
@@ -117,16 +116,7 @@
         <?php foreach ($appointments as $appointment): ?>
           {
             id: '<?php echo htmlspecialchars($appointment['id']); ?>',
-            title: '<?php echo htmlspecialchars(
-                $appointment['services'] === 'cleaning' ? 'Teeth Cleaning' :
-                ($appointment['services'] === 'extraction' ? 'Tooth Extraction' : 
-                ($appointment['services'] === 'filling' ? 'Dental Filling' : 
-                ($appointment['services'] === 'checkup' ? 'Dental Checkup' : 
-                ($appointment['services'] === 'whitening' ? 'Teeth Whitening' : 
-                ($appointment['services'] === 'brace_adjustment' ? 'Brace Adjustment' : 
-                ($appointment['services'] === 'brace_consultation' ? 'Braces Consultation' : 
-                ($appointment['services'] === 'brace_installation' ? 'Dental Braces Installation' : 
-                $appointment['services'])))))))); ?>',
+            title: '<?php echo htmlspecialchars($appointment['service_name']); ?>',
             start: '<?php echo htmlspecialchars($appointment['appointment_date']); ?>',
             time: '<?php 
                 $time = new DateTime($appointment['appointment_time']);
@@ -398,16 +388,27 @@
       document.getElementById('appointment_id').value = appointmentId;
     }
 
-    function openEditModal(id, date, time, notes, status, first_name, last_name, member_id) {
-        // Populate the form fields with existing appointment data
-        document.getElementById('edit_appointment_id').value = id;
-        document.getElementById('edit_appointment_date').value = date || ''; // Default to empty if no date
-        document.getElementById('edit_appointment_time').value = time || ''; // Default to empty if no time
-        document.getElementById('edit_notes').value = notes || ''; // Default to empty if no notes
-        document.getElementById('status').value = status; // Set the status
-        document.getElementById('first_name').value = first_name;
-        document.getElementById('last_name').value = last_name;
-        document.getElementById('member_id').value = member_id;
+    function openEditModal(
+        appointmentId,
+        serviceId,
+        appointmentDate,
+        appointmentTime,
+        notes,
+        status,
+        firstName,
+        lastName,
+        memberId) {
+            // Populate modal fields with the passed data
+            document.getElementById('edit_appointment_id').value = appointmentId;
+            document.getElementById('edit_services').value = serviceId; // Pre-select the service
+            document.getElementById('edit_appointment_date').value = appointmentDate;
+            document.getElementById('edit_appointment_time').value = appointmentTime;
+            document.getElementById('edit_notes').value = notes;
+            document.getElementById('status').value = status;
+            document.getElementById('first_name').value = firstName;
+            document.getElementById('last_name').value = lastName;
+            document.getElementById('member_id').value = memberId;
+
 
         // Show the modal
         $('#editAppointmentModal').modal('show');
@@ -578,6 +579,62 @@
         document.getElementById('proofPayment').submit();  // Manually submit form
         return false;  // Prevent default form submission
     }
+
+    $('#viewComputationModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var appointmentId = button.data('appointment-id'); // Extract appointment ID from data attribute
+
+            console.log('Appointment ID:', appointmentId); // Log the appointment ID to ensure it's correct
+
+            // AJAX request to fetch computation data
+            $.ajax({
+                url: 'controller/fetchComputation.php', // Path to the PHP script
+                method: 'POST',
+                data: { appointment_id: appointmentId }, // Send appointment ID as POST data
+                success: function(response) {
+                    console.log('Raw Response:', response);
+                    try {
+                        var data = JSON.parse(response);  // Attempt to parse JSON
+                        if (data.error) {
+                            $('#computation-details').html('<p>' + data.error + '</p>');
+                        } else {
+                            var computationDetails = '<p style="font-size: 19px;"><strong>Total Amount:</strong> ' + data.total_price + '</p>';
+                            computationDetails += '<p style="font-size: 1.5em; font-weight: bold; color: #e67e22;"><strong>Down Payment (20%):</strong> ' + data.down_payment + '</p>';
+                            computationDetails += '<p style="font-size: 19px; font-weight: bold; color: #e67e22;"><strong>Remaining Balance:</strong> ' + data.remaining_balance + '</p>';
+                            
+                            // Generate the table for services
+                            computationDetails += '<br/><h5>Services:</h5>';
+                            computationDetails += '<table class="table table-bordered table-striped">';
+                            computationDetails += '<thead><tr><th>Service</th><th>Price</th></tr></thead>';
+                            computationDetails += '<tbody>';
+
+                            data.services.forEach(function(service) {
+                                computationDetails += '<tr><td>' + service.sub_category + '</td><td>' + service.price + '</td></tr>';
+                            });
+
+                            computationDetails += '</tbody></table>';
+
+                            $('#computation-details').html(computationDetails);
+                        }
+                    } catch (e) {
+                        console.error('JSON Parsing Error:', e);
+                        $('#computation-details').html('<p>Error parsing response data.</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // If there's an error in the AJAX request itself, log it
+                    console.log('AJAX Error:', status, error);
+                    $('#computation-details').html('<p>There was an error fetching the computation data. Please try again later.</p>');
+                }
+            });
+        });
+
+
+    // Helper function for currency formatting
+    function formatCurrency(amount) {
+        return parseFloat(amount).toFixed(2); // Format to 2 decimal places
+    }
+
   </script>
 </body>
 

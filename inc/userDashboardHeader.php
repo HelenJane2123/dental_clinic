@@ -62,6 +62,8 @@
     //check if member id is already in patient record
     $patientCount = $appointment->patient_record_existence($member_id);
     $appointment_id = $appointment->getAppointmentId($member_id);
+
+    $dental_services = $appointment->get_dental_services();
     
 ?>
 <head>

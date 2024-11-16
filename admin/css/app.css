@@ -1290,3 +1290,26 @@ a {
 a {
     text-decoration: none !important;
 }
+
+/* Optional: Style for the table in the modal */
+#computation-details table {
+    width: 100%;
+    margin-top: 1rem;
+    border-collapse: collapse;
+}
+
+#computation-details th, #computation-details td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+#computation-details th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Highlight rows or cells */
+#computation-details tr:hover {
+    background-color: #f5f5f5;
+}
