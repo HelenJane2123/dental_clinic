@@ -41,7 +41,21 @@
                         <input type="hidden" name="patient_id" value="<?= $appointments['patient_id'] ?>">
                         <input type="hidden" name="action" value="reschedule">
                         <input type="date" class="form-control appointmentDate" id="appointmentDate<?= $appointments['appointment_id'] ?>" name="new_date" required>
-                        <input type="time" class="form-control appointment_time" id="appointment_time<?= $appointments['appointment_id'] ?>" name="new_time" required>
+                        <!-- <input type="time" class="form-control appointment_time" id="appointment_time<?= $appointments['appointment_id'] ?>" name="new_time" required> -->
+                        <select class="form-control appointment_time" name="appointment_time" id="appointment_time<?= $appointments['appointment_id'] ?>" name="new_time" required>
+                            <option value="" disabled selected>Select a time</option>
+                            <!-- Time options from 9:00 AM to 4:00 PM in 30-minute intervals -->
+                            <option value="09:00:00">9:00 AM</option>
+                            <option value="10:00:00">10:00 AM</option>
+                            <option value="11:00:00">11:00 AM</option>
+                            <option value="12:00:00">12:00 PM</option>
+                            <option value="13:00:00">1:00 PM</option>
+                            <option value="14:00:00">2:00 PM</option>
+                            <option value="15:00:00">3:00 PM</option>
+                            <option value="16:00:00">4:00 PM</option>
+                        </select>
+
+                        
                         <textarea class="form-control" name="notes" placeholder="Add notes..." rows="3"></textarea>
                 </div>
                 <div class="modal-footer">
@@ -250,6 +264,97 @@
   </div>
 </div>
 
+<!-- Edit Dental Service Modal -->
+<div class="modal fade" id="editDentalServiceModal" tabindex="-1" aria-labelledby="editDentalServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDentalServiceModalLabel">Edit Dental Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editDentalServiceForm" method="POST" action="controller/editDentalService.php">
+                    <input type="hidden" id="editServiceId" name="id">
+                    <div class="mb-3">
+                        <label for="editCategory" class="form-label">Category</label>
+                        <input type="text" class="form-control" id="editCategory" name="category" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSubCategory" class="form-label">Sub Category</label>
+                        <input type="text" class="form-control" id="editSubCategory" name="sub_category" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPriceRange" class="form-label">Price Range</label>
+                        <input type="text" class="form-control" id="editPriceRange" name="price_range" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrice" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="editPrice" name="price" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Dental Service Modal -->
+<div class="modal fade" id="deleteDentalServiceModal" tabindex="-1" aria-labelledby="deleteDentalServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteDentalServiceModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this dental service?</p>
+                <form method="POST" action="controller/deleteDentalService.php">
+                    <input type="hidden" id="deleteServiceId" name="id">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Dental Services Modal -->
+<div class="modal fade" id="addServicesModal" tabindex="-1" aria-labelledby="addServicesModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addServicesModalLabel">Add Dental Service</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="controller/addDentalService.php" method="POST">
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <input type="text" class="form-control" id="category" name="category" required>
+          </div>
+          <div class="mb-3">
+            <label for="sub_category" class="form-label">Sub Category</label>
+            <input type="text" class="form-control" id="sub_category" name="sub_category" required>
+          </div>
+          <div class="mb-3">
+            <label for="price_range" class="form-label">Price Range</label>
+            <input type="text" class="form-control" id="price_range" name="price_range" required>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" name="price" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Service</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
     // Validate time for each appointment time input
     document.querySelectorAll('.appointment_time').forEach(function(timeInput) {
@@ -287,6 +392,20 @@
 
     function confirmDoctorDelete(doctorId) {
         document.getElementById('delete_doctor_id').value = doctorId;
+    }
+
+    // Populate Edit Modal with the selected dental service data
+    function populateEditModal(dentalService) {
+        document.getElementById('editServiceId').value = dentalService.id;
+        document.getElementById('editCategory').value = dentalService.category;
+        document.getElementById('editSubCategory').value = dentalService.sub_category;
+        document.getElementById('editPriceRange').value = dentalService.price_range;
+        document.getElementById('editPrice').value = dentalService.price;
+    }
+
+    // Confirm the deletion by setting the service ID
+    function confirmDelete(serviceId) {
+        document.getElementById('deleteServiceId').value = serviceId;
     }
 
 </script>

@@ -49,21 +49,19 @@
                     <span>Change Password</span>
                 </a>
             </li>
-            <li class="sidebar-title">Pages</li>
+            <li class="sidebar-title">Maintenance</li>
             <?php if ($_SESSION['user_type'] == 'super_admin'): ?>
+                <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : '' ?>">
+                    <a href="dental_services.php" class='sidebar-link'>
+                        <i class="bi bi-gear-fill"></i>
+                        <span>Dental Services</span>
+                    </a>
+                </li>
                 <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : '' ?>">
                     <a href="reports.php" class='sidebar-link'>
                         <i class="bi bi-bar-chart-fill"></i>
                         <span>Reports</span>
                     </a>
-                    <ul class="submenu ">
-                        <li class="submenu-item ">
-                            <a href="ui-chart-chartjs.html">ChartJS</a>
-                        </li>
-                        <li class="submenu-item ">
-                            <a href="ui-chart-apexcharts.html">Apexcharts</a>
-                        </li>
-                    </ul>
                 </li>
             <?php endif; ?>
                 <li class="sidebar-title">Others</li>

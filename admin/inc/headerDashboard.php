@@ -30,6 +30,8 @@
         $get_appointments = $appointment_admin->get_all_appointment_bookings();
         $get_patients = $appointment_admin->get_all_patients();
         $get_doctors = $appointment_admin->get_doctor_details_with_account();
+        $get_dental_services = $appointment_admin->get_dental_services();
+
     }
     else {
         $get_appointments = $appointment_admin->get_all_appointment_bookings_per_doctor($user_id_admin);

@@ -1,6 +1,7 @@
 <?php
 include_once('inc/headerDashboard.php');
 include_once('inc/sidebarMenu.php');
+
 ?>
 <div id="main">
     <header class="mb-3">

@@ -59,7 +59,8 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
                                         echo "<td>{$payment['appointment_id']}</td>";
                                         echo "<td>{$payment['patient_member_id']}</td>";
                                         echo "<td>" . $payment['patient_first_name'] . " " . $payment['patient_last_name'] . "</td>";
-                                        echo "<td>" . $payment['doctor_first_name'] . " " . $payment['doctor_last_name'] . "</td>";                                        echo "<td>{$payment['status']}</td>";
+                                        echo "<td>" . $payment['doctor_first_name'] . " " . $payment['doctor_last_name'] . "</td>";
+                                        echo "<td>{$payment['status']}</td>";
                                         echo "<td>";
                                         if ($payment['file_name']) {
                                             echo "<a href='../public/payment/{$payment['patient_member_id']}/{$payment['appointment_id']}/{$payment['file_name']}' target='_blank'>View Receipt</a>";
@@ -69,20 +70,28 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
                                         echo "</td>";
                                         echo "<td>{$payment['remarks']}</td>";
                                         echo "<td>";
-                                        if ($payment['file_name']) {
-                                            echo "
-                                                <button 
-                                                    class='btn btn-success btn-sm approve-btn' 
-                                                    data-appointment-id='{$payment['appointment_id']}'>
-                                                    Approve
-                                                </button>
-                                                <button 
-                                                    class='btn btn-danger btn-sm reject-btn' 
-                                                    data-appointment-id='{$payment['appointment_id']}'>
-                                                    Reject
-                                                </button>";
+                                        // Display action buttons based on payment status
+                                        if ($payment['status'] == 'Approved') {
+                                            echo "<button class='btn btn-success btn-sm' disabled>Secured 20% Down Payment</button>";
+                                        } elseif ($payment['status'] == 'Rejected') {
+                                            echo "Payment Rejected";
                                         } else {
-                                            echo "No receipt uploaded"; // Replace button with text
+                                            // Show Approve and Reject buttons only if a receipt is uploaded
+                                            if ($payment['file_name']) {
+                                                echo "
+                                                    <button 
+                                                        class='btn btn-success btn-sm approve-btn' 
+                                                        data-appointment-id='{$payment['appointment_id']}'>
+                                                        Approve
+                                                    </button>
+                                                    <button 
+                                                        class='btn btn-danger btn-sm reject-btn' 
+                                                        data-appointment-id='{$payment['appointment_id']}'>
+                                                        Reject
+                                                    </button>";
+                                            } else {
+                                                echo "No receipt uploaded"; // No buttons if no receipt
+                                            }
                                         }
                                         echo "</td>";
                                         echo "</tr>";
@@ -91,7 +100,7 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
                                     echo "<tr><td colspan='8'>No payment found.</td></tr>";
                                 }
                             ?>
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -127,20 +136,30 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
             // Handle Approve button
             document.querySelectorAll('.approve-btn').forEach(button => {
                 button.addEventListener('click', function () {
-                    const appointmentId = this.getAttribute('data-appointment-id');
-                    if (confirm('Are you sure you want to approve this payment?')) {
+                    const appointmentId = this.getAttribute('data-appointment-id');  // Get the appointment ID
+                    
+                    // Show the confirmation modal
+                    $('#confirmationModal').modal('show');  // Show the modal using Bootstrap's modal method
+                    
+                    // Add event listener for 'Yes' button inside the modal
+                    document.getElementById('confirmApproval').addEventListener('click', function() {
+                        // Redirect to the action URL with the appointment ID when "Yes" is clicked
                         window.location.href = `controller/paymentAction.php?action=approve&appointment_id=${appointmentId}`;
-                    }
+                    });
                 });
             });
-
             // Handle Reject button
             document.querySelectorAll('.reject-btn').forEach(button => {
                 button.addEventListener('click', function () {
                     const appointmentId = this.getAttribute('data-appointment-id');
-                    if (confirm('Are you sure you want to reject this payment?')) {
+                    
+                    // Show the reject confirmation modal
+                    $('#rejectconfirmationModal').modal('show');
+                    
+                    // Add event listener for 'Yes' button inside the reject modal
+                    document.getElementById('confirmReject').addEventListener('click', function() {
                         window.location.href = `controller/paymentAction.php?action=reject&appointment_id=${appointmentId}`;
-                    }
+                    });
                 });
             });
         });

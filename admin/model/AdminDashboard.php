@@ -362,6 +362,8 @@
             }
         }
 
+        
+
         public function get_all_patients_per_doctor($doctor_id) {
             // SQL query to get patient details along with assigned doctor details
             $query = "
@@ -921,9 +923,12 @@
         }
 
         public function get_all_patients_without_doctor() {
-            // Assuming $db is your mysqli connection
-            $sql = "SELECT * FROM patients WHERE assigned_doctor IS NULL OR assigned_doctor = ''";
-            
+            // SQL query to get patients without an assigned doctor and exclude 'super_admin' user_type from the accounts table
+            $sql = "
+                SELECT patients.*
+                FROM patients
+            ";
+        
             // Prepare the statement
             $stmt = $this->db->prepare($sql);
             
@@ -941,6 +946,32 @@
             
             return $patients;
         }
+
+        public function get_dental_services() {
+            // SQL query to get patients without an assigned doctor and exclude 'super_admin' user_type from the accounts table
+            $sql = "
+                SELECT dental_services.*
+                FROM dental_services
+            ";
+        
+            // Prepare the statement
+            $stmt = $this->db->prepare($sql);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Get the result set
+            $result = $stmt->get_result();
+            
+            // Fetch all rows into an associative array
+            $dental_services = $result->fetch_all(MYSQLI_ASSOC);
+            
+            // Close the statement
+            $stmt->close();
+            
+            return $dental_services;
+        }
+        
 
         public function assign_patient($doctor_id, $patient_id) {
             // Prepare the SQL statement
@@ -1005,7 +1036,7 @@
         }
 
         public function updatePaymentStatus($appointmentId, $status) {
-            // Update proof_of_payment table
+            // Update proof_of_payment table with the new status
             $sql = "UPDATE proof_of_payment SET status = ? WHERE appointment_id = ?";
             $stmt = $this->db->prepare($sql);
         
@@ -1015,7 +1046,8 @@
                 $stmt->close();
         
                 // Determine appointment status based on proof_of_payment status
-                $appointmentStatus = ($status === 'Approved') ? 'Confirmed' : 'Pending';
+                // If approved, set appointment status to 'Confirmed', if rejected, set to 'Cancelled' or 'Pending'
+                $appointmentStatus = ($status === 'Approved') ? 'Confirmed' : 'Cancelled';
         
                 // Fetch existing notes from the appointment table
                 $fetchNotesSql = "SELECT notes FROM appointments WHERE id = ?";
@@ -1029,7 +1061,14 @@
                     $fetchNotesStmt->close();
         
                     // Prepare the updated notes
-                    $newNote = ($status === 'Approved') ? "Patient has paid." : "";
+                    $newNote = "";
+                    if ($status === 'Approved') {
+                        $newNote = "Patient has paid.";
+                    } elseif ($status === 'Rejected') {
+                        $newNote = "Payment was rejected.";
+                    }
+        
+                    // Combine existing notes with new note
                     $updatedNotes = $existingNotes ? $existingNotes . " " . $newNote : $newNote;
         
                     // Update the appointment table with new status and notes
@@ -1048,10 +1087,42 @@
             return false;
         }
         
-        
-        
-        
-        
+        // Example method in Admin class to delete a dental service
+        public function delete_dental_services($id) {
+            $query = "DELETE FROM dental_services WHERE id = ?";
+
+            if ($stmt = $this->db->prepare($query)) {
+                $stmt->bind_param("i", $id);
+                return $stmt->execute();
+            } else {
+                return false;
+            }
+        }
+
+        // Example method in Admin class to update a dental service
+        public function update_dental_services($id, $category, $subCategory, $priceRange, $price) {
+            $query = "UPDATE dental_services SET category = ?, sub_category = ?, price_range = ?, price = ? WHERE id = ?";
+
+            if ($stmt = $this->db->prepare($query)) {
+                $stmt->bind_param("ssssi", $category, $subCategory, $priceRange, $price, $id);
+                return $stmt->execute();
+            } else {
+                return false;
+            }
+        }
+
+        // Example method in Admin class to add dental service
+        public function add_dental_service($category, $subCategory, $priceRange, $price) {
+            $query = "INSERT INTO dental_services (category, sub_category, price_range, price) 
+                    VALUES (?, ?, ?, ?)";
+
+            if ($stmt = $this->db->prepare($query)) {
+                $stmt->bind_param("sssd", $category, $subCategory, $priceRange, $price);
+                return $stmt->execute();
+            } else {
+                return false;
+            }
+        }
         
 	}
 ?>
