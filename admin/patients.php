@@ -65,7 +65,7 @@ include_once('inc/sidebarMenu.php');
                                         </td>
                                         <td><?= htmlspecialchars($patients['doctor_first_name'])." ".htmlspecialchars($patients['doctor_last_name']) ?></td>
                                         <td>
-                                            <a href="viewRecord.php?patient_id=<?= urlencode($patients['patient_id']) ?>" class="btn btn-primary btn-sm">View Record</a>
+                                            <a href="view_record.php?patient_id=<?= urlencode($patients['patient_id']) ?>" class="btn btn-primary btn-sm">View Record</a>
                                         </td>
                                       </tr>
                                   <?php endforeach; ?>

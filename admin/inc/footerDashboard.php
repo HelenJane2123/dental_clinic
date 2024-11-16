@@ -343,6 +343,29 @@
             document.getElementById('doctorIdInput').value = doctorId;
         }
 
+        function addRow() {
+            var table = document.getElementById('dentalTable').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow(table.rows.length);
+
+            newRow.innerHTML = `
+                <td><input type="date" name="date[]" class="form-control" required></td>
+                <td><input type="text" name="tooth_no[]" class="form-control" required></td>
+                <td><input type="text" name="procedure[]" class="form-control" required></td>
+                <td><input type="text" name="dentist[]" class="form-control" required></td>
+                <td><input type="number" name="amount_charged[]" class="form-control" step="0.01" required></td>
+                <td><input type="number" name="amount_paid[]" class="form-control" step="0.01" required></td>
+                <td><input type="number" name="balance[]" class="form-control" step="0.01" required></td>
+                <td><input type="date" name="next_appointment[]" class="form-control" required></td>
+                <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+            `;
+        }
+
+        // Remove a row from the table
+        function removeRow(button) {
+            var row = button.closest('tr');
+            row.parentNode.removeChild(row);
+        }
+
     </script>
       
       <script src="js/main.js"></script>

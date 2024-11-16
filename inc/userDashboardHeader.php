@@ -148,6 +148,12 @@
           <span></span>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="help.php">
+            <i class="mdi mdi-book menu-icon"></i>
+            <span class="menu-title">Help</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="index.php">
             <i class="mdi mdi-home menu-icon"></i>
             <span class="menu-title">Back to Home Page</span>

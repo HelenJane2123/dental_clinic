@@ -39,7 +39,6 @@
     }
     $get_recent_appointments = $appointment_admin->get_today_appointments();
 
-
      // Fetch user details
     $userDetails = $appointment_admin->get_user_profile($member_id_admin);
 
@@ -81,6 +80,48 @@
     <link rel="stylesheet" href="vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="shortcut icon" href="images/favicon.svg" type="image/x-icon">
+
+    <style>
+        /* Print-specific styles */
+        @media print {
+            /* Hide all elements except #printable-content */
+            body * {
+                visibility: hidden;
+            }
+            #printable-content, #printable-content * {
+                visibility: visible;
+            }
+            #printable-content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+
+            /* Remove unnecessary elements */
+            .sidebar, #sidebarMenu, .header, .breadcrumb, .btn {
+                display: none !important;
+            }
+
+            /* Ensure proper page size and margins */
+            @page {
+                size: letter; /* 8.5 x 11 inches */
+                margin: 1in; /* Normal 1-inch margin */
+            }
+
+            /* Clean print layout */
+            body {
+                background: #fff;
+                margin: 0;
+            }
+
+            /* Optional: Adjust font size and styles for printing */
+            #printable-content {
+                font-size: 12pt;
+                line-height: 1.5;
+            }
+        }
+    </style>
 </head>
 
 <body>

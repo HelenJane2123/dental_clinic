@@ -1123,6 +1123,198 @@
                 return false;
             }
         }
+
+        // Method to get patient details by ID
+        public function get_patient_by_id($patient_id) {
+            $sql = "SELECT 
+                        p.*, 
+                        d.first_name AS doctor_first_name, 
+                        d.last_name AS doctor_last_name, 
+                        d.specialty AS doctor_specialty, 
+                        d.email AS doctor_email
+                    FROM patients p
+                    LEFT JOIN doctors d ON p.assigned_doctor = d.account_id
+                    WHERE p.patient_id = ?";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc(); // Return the patient data along with doctor details
+            } else {
+                return null; // Return null if no patient found
+            }
+        }
+        
+
+        // Method to get medical history of a patient
+        public function get_medical_history($patient_id) {
+            $sql = "SELECT * FROM medical_history WHERE patient_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc(); // Assuming one row per patient
+            } else {
+                return null;
+            }
+        }
+
+        // Method to get guardians' details of a patient
+        public function get_guardians($patient_id) {
+            $sql = "SELECT * FROM guardians WHERE patient_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $guardians = [];
+            while ($row = $result->fetch_assoc()) {
+                $guardians[] = $row;
+            }
+            return $guardians; // Return an array of guardians' details
+        }
+
+        // Method to get consultations of a patient
+        public function get_consultations($patient_id) {
+            $sql = "SELECT * FROM consultations WHERE patient_id = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $consultations = [];
+            while ($row = $result->fetch_assoc()) {
+                $consultations[] = $row;
+            }
+            return $consultations; // Return an array of consultations' details
+        }
+
+        public function save_dental_record($patient_id, $date, $tooth_no, $procedure, $dentist, $amount_charged, $amount_paid, $balance, $next_appointment) {
+            // First, check if a record for the patient already exists on the given date and tooth number
+            $check_query = "SELECT id FROM dental_records WHERE patient_id = ? AND `date` = ? AND tooth_no = ?";
+        
+            if ($stmt = $this->db->prepare($check_query)) {
+                // Bind parameters
+                $stmt->bind_param('iss', $patient_id, $date, $tooth_no);
+                
+                // Execute and get the result
+                $stmt->execute();
+                $stmt->store_result();
+        
+                // If the record exists, update it, otherwise insert a new one
+                if ($stmt->num_rows > 0) {
+                    // Record exists, so update it
+                    $update_query = "UPDATE dental_records SET 
+                                        `procedure` = ?, 
+                                        dentist = ?, 
+                                        amount_charged = ?, 
+                                        amount_paid = ?, 
+                                        balance = ?, 
+                                        next_appointment = ?
+                                      WHERE patient_id = ? AND `date` = ? AND tooth_no = ?";
+        
+                    if ($update_stmt = $this->db->prepare($update_query)) {
+                        // Bind parameters for the update query
+                        $update_stmt->bind_param('ssdddsiss', 
+                            $procedure, 
+                            $dentist, 
+                            $amount_charged, 
+                            $amount_paid, 
+                            $balance, 
+                            $next_appointment, 
+                            $patient_id, 
+                            $date, 
+                            $tooth_no
+                        );
+        
+                        // Execute the update statement
+                        if ($update_stmt->execute()) {
+                            $update_stmt->close();
+                            return true; // Update successful
+                        } else {
+                            $update_stmt->close();
+                            return false; // Update failed
+                        }
+                    } else {
+                        return false; // Update statement preparation failed
+                    }
+                } else {
+                    // No existing record found, so insert a new one
+                    $insert_query = "INSERT INTO dental_records 
+                                        (patient_id, `date`, tooth_no, `procedure`, dentist, 
+                                        amount_charged, amount_paid, balance, next_appointment)
+                                     VALUES 
+                                        (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+                    if ($insert_stmt = $this->db->prepare($insert_query)) {
+                        // Bind parameters for the insert query
+                        $insert_stmt->bind_param('issssddds', 
+                            $patient_id, 
+                            $date, 
+                            $tooth_no, 
+                            $procedure, 
+                            $dentist, 
+                            $amount_charged, 
+                            $amount_paid, 
+                            $balance, 
+                            $next_appointment
+                        );
+        
+                        // Execute the insert statement
+                        if ($insert_stmt->execute()) {
+                            $insert_stmt->close();
+                            return true; // Insert successful
+                        } else {
+                            $insert_stmt->close();
+                            return false; // Insert failed
+                        }
+                    } else {
+                        return false; // Insert statement preparation failed
+                    }
+                }
+            } else {
+                return false; // Check query preparation failed
+            }
+        }
+        
+
+        public function get_dental_records($patient_id) {
+            // Assuming you have a database connection $this->db (mysqli)
+            $sql = "SELECT * FROM dental_records WHERE patient_id = ? ORDER BY date DESC";
+            
+            // Prepare the SQL statement
+            $stmt = $this->db->prepare($sql);
+            
+            // Bind the patient_id to the query
+            $stmt->bind_param('i', $patient_id);
+        
+            // Execute the query
+            $stmt->execute();
+            
+            // Get the result of the query
+            $result = $stmt->get_result();
+            
+            // Check if any records exist
+            if ($result->num_rows > 0) {
+                // Fetch all records into an associative array
+                $records = [];
+                while ($row = $result->fetch_assoc()) {
+                    $records[] = $row;
+                }
+                return $records; // Return all records
+            } else {
+                return false; // No records found
+            }
+        
+            // Close the prepared statement
+            $stmt->close();
+        }        
+
         
 	}
 ?>

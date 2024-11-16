@@ -65,6 +65,60 @@
   
 
   <script>
+    $('#viewComputationModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var appointmentId = button.data('appointment-id'); // Extract appointment ID from data attribute
+
+            console.log('Appointment ID:', appointmentId); // Log the appointment ID to ensure it's correct
+
+            // AJAX request to fetch computation data
+            $.ajax({
+                url: 'controller/fetchComputation.php', // Path to the PHP script
+                method: 'POST',
+                data: { appointment_id: appointmentId }, // Send appointment ID as POST data
+                success: function(response) {
+                    console.log('Raw Response:', response);
+                    try {
+                        var data = JSON.parse(response);  // Attempt to parse JSON
+                        if (data.error) {
+                            $('#computation-details').html('<p>' + data.error + '</p>');
+                        } else {
+                            var computationDetails = '<p style="font-size: 19px;"><strong>Total Amount:</strong> ' + data.total_price + '</p>';
+                            computationDetails += '<p style="font-size: 1.5em; font-weight: bold; color: #e67e22;"><strong>Down Payment (20%):</strong> ' + data.down_payment + '</p>';
+                            computationDetails += '<p style="font-size: 19px; font-weight: bold; color: #e67e22;"><strong>Remaining Balance:</strong> ' + data.remaining_balance + '</p>';
+                            
+                            // Generate the table for services
+                            computationDetails += '<br/><h5>Services:</h5>';
+                            computationDetails += '<table class="table table-bordered table-striped">';
+                            computationDetails += '<thead><tr><th>Service</th><th>Price</th></tr></thead>';
+                            computationDetails += '<tbody>';
+
+                            data.services.forEach(function(service) {
+                                computationDetails += '<tr><td>' + service.sub_category + '</td><td>' + service.price + '</td></tr>';
+                            });
+
+                            computationDetails += '</tbody></table>';
+
+                            $('#computation-details').html(computationDetails);
+                        }
+                    } catch (e) {
+                        console.error('JSON Parsing Error:', e);
+                        $('#computation-details').html('<p>Error parsing response data.</p>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // If there's an error in the AJAX request itself, log it
+                    console.log('AJAX Error:', status, error);
+                    $('#computation-details').html('<p>There was an error fetching the computation data. Please try again later.</p>');
+                }
+            });
+        });
+
+
+    // Helper function for currency formatting
+    function formatCurrency(amount) {
+        return parseFloat(amount).toFixed(2); // Format to 2 decimal places
+    }
     function showModal(modal_title, message, callback) {
         // Set modal title and message
         $('#genericModalLabel').text(modal_title);
@@ -578,61 +632,6 @@
         // Custom validation or logic
         document.getElementById('proofPayment').submit();  // Manually submit form
         return false;  // Prevent default form submission
-    }
-
-    $('#viewComputationModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var appointmentId = button.data('appointment-id'); // Extract appointment ID from data attribute
-
-            console.log('Appointment ID:', appointmentId); // Log the appointment ID to ensure it's correct
-
-            // AJAX request to fetch computation data
-            $.ajax({
-                url: 'controller/fetchComputation.php', // Path to the PHP script
-                method: 'POST',
-                data: { appointment_id: appointmentId }, // Send appointment ID as POST data
-                success: function(response) {
-                    console.log('Raw Response:', response);
-                    try {
-                        var data = JSON.parse(response);  // Attempt to parse JSON
-                        if (data.error) {
-                            $('#computation-details').html('<p>' + data.error + '</p>');
-                        } else {
-                            var computationDetails = '<p style="font-size: 19px;"><strong>Total Amount:</strong> ' + data.total_price + '</p>';
-                            computationDetails += '<p style="font-size: 1.5em; font-weight: bold; color: #e67e22;"><strong>Down Payment (20%):</strong> ' + data.down_payment + '</p>';
-                            computationDetails += '<p style="font-size: 19px; font-weight: bold; color: #e67e22;"><strong>Remaining Balance:</strong> ' + data.remaining_balance + '</p>';
-                            
-                            // Generate the table for services
-                            computationDetails += '<br/><h5>Services:</h5>';
-                            computationDetails += '<table class="table table-bordered table-striped">';
-                            computationDetails += '<thead><tr><th>Service</th><th>Price</th></tr></thead>';
-                            computationDetails += '<tbody>';
-
-                            data.services.forEach(function(service) {
-                                computationDetails += '<tr><td>' + service.sub_category + '</td><td>' + service.price + '</td></tr>';
-                            });
-
-                            computationDetails += '</tbody></table>';
-
-                            $('#computation-details').html(computationDetails);
-                        }
-                    } catch (e) {
-                        console.error('JSON Parsing Error:', e);
-                        $('#computation-details').html('<p>Error parsing response data.</p>');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // If there's an error in the AJAX request itself, log it
-                    console.log('AJAX Error:', status, error);
-                    $('#computation-details').html('<p>There was an error fetching the computation data. Please try again later.</p>');
-                }
-            });
-        });
-
-
-    // Helper function for currency formatting
-    function formatCurrency(amount) {
-        return parseFloat(amount).toFixed(2); // Format to 2 decimal places
     }
 
   </script>
