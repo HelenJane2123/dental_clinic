@@ -272,7 +272,7 @@
         
         // Check if the selected date is a Saturday (getDay() returns 6 for Saturday)
         if (selectedDate.getDay() === 6) {
-            alert("Appointments cannot be scheduled on Saturdays. Please choose another date.");
+            showModal('Warning', 'Appointments cannot be scheduled on Saturdays. Please choose another date.');
             this.value = ''; // Clear the selected date
         }
     });
@@ -282,7 +282,7 @@
         
         // Check if the selected date is a Saturday (getDay() returns 6 for Saturday)
         if (selectedDate.getDay() === 6) {
-            alert("Appointments cannot be scheduled on Saturdays. Please choose another date.");
+            showModal('Warning', 'Appointments cannot be scheduled on Saturdays. Please choose another date.');
             this.value = ''; // Clear the selected date
         }
     });
@@ -300,7 +300,7 @@
             const maxTime = 16 * 60;  // 4:00 PM in minutes
             
             if (totalMinutes < minTime || totalMinutes > maxTime) {
-                alert('Please select a time between 9:00 AM and 4:00 PM.');
+                showModal('Notification', 'Please select a time between 9:00 AM and 4:00 PM.');
                 this.value = '';  // Clear the input field if time is invalid
             }
         }
@@ -319,7 +319,7 @@
             const maxTime = 16 * 60;  // 4:00 PM in minutes
             
             if (totalMinutes < minTime || totalMinutes > maxTime) {
-                alert('Please select a time between 9:00 AM and 4:00 PM.');
+                showModal('Warning', 'Please select a time between 9:00 AM and 4:00 PM.');
                 this.value = '';  // Clear the input field if time is invalid
             }
         }
@@ -368,7 +368,7 @@
         document.getElementById("appointmentDate").addEventListener("change", function() {
             var selectedDate = new Date(this.value);
             if (selectedDate < today) {
-                alert("You cannot set an appointment for a past date. Please choose a valid date.");
+                showModal('Warning', 'You cannot set an appointment for a past date. Please choose a valid date.');
                 this.value = ''; // Clear the input field
             }
         });
@@ -376,7 +376,7 @@
         document.getElementById("edit_appointment_date").addEventListener("change", function() {
             var selectedDate = new Date(this.value);
             if (selectedDate < today) {
-                alert("You cannot set an appointment for a past date. Please choose a valid date.");
+                showModal('Warning', 'You cannot set an appointment for a past date. Please choose a valid date.');
                 this.value = ''; // Clear the input field
             }
         });

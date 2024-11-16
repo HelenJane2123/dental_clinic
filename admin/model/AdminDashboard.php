@@ -960,6 +960,97 @@
             }
         }
         
+        public function getPaymentStatus() {
+            $sql = "
+                SELECT 
+                    a.id AS appointment_id,
+                    pt.member_id AS patient_member_id,
+                    COALESCE(pp.status, 'Pending') AS status,
+                    pp.file_name,
+                    pt.first_name as patient_first_name,
+                    pt.last_name as patient_last_name,
+                    d.first_name as doctor_first_name,
+                    d.last_name as doctor_last_name,
+                    COALESCE(pp.remarks, 'No payment uploaded') AS remarks
+                FROM 
+                    appointments a
+                LEFT JOIN 
+                    proof_of_payment pp ON a.id = pp.appointment_id
+                LEFT JOIN 
+                    patients pt ON a.patient_id = pt.patient_id
+                LEFT JOIN
+                    doctors d ON d.account_id = pt.assigned_doctor
+            ";
+        
+            // Prepare the statement
+            $stmt = $this->db->prepare($sql);
+        
+            if ($stmt) {
+                $stmt->execute();
+                $result = $stmt->get_result();
+        
+                // Fetch all data
+                $data = [];
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = $row;
+                }
+        
+                $stmt->close();
+                return $data;
+            } else {
+                // Log an error if the query fails
+                error_log("Query failed: " . $this->db->error);
+                return [];
+            }
+        }
+
+        public function updatePaymentStatus($appointmentId, $status) {
+            // Update proof_of_payment table
+            $sql = "UPDATE proof_of_payment SET status = ? WHERE appointment_id = ?";
+            $stmt = $this->db->prepare($sql);
+        
+            if ($stmt) {
+                $stmt->bind_param("si", $status, $appointmentId);
+                $stmt->execute();
+                $stmt->close();
+        
+                // Determine appointment status based on proof_of_payment status
+                $appointmentStatus = ($status === 'Approved') ? 'Confirmed' : 'Pending';
+        
+                // Fetch existing notes from the appointment table
+                $fetchNotesSql = "SELECT notes FROM appointments WHERE id = ?";
+                $fetchNotesStmt = $this->db->prepare($fetchNotesSql);
+        
+                if ($fetchNotesStmt) {
+                    $fetchNotesStmt->bind_param("i", $appointmentId);
+                    $fetchNotesStmt->execute();
+                    $fetchNotesStmt->bind_result($existingNotes);
+                    $fetchNotesStmt->fetch();
+                    $fetchNotesStmt->close();
+        
+                    // Prepare the updated notes
+                    $newNote = ($status === 'Approved') ? "Patient has paid." : "";
+                    $updatedNotes = $existingNotes ? $existingNotes . " " . $newNote : $newNote;
+        
+                    // Update the appointment table with new status and notes
+                    $updateAppointmentSql = "UPDATE appointments SET status = ?, notes = ? WHERE id = ?";
+                    $appointmentStmt = $this->db->prepare($updateAppointmentSql);
+        
+                    if ($appointmentStmt) {
+                        $appointmentStmt->bind_param("ssi", $appointmentStatus, $updatedNotes, $appointmentId);
+                        $appointmentStmt->execute();
+                        $appointmentStmt->close();
+                        return true;
+                    }
+                }
+            }
+        
+            return false;
+        }
+        
+        
+        
+        
         
         
 	}

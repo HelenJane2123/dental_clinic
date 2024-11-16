@@ -36,6 +36,23 @@
     <form id="notificationForm" method="POST" action="controller/updateNotification.php" style="display: none;">
         <input type="hidden" name="notification_id" id="notificationId">
     </form>
+
+    <div class="modal fade" id="genericModal" tabindex="-1" aria-labelledby="genericModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="genericModalLabel">Notification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="genericModalMessage">
+                    <!-- Message will be dynamically populated -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
@@ -47,6 +64,15 @@
     <script src="js/pages/dashboard.js"></script>
 
     <script>
+        function showModal(title, message) {
+            // Set the title and message dynamically
+            document.getElementById('genericModalLabel').textContent = title;
+            document.getElementById('genericModalMessage').textContent = message;
+
+            // Show the modal
+            const modal = new bootstrap.Modal(document.getElementById('genericModal'));
+            modal.show();
+        }
         // Simple Datatable
         document.addEventListener("DOMContentLoaded", function() {
             const dataTableElement = document.getElementById("table1");
@@ -106,9 +132,10 @@
             })
             .then(response => {
                 if (response.ok) {
+                    showModal('Appointment Approved', 'The appointment has been successfully approved.');
                     location.reload();
                 } else {
-                    alert('Failed to approve appointment.');
+                    showModal('Error', 'Failed to approve appointment.');
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -136,9 +163,10 @@
             })
             .then(response => {
                 if (response.ok) {
+                    showModal('Appointment Rescheduled', 'The appointment has been successfully rescheduled.');
                     location.reload();
                 } else {
-                    alert('Failed to reschedule appointment.');
+                    showModal('Appointment Reschedule Failed', 'Failed to reschedule appointment.');
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -162,9 +190,10 @@
             })
             .then(response => {
                 if (response.ok) {
+                    showModal('Appointment Canceled', 'Appointment successfully canceled.');
                     location.reload();
                 } else {
-                    alert('Failed to cancel appointment.');
+                    showModal('Appointment Cancelation Failed', 'Failed to cancel appointment.');
                 }
             })
             .catch(error => console.error('Error:', error));

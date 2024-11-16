@@ -96,7 +96,7 @@ include_once("inc/userDashboardHeader.php");
                                     echo "</tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='4'>No appointments found.</td></tr>";
+                                echo "<tr><td colspan='4'>No payment found.</td></tr>";
                             }
                             ?>
                         </tbody>

@@ -27,7 +27,7 @@ PATIENT SIDE:
 
     2. User Login
         Example:
-            User: HeartJasmine
+            User: JohnDoe
             Password: P@@swoord1223
         Logic:
             - Validates invalid username and password

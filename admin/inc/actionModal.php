@@ -264,7 +264,7 @@
                 const maxTime = 16 * 60;  // 4:00 PM in minutes
 
                 if (totalMinutes < minTime || totalMinutes > maxTime) {
-                    alert('Please select a time between 9:00 AM and 4:00 PM.');
+                    showModal('Warning', 'Please select a time between 9:00 AM and 4:00 PM.');
                     this.value = '';  // Clear the input field if time is invalid
                 }
             }
@@ -279,7 +279,7 @@
             today.setHours(0, 0, 0, 0);
 
             if (selectedDate < today) {
-                alert("You cannot set an appointment for a past date. Please choose a valid date.");
+                showModal('Warning', 'You cannot set an appointment for a past date. Please choose a valid date.');
                 this.value = ''; // Clear the input field if date is invalid
             }
         });

@@ -17,6 +17,20 @@
     </div>
     <!-- page-body-wrapper ends -->
   </div>
+  <div class="modal fade" id="genericModal" tabindex="-1" aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="genericModalLabel"></h5>
+                <button type="button" class="btn-close" onclick="closeModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="genericModalMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
   <!-- container-scroller -->
   <!-- base:js -->
   <script src="vendors/js/vendor.bundle.base.js"></script>
@@ -37,6 +51,7 @@
   <script src="js/dashboard/dashboard.js"></script>
   <!-- End custom js for this page-->
  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
@@ -51,6 +66,40 @@
   
 
   <script>
+    function showModal(modal_title, message, callback) {
+        // Set modal title and message
+        $('#genericModalLabel').text(modal_title);
+        $('#genericModalMessage').text(message);
+
+        // Apply color classes based on the title type
+        const modalTitle = $('#genericModalLabel')[0];
+        modalTitle.classList.remove('text-danger', 'text-warning', 'text-success', 'text-dark');
+
+        if (modal_title.toLowerCase() === 'error') {
+            modalTitle.classList.add('text-danger');
+        } else if (modal_title.toLowerCase() === 'warning') {
+            modalTitle.classList.add('text-warning');
+        } else if (modal_title.toLowerCase() === 'success') {
+            modalTitle.classList.add('text-success');
+        } else if (modal_title.toLowerCase() === 'notification') {
+            modalTitle.classList.add('text-dark');
+        }
+
+        // Show modal without affecting table
+        $('#genericModal').modal({ backdrop: 'static', keyboard: false }).modal('show');
+
+        // Run the callback function when modal closes
+        $('#genericModal').on('hidden.bs.modal', function() {
+            if (typeof callback === 'function') {
+                callback();
+            }
+        });
+    }
+    function closeModal() {
+        // For Bootstrap 4, using jQuery to hide the modal
+        $('#genericModal').modal('hide');
+    }
+
     var patientCount = <?php echo $patientCount; ?>;
     document.addEventListener('DOMContentLoaded', function() {
       const statusColors = {
@@ -135,14 +184,14 @@
         },
         dateClick: function(info) {
             if (patientCount === 0) {
-                // If patient record is not completed, show an alert and do not open modal
-                alert('You must complete your patient record before booking an appointment. Please complete your record first.');
-                window.location.href = 'my_record.php'; // Redirect to the record form
-                return; // Prevent modal from opening
+                showModal('Warning', 'You must complete your patient record before booking an appointment. Please complete your record first.', function() {
+                    window.location.href = 'my_record.php'; // Redirect after modal closes
+                });
+                return; // Prevent further actions
             }
 
             if (info.date.getDay() === 6) {
-                alert('Appointments cannot be booked on Saturdays. Please select another date.');
+                showModal('Warning', 'Appointments cannot be booked on Saturdays. Please select another date.');
                 return; // Prevent the modal from opening
             }
             
@@ -165,7 +214,7 @@
                     $('#appointmentModal').modal('hide');
                 });
             } else {
-                alert('You cannot select past dates.');
+                showModal('Warning', 'You cannot select past dates.')
             }
         },
         // Add event click handling
@@ -202,8 +251,16 @@
           if (appointment.start === today) {
               // Compare current time with appointment time
               if (currentTime > convertTo24Hour(appointment.time)) {  // Convert appointment time to 24-hour format for comparison
-                  alert(`Appointment for ${appointment.title} scheduled at ${appointment.time} is still pending. It will be automatically canceled.`);
-                  window.location.href = `appointment.php?cancel=${appointment.id}`;  // Refresh the page for cancellation processing
+                 // Set the message dynamically using string interpolation
+                const message = `Appointment for ${appointment.title} scheduled at ${appointment.time} is still pending. It will be automatically canceled.`;
+
+                // Store the appointment ID globally for redirection
+                window.appointmentToCancel = appointment.id;
+
+                // Show the modal with the appointment message
+                showModal('Notification', message, function() {
+                    window.location.href = `appointment.php?cancel=${appointment.id}`; // Redirect after modal closes
+                });
               }
           }
       });
@@ -241,7 +298,7 @@
 
         // Check if date and time are selected
         if (!appointmentDate || !appointmentTime) {
-            alert("Please select both date and time.");
+            showModal('Error', 'Please select both date and time.')
             return;
         }
 
@@ -266,25 +323,20 @@
 
             // Check if the appointment is available
             if (result.available) {
-                alert("Appointment successfully booked! Redirecting to the payment page...");
+                showModal('Success', 'Appointment successfully booked! Redirecting to the payment page...', function() {
+                    window.location.href = 'payment.php'; // Redirect to the payment page
+                });                
                
                 // Submit the form if the slot is available
                 document.getElementById('addappointmentForm').submit();
                 $('#appointmentModal').modal('hide'); // Close modal
-
-                setTimeout(() => {
-                    window.location.href = 'payment.php'; // Redirect to the payment page
-                }, 5000); // 1-second delay before redirect
-
             } else {
-                // Show an alert message if the time slot is already booked
-                alert("This time slot is already booked. Please choose another time.");
+                showModal('Warning', 'This time slot is already booked. Please choose another time.');
             }
 
         } catch (error) {
             console.error('Error checking availability:', error);
-            // Show an alert if something goes wrong
-            alert('An error occurred while checking availability. Please try again later.');
+            showModal('Error', 'An error occurred while checking availability. Please try again later.');
         }
     }
 
@@ -407,14 +459,13 @@
             console.log("Result:", result);
 
             if (result.available === false) {
-                // Show error message if the time slot is already taken
-                alert('The selected date and time is already booked. Please choose another time.');
+                showModal('Warning', 'The selected date and time is already booked. Please choose another time.');
                 document.getElementById('edit_appointment_time').value = ''; // Clear the time field
             }
 
         } catch (error) {
             console.error('Error checking availability:', error);
-            alert('An error occurred while checking availability. Please try again later.');
+            showModal('Error', 'An error occurred while checking availability. Please try again later.');
         }
     }
 
@@ -449,7 +500,7 @@
                 button.classList.remove("btn-warning");
                 button.classList.add("btn-success");
             } else {
-                alert("Error updating notification.");
+                showModal('Error', 'Error updating notification.');
             }
         };
         xhr.send();
@@ -516,7 +567,7 @@
                 // If the form is invalid, prevent submission
                 e.preventDefault();
                 // Optionally, you can add custom behavior if the form is invalid
-                alert('Please correct the errors before submitting the form.');
+                showModal('Warning', 'Please correct the errors before submitting the form.');
             }
             // If Parsley validation passes, the form will submit normally
         });

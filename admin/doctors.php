@@ -39,8 +39,7 @@ include_once('inc/sidebarMenu.php');
                     unset($_SESSION['display_message']);
                     unset($_SESSION['message_type']);
                 endif;
-                ?>
-
+            ?>
             <div class="card">
                 <div class="card-header">
                     <!-- Add Doctor Button -->
