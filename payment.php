@@ -104,25 +104,21 @@
             
             <br/>
             <div class="container">
-              <!-- Title for QR Code Section -->
               <h3 class="text-center mb-4">QR Codes for Payment Methods</h3>
-
               <div class="row">
                 <!-- GCash QR Code -->
-                <div class="col-md-4 text-center">
-                  <img src="img/payment/gcash.jpg" alt="GCash QR Code" class="img-fluid mb-3" style="max-width: 350px; height: auto;">
+                <div class="col-12 col-md-4 text-center mb-3">
+                  <img src="img/payment/gcash.jpg" alt="GCash QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
                   <h5>GCash</h5>
                 </div>
-                
                 <!-- PayMaya QR Code -->
-                <div class="col-md-4 text-center">
-                  <img src="img/payment/paymaya.jpg" alt="PayMaya QR Code" class="img-fluid mb-3" style="max-width: 350px; height: auto;">
+                <div class="col-12 col-md-4 text-center mb-3">
+                  <img src="img/payment/paymaya.jpg" alt="PayMaya QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
                   <h5>PayMaya</h5>
                 </div>
-                
                 <!-- Bank Transfer QR Code -->
-                <div class="col-md-4 text-center">
-                  <img src="img/payment/bpi.jpg" alt="Bank Transfer QR Code" class="img-fluid mb-3" style="max-width: 350px; height: auto;">
+                <div class="col-12 col-md-4 text-center mb-3">
+                  <img src="img/payment/bpi.jpg" alt="Bank Transfer QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
                   <h5>Bank Transfer</h5>
                 </div>
               </div>

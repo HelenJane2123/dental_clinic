@@ -31,6 +31,13 @@
         </div>
     </div>
 </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!-- Include Bootstrap Bundle with Popper.js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
   <!-- container-scroller -->
   <!-- base:js -->
   <script src="vendors/js/vendor.bundle.base.js"></script>
@@ -50,10 +57,6 @@
   <!-- Custom js for this page-->
   <script src="js/dashboard/dashboard.js"></script>
   <!-- End custom js for this page-->
- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
 
   <script src='vendors/fullcalendar/packages/core/main.js'></script>
   <script src='vendors/fullcalendar/packages/interaction/main.js'></script>
@@ -65,6 +68,7 @@
   
 
   <script>
+
     $('#viewComputationModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var appointmentId = button.data('appointment-id'); // Extract appointment ID from data attribute
@@ -633,6 +637,16 @@
         document.getElementById('proofPayment').submit();  // Manually submit form
         return false;  // Prevent default form submission
     }
+
+    // Toggle the offcanvas menu
+    $('#menuToggle').on('click', function() {
+        $('#offcanvasMenu').collapse('toggle');
+    });
+
+    // Close the offcanvas menu manually
+    $('#closeMenu').on('click', function() {
+        $('#offcanvasMenu').collapse('hide');
+    });
 
   </script>
 </body>

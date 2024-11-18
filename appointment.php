@@ -107,8 +107,7 @@
                                               <p>
                                                   <?php
                                                       // Get the service name based on the appointment's services
-                                                      $serviceName = isset($serviceNames[$appointment['services']]) ? $serviceNames[$appointment['services']] : 'Unknown Service';
-                                                      echo "Service: " . htmlspecialchars($serviceName);
+                                                      echo "Service: " . htmlspecialchars($appointment['services']);
                                                   ?>
                                               </p>
                                           </li>
@@ -130,8 +129,7 @@
                                               <p>
                                                   <?php
                                                       // Get the service name based on the appointment's services
-                                                      $serviceName = isset($serviceNames[$appointment['services']]) ? $serviceNames[$appointment['services']] : 'Unknown Service';
-                                                      echo "Service: " . htmlspecialchars($serviceName);
+                                                      echo "Service: " . htmlspecialchars($appointment['services']);
                                                   ?>
                                               </p>
                                           </li>
@@ -186,10 +184,12 @@
                                           <td><?= htmlspecialchars($appointment['appointment_date']) ?></td>
                                           <td><?= htmlspecialchars($appointment['appointment_time']) ?></td>
                                           <td>
-                                              <label class="badge <?= htmlspecialchars($appointment['status'] == 'Canceled' ? 'badge-danger' : ($appointment['status'] == 'Confirmed' ? 'badge-success' : 'badge-warning')) ?>">
-                                                  <?= htmlspecialchars($appointment['status']) ?>
-                                              </label>
-                                          </td>
+                                            <label class="badge <?= htmlspecialchars($appointment['status'] == 'Canceled' ? 'badge-danger' : 
+                                                ($appointment['status'] == 'Confirmed' ? 'badge-success' : 
+                                                ($appointment['status'] == 'Re-schedule' ? 'badge-info' : 'badge-warning'))) ?>">
+                                                <?= htmlspecialchars($appointment['status']) ?>
+                                            </label>
+                                            </td>
                                           <td><?= htmlspecialchars($appointment['notes']) ?></td>
                                       </tr>
                                   <?php endforeach; ?>

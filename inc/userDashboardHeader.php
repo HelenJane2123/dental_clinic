@@ -84,15 +84,17 @@
   <!-- DataTables CSS -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.css">
+  <!-- Include Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- endinject -->
-  <link rel="shortcut icon" href="img/images/favicon.png" />
+  <link rel="shortcut icon" href="img/logo.png" />
 </head>
 <body>
   <div class="container-scroller d-flex">
-    <!-- partial:./partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
+        <a class="navbar-brand brand-logo" href="index.php"><img src="img/logo.png" alt="logo" style="height: 105px;margin-left: 8px;"/></a>
         <li class="nav-item sidebar-category">
           <p>Navigation</p>
           <span></span>

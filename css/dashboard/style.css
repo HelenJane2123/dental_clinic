@@ -21879,6 +21879,8 @@ dl li {
   }
 }
 
+
+
 /* Navbar */
 .navbar {
   font-weight: 400;
@@ -22416,3 +22418,104 @@ dl li {
 #current_password_error, #new_password_error, #confirm_password_error {
   margin-top: 5px;
 }
+
+.offcanvas {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  color: white;
+  transition: left 0.3s;
+}
+
+.offcanvas.show {
+  left: 0;
+}
+
+.offcanvas .btn-close {
+  color: white;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+}
+
+/* Apply styles to mobile views */
+@media (max-width: 767px) {
+  /* Set the offcanvas to cover half of the page */
+  .offcanvas {
+    width: 50% !important; /* Set the offcanvas width to 50% */
+    position: fixed !important; /* Fixed position to stay on the screen when toggled */
+    right: -100% !important; /* Initially off-screen to the right */
+    top: 0 !important; /* Align it to the top */
+    bottom: 0 !important; /* Ensure it covers the full height */
+    background-color: #2aa58b !important; /* Set background color */
+    z-index: 1050 !important; /* Ensure it stays on top of other content */
+    display: block !important; /* Visible by default for the offcanvas */
+    transition: transform 0.3s ease-in-out !important; /* Smooth transition for opening/closing */
+    background-color: #2aa58b !important; 
+  }
+
+  /* Show the offcanvas when the 'show' class is added */
+  .offcanvas.show {
+    transform: translateX(-100%) !important; /* Slide it in from the right */
+    right: 0 !important; /* Position it to the right when shown */
+  }
+
+  /* Make the offcanvas body and nav-item content white */
+  .offcanvas-body {
+    color: white !important; /* Set text color to white */
+    padding-left: 0 !important; /* Remove left padding */
+    padding-right: 0 !important; /* Remove right padding */
+    padding-top: 576px !important; /* Adjust padding top for better spacing */
+    background-color: #2aa58b !important; 
+    z-index: 1050;
+  }
+
+  /* Style for the navigation items */
+  .offcanvas-body .nav-item {
+    padding: 0px 15px !important; /* Add padding for horizontal spacing */
+    text-align: left !important; /* Align the text to the left */
+    display: block !important; /* Make nav items block-level */
+  }
+
+  /* Make the menu horizontal when shown in the offcanvas */
+  .offcanvas-body .nav {
+    display: flex !important; /* Use flexbox to align items horizontally */
+    flex-direction: column !important; /* Stack items vertically */
+    justify-content: flex-start !important; /* Align items to the start */
+    margin-bottom: 0 !important; /* Remove any bottom margin */
+    list-style: none !important; /* Remove bullet points */
+  }
+
+  /* Change text color of links on hover */
+  .offcanvas-body .nav-item .nav-link:hover {
+    color: #0a58ca !important; /* Optional: Change hover color */
+  }
+
+  /* Style for the close button */
+  .offcanvas-header .btn-close {
+    color: white !important; /* Close button color */
+  }
+
+  /* Optional: Adjust icon color inside the menu */
+  .nav-link .mdi {
+    color: white !important; /* Icon color */
+  }
+
+  /* Style for the toggler button */
+  .navbar-toggler {
+    background-color: #2aa58b !important; /* Optional: Change toggle button background color */
+  }
+
+  .navbar-toggler-icon {
+    color: white !important; /* Ensure the toggle button icon is white */
+  }
+}
+
+
+
+
+
+

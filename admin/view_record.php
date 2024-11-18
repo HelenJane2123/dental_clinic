@@ -125,55 +125,57 @@ if (isset($_GET['patient_id'])) {
             <h4>Dental Treatment Records</h4>
             <button type="button" class="btn btn-success" onclick="addRow()">Add Row</button>
         </div>
-        <div class="card-body">
-            <form id="dentalRecordForm" action="controller/saveDentalrecord.php" method="POST">
-                <table class="table table-bordered" id="dentalTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Tooth No./s</th>
-                            <th>Procedure</th>
-                            <th>Dentist/s</th>
-                            <th>Amount Charged</th>
-                            <th>Amount Paid</th>
-                            <th>Balance</th>
-                            <th>Next Appointment Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <input type="hidden" value=<?=$patient_id?> name="patient_id"/>
-                        <?php if ($dental_records) : ?>
-                            <?php foreach ($dental_records as $record) : ?>
+        <div class="table-responsive">
+            <div class="card-body">
+                <form id="dentalRecordForm" action="controller/saveDentalrecord.php" method="POST">
+                    <table class="table table-bordered" id="dentalTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Tooth No./s</th>
+                                <th>Procedure</th>
+                                <th>Dentist/s</th>
+                                <th>Amount Charged</th>
+                                <th>Amount Paid</th>
+                                <th>Balance</th>
+                                <th>Next Appointment Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <input type="hidden" value=<?=$patient_id?> name="patient_id"/>
+                            <?php if ($dental_records) : ?>
+                                <?php foreach ($dental_records as $record) : ?>
+                                    <tr>
+                                        <td><input type="date" name="date[]" value="<?= $record['date'] ?>" class="form-control" required></td>
+                                        <td><input type="text" name="tooth_no[]" value="<?= $record['tooth_no'] ?>" class="form-control" required></td>
+                                        <td><input type="text" name="procedure[]" value="<?= $record['procedure'] ?>" class="form-control" required></td>
+                                        <td><input type="text" name="dentist[]" value="<?= $record['dentist'] ?>" class="form-control" required></td>
+                                        <td><input type="number" name="amount_charged[]" value="<?= $record['amount_charged'] ?>" class="form-control" step="0.01" required></td>
+                                        <td><input type="number" name="amount_paid[]" value="<?= $record['amount_paid'] ?>" class="form-control" step="0.01" required></td>
+                                        <td><input type="number" name="balance[]" value="<?= $record['balance'] ?>" class="form-control" step="0.01" required></td>
+                                        <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control" required></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
                                 <tr>
-                                    <td><input type="date" name="date[]" value="<?= $record['date'] ?>" class="form-control" required></td>
-                                    <td><input type="text" name="tooth_no[]" value="<?= $record['tooth_no'] ?>" class="form-control" required></td>
-                                    <td><input type="text" name="procedure[]" value="<?= $record['procedure'] ?>" class="form-control" required></td>
-                                    <td><input type="text" name="dentist[]" value="<?= $record['dentist'] ?>" class="form-control" required></td>
-                                    <td><input type="number" name="amount_charged[]" value="<?= $record['amount_charged'] ?>" class="form-control" step="0.01" required></td>
-                                    <td><input type="number" name="amount_paid[]" value="<?= $record['amount_paid'] ?>" class="form-control" step="0.01" required></td>
-                                    <td><input type="number" name="balance[]" value="<?= $record['balance'] ?>" class="form-control" step="0.01" required></td>
-                                    <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control" required></td>
+                                    <td><input type="date" name="date[]" class="form-control" required></td>
+                                    <td><input type="text" name="tooth_no[]" class="form-control" required></td>
+                                    <td><input type="text" name="procedure[]" class="form-control" required></td>
+                                    <td><input type="text" name="dentist[]" class="form-control" required></td>
+                                    <td><input type="number" name="amount_charged[]" class="form-control" step="0.01" required></td>
+                                    <td><input type="number" name="amount_paid[]" class="form-control" step="0.01" required></td>
+                                    <td><input type="number" name="balance[]" class="form-control" step="0.01" required></td>
+                                    <td><input type="date" name="next_appointment[]" class="form-control" required></td>
                                     <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <tr>
-                                <td><input type="date" name="date[]" class="form-control" required></td>
-                                <td><input type="text" name="tooth_no[]" class="form-control" required></td>
-                                <td><input type="text" name="procedure[]" class="form-control" required></td>
-                                <td><input type="text" name="dentist[]" class="form-control" required></td>
-                                <td><input type="number" name="amount_charged[]" class="form-control" step="0.01" required></td>
-                                <td><input type="number" name="amount_paid[]" class="form-control" step="0.01" required></td>
-                                <td><input type="number" name="balance[]" class="form-control" step="0.01" required></td>
-                                <td><input type="date" name="next_appointment[]" class="form-control" required></td>
-                                <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-                <button type="submit" class="btn btn-primary">Save All Records</button>
-            </form>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Save All Records</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

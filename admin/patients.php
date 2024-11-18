@@ -30,52 +30,54 @@ include_once('inc/sidebarMenu.php');
             <div class="card">
                 <div class="card-header">
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Patient ID</th>
-                                <th>Member ID</th>
-                                <th>Name</th>
-                                <th>Birthday</th>
-                                <th>Gender</th>
-                                <th>Age</th>
-                                <th>Assigned Doctor</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                              <?php if (!empty($get_patients)) : ?>
-                                  <?php foreach ($get_patients as $patients) : ?>
-                                      <tr>
-                                        <td><?= htmlspecialchars($patients['patient_id']) ?></td>
-                                        <td><?= htmlspecialchars($patients['member_id']) ?></td>
-                                        <td><?= htmlspecialchars($patients['first_name'])." ".htmlspecialchars($patients['last_name']) ?></td>
-                                        <td>
-                                            <?php 
-                                                $birthdate = new DateTime($patients['birthdate']);
-                                                echo $birthdate->format('F j, Y'); // Format as "Month Day, Year"
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?= $patients['sex'] == "F" ? "Female" : "Male"; ?>
-                                        </td>
-                                        <td>
-                                            <?= $patients['age']?>
-                                        </td>
-                                        <td><?= htmlspecialchars($patients['doctor_first_name'])." ".htmlspecialchars($patients['doctor_last_name']) ?></td>
-                                        <td>
-                                            <a href="view_record.php?patient_id=<?= urlencode($patients['patient_id']) ?>" class="btn btn-primary btn-sm">View Record</a>
-                                        </td>
-                                      </tr>
-                                  <?php endforeach; ?>
-                              <?php else : ?>
-                                  <tr>
-                                      <td colspan="9" class="text-center">No Patient record found.</td>
-                                  </tr>
-                              <?php endif; ?>
-                          </tbody>
-                    </table>
+                <div class="table-responsive">
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Member ID</th>
+                                    <th>Name</th>
+                                    <th>Birthday</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Assigned Doctor</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($get_patients)) : ?>
+                                    <?php foreach ($get_patients as $patients) : ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($patients['patient_id']) ?></td>
+                                            <td><?= htmlspecialchars($patients['member_id']) ?></td>
+                                            <td><?= htmlspecialchars($patients['first_name'])." ".htmlspecialchars($patients['last_name']) ?></td>
+                                            <td>
+                                                <?php 
+                                                    $birthdate = new DateTime($patients['birthdate']);
+                                                    echo $birthdate->format('F j, Y'); // Format as "Month Day, Year"
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?= $patients['sex'] == "F" ? "Female" : "Male"; ?>
+                                            </td>
+                                            <td>
+                                                <?= $patients['age']?>
+                                            </td>
+                                            <td><?= htmlspecialchars($patients['doctor_first_name'])." ".htmlspecialchars($patients['doctor_last_name']) ?></td>
+                                            <td>
+                                                <a href="view_record.php?patient_id=<?= urlencode($patients['patient_id']) ?>" class="btn btn-primary btn-sm">View Record</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="9" class="text-center">No Patient record found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

@@ -48,52 +48,54 @@ include_once('inc/sidebarMenu.php');
                         Add Doctor
                     </button>
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Doctor ID</th>
-                                <th>Member ID</th>
-                                <th>Name</th>
-                                <th>Gender</th>
-                                <th>Email</th>
-                                <th>Contact Number</th>
-                                <th>Specialty</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($get_doctors)) : ?>
-                                <?php foreach ($get_doctors as $doctors) : ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($doctors['doctor_id']) ?></td>
-                                        <td><?= htmlspecialchars($doctors['member_id']) ?></td>
-                                        <td><?= htmlspecialchars($doctors['first_name']) . " " . htmlspecialchars($doctors['last_name']) ?></td>
-                                        <td><?= htmlspecialchars($doctors['gender']) ?></td>
-                                        <td><?= htmlspecialchars($doctors['email']) ?></td>
-                                        <td><?= htmlspecialchars($doctors['contact_number']) ?></td>
-                                        <td><?= htmlspecialchars($doctors['specialty']) ?></td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patientListModal" 
-                                                onclick="openPatientModal(<?= htmlspecialchars($doctors['account_id']) ?>)">
-                                                Assign Patient
-                                            </button>
-                                            <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">
-                                                <i class="fas fa-edit"></i>
-                                            </button> -->
-                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDoctorDelete(<?= htmlspecialchars($doctors['doctor_id']) ?>)">
-                                                <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
-                                            </button>                                        
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else : ?>
+                <div class="table-responsive">
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                            <thead>
                                 <tr>
-                                    <td colspan="8" class="text-center">No Doctor/s record found.</td>
+                                    <th>Doctor ID</th>
+                                    <th>Member ID</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact Number</th>
+                                    <th>Specialty</th>
+                                    <th>Action</th>
                                 </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($get_doctors)) : ?>
+                                    <?php foreach ($get_doctors as $doctors) : ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($doctors['doctor_id']) ?></td>
+                                            <td><?= htmlspecialchars($doctors['member_id']) ?></td>
+                                            <td><?= htmlspecialchars($doctors['first_name']) . " " . htmlspecialchars($doctors['last_name']) ?></td>
+                                            <td><?= htmlspecialchars($doctors['gender']) ?></td>
+                                            <td><?= htmlspecialchars($doctors['email']) ?></td>
+                                            <td><?= htmlspecialchars($doctors['contact_number']) ?></td>
+                                            <td><?= htmlspecialchars($doctors['specialty']) ?></td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patientListModal" 
+                                                    onclick="openPatientModal(<?= htmlspecialchars($doctors['account_id']) ?>)">
+                                                    Assign Patient
+                                                </button>
+                                                <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button> -->
+                                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDoctorDelete(<?= htmlspecialchars($doctors['doctor_id']) ?>)">
+                                                    <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
+                                                </button>                                        
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="8" class="text-center">No Doctor/s record found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

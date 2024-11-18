@@ -315,10 +315,11 @@
 
         // Your existing method for getting upcoming appointments
         public function get_upcoming_appointments($member_id) {
-            $query = "SELECT appointment_date, appointment_time, services FROM appointments 
+            $query = "SELECT appointment_date, appointment_time, ds.sub_category as services FROM appointments 
                   LEFT JOIN patients p ON p.patient_id = appointments.patient_id
+                  LEFT JOIN dental_services ds ON ds.id = appointments.services
                   WHERE appointment_date = CURDATE() + INTERVAL 2 DAY 
-                  AND status = 'Confirmed' AND member_id = '$member_id'";
+                  AND appointments.status = 'Confirmed' AND member_id = '$member_id'";
             $result = $this->db->query($query);
             
             return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
@@ -326,10 +327,11 @@
 
         public function get_todays_appointments($member_id) {
             // Define the query to select today's confirmed appointments
-            $query = "SELECT appointment_date, appointment_time, notes, services
+            $query = "SELECT appointment_date, appointment_time, notes, ds.sub_category as services
                       FROM appointments 
                       LEFT JOIN patients p ON p.patient_id = appointments.patient_id
-                      WHERE appointment_date = CURDATE() AND status = 'Confirmed' AND p.member_id = '$member_id'";
+                      LEFT JOIN dental_services ds ON ds.id = appointments.services
+                      WHERE appointments.appointment_date = CURDATE() AND appointments.status = 'Confirmed' AND p.member_id = '$member_id'";
         
             // Execute the query
             $result = $this->db->query($query);

@@ -34,74 +34,76 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
             <div class="card">
                 <div class="card-header">
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>Appointment ID</th>
-                                <th>Patient ID</th>
-                                <th>Patient Name</th>
-                                <th>Assigned Doctor</th>
-                                <th>Status</th>
-                                <th>Uploaded Receipt</th>
-                                <th>Remarks</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                // Fetch payment details from the database
-                                $paymentStatus = $appointment_admin->getPaymentStatus(); // Example function to fetch data
+                <div class="table-responsive">
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                            <thead>
+                                <tr>
+                                    <th>Appointment ID</th>
+                                    <th>Patient ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Assigned Doctor</th>
+                                    <th>Status</th>
+                                    <th>Uploaded Receipt</th>
+                                    <th>Remarks</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    // Fetch payment details from the database
+                                    $paymentStatus = $appointment_admin->getPaymentStatus(); // Example function to fetch data
 
-                                if ($paymentStatus && count($paymentStatus) > 0) {
-                                    foreach ($paymentStatus as $payment) {
-                                        echo "<tr>";
-                                        echo "<td>{$payment['appointment_id']}</td>";
-                                        echo "<td>{$payment['patient_member_id']}</td>";
-                                        echo "<td>" . $payment['patient_first_name'] . " " . $payment['patient_last_name'] . "</td>";
-                                        echo "<td>" . $payment['doctor_first_name'] . " " . $payment['doctor_last_name'] . "</td>";
-                                        echo "<td>{$payment['status']}</td>";
-                                        echo "<td>";
-                                        if ($payment['file_name']) {
-                                            echo "<a href='../public/payment/{$payment['patient_member_id']}/{$payment['appointment_id']}/{$payment['file_name']}' target='_blank'>View Receipt</a>";
-                                        } else {
-                                            echo "No receipt uploaded"; // Replace button with text
-                                        }
-                                        echo "</td>";
-                                        echo "<td>{$payment['remarks']}</td>";
-                                        echo "<td>";
-                                        // Display action buttons based on payment status
-                                        if ($payment['status'] == 'Approved') {
-                                            echo "<button class='btn btn-success btn-sm' disabled>Secured 20% Down Payment</button>";
-                                        } elseif ($payment['status'] == 'Rejected') {
-                                            echo "Payment Rejected";
-                                        } else {
-                                            // Show Approve and Reject buttons only if a receipt is uploaded
+                                    if ($paymentStatus && count($paymentStatus) > 0) {
+                                        foreach ($paymentStatus as $payment) {
+                                            echo "<tr>";
+                                            echo "<td>{$payment['appointment_id']}</td>";
+                                            echo "<td>{$payment['patient_member_id']}</td>";
+                                            echo "<td>" . $payment['patient_first_name'] . " " . $payment['patient_last_name'] . "</td>";
+                                            echo "<td>" . $payment['doctor_first_name'] . " " . $payment['doctor_last_name'] . "</td>";
+                                            echo "<td>{$payment['status']}</td>";
+                                            echo "<td>";
                                             if ($payment['file_name']) {
-                                                echo "
-                                                    <button 
-                                                        class='btn btn-success btn-sm approve-btn' 
-                                                        data-appointment-id='{$payment['appointment_id']}'>
-                                                        Approve
-                                                    </button>
-                                                    <button 
-                                                        class='btn btn-danger btn-sm reject-btn' 
-                                                        data-appointment-id='{$payment['appointment_id']}'>
-                                                        Reject
-                                                    </button>";
+                                                echo "<a href='../public/payment/{$payment['patient_member_id']}/{$payment['appointment_id']}/{$payment['file_name']}' target='_blank'>View Receipt</a>";
                                             } else {
-                                                echo "No receipt uploaded"; // No buttons if no receipt
+                                                echo "No receipt uploaded"; // Replace button with text
                                             }
+                                            echo "</td>";
+                                            echo "<td>{$payment['remarks']}</td>";
+                                            echo "<td>";
+                                            // Display action buttons based on payment status
+                                            if ($payment['status'] == 'Approved') {
+                                                echo "<button class='btn btn-success btn-sm' disabled>Secured 20% Down Payment</button>";
+                                            } elseif ($payment['status'] == 'Rejected') {
+                                                echo "Payment Rejected";
+                                            } else {
+                                                // Show Approve and Reject buttons only if a receipt is uploaded
+                                                if ($payment['file_name']) {
+                                                    echo "
+                                                        <button 
+                                                            class='btn btn-success btn-sm approve-btn' 
+                                                            data-appointment-id='{$payment['appointment_id']}'>
+                                                            Approve
+                                                        </button>
+                                                        <button 
+                                                            class='btn btn-danger btn-sm reject-btn' 
+                                                            data-appointment-id='{$payment['appointment_id']}'>
+                                                            Reject
+                                                        </button>";
+                                                } else {
+                                                    echo "No receipt uploaded"; // No buttons if no receipt
+                                                }
+                                            }
+                                            echo "</td>";
+                                            echo "</tr>";
                                         }
-                                        echo "</td>";
-                                        echo "</tr>";
+                                    } else {
+                                        echo "<tr><td colspan='8'>No payment found.</td></tr>";
                                     }
-                                } else {
-                                    echo "<tr><td colspan='8'>No payment found.</td></tr>";
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

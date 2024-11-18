@@ -48,49 +48,51 @@ include_once('inc/sidebarMenu.php');
                         Add Dental Services
                     </button>
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Category</th>
-                                <th>Sub Category</th>
-                                <th>Price Range</th>
-                                <th>Price</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($get_dental_services)) : ?>
-                                <?php foreach ($get_dental_services as $dental_services) : ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($dental_services['id']) ?></td>
-                                        <td><?= htmlspecialchars($dental_services['category']) ?></td>
-                                        <td><?= htmlspecialchars($dental_services['sub_category']) ?></td>
-                                        <td><?= htmlspecialchars($dental_services['price_range']) ?></td>
-                                        <td><?= htmlspecialchars($dental_services['price']) ?></td>
-                                        <td>
-                                            <!-- Edit Button -->
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDentalServiceModal" 
-                                                    onclick="populateEditModal(<?= htmlspecialchars(json_encode($dental_services)) ?>)">
-                                                <i class="fas fa-edit"></i> Edit
-                                            </button>
-
-                                            <!-- Delete Button -->
-                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDentalServiceModal" 
-                                                    onclick="confirmDelete(<?= htmlspecialchars($dental_services['id']) ?>)">
-                                                <i class="fas fa-trash-alt"></i> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else : ?>
+                <div class="table-responsive">
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1">
+                            <thead>
                                 <tr>
-                                    <td colspan="6" class="text-center">No record found.</td>
+                                    <th>ID</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+                                    <th>Price Range</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
                                 </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <?php if (!empty($get_dental_services)) : ?>
+                                    <?php foreach ($get_dental_services as $dental_services) : ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($dental_services['id']) ?></td>
+                                            <td><?= htmlspecialchars($dental_services['category']) ?></td>
+                                            <td><?= htmlspecialchars($dental_services['sub_category']) ?></td>
+                                            <td><?= htmlspecialchars($dental_services['price_range']) ?></td>
+                                            <td><?= htmlspecialchars($dental_services['price']) ?></td>
+                                            <td>
+                                                <!-- Edit Button -->
+                                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDentalServiceModal" 
+                                                        onclick="populateEditModal(<?= htmlspecialchars(json_encode($dental_services)) ?>)">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </button>
+
+                                                <!-- Delete Button -->
+                                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDentalServiceModal" 
+                                                        onclick="confirmDelete(<?= htmlspecialchars($dental_services['id']) ?>)">
+                                                    <i class="fas fa-trash-alt"></i> Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center">No record found.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
