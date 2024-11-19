@@ -46,7 +46,7 @@ include_once('inc/header.php');
             <?php endif ?>
 
             <!-- Signup Form -->
-            <form action="controller/registerAccount.php" method="post" id="register" class="needs-validation-registration" novalidate enctype="multipart/form-data">
+            <form action="controller/registerAccount.php" method="post" id="register" class="needs-validation-registration" novalidate>
               <div class="row gy-3">
                 <div class="col-12">
                   <div class="form-group row">

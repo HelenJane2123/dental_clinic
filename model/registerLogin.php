@@ -34,7 +34,7 @@
             }
         }
 		/*** for registration process ***/
-		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created){
+		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created, $verification_code){
 			$password = md5($password_1);
             $check =  $this->isUserExist($email_address);
 			$check_username =  $this->isUsername($username);
@@ -48,7 +48,8 @@
                             password='$password_1',
                             user_type='patient',
 							email='$email_address',
-                            date_created='$date_created'";
+                            date_created='$date_created',
+                            verification_code = '$verification_code'";
                 $result = mysqli_query($this->db,$sql1) or die(mysqli_connect_errno()."Data cannot inserted");
                 return $result;
             }
@@ -65,7 +66,7 @@
 
         /*** validate login details ***/
         public function check_login($username, $password) {
-            $sql = "SELECT password FROM accounts WHERE username = ? and user_type = 'patient'";
+            $sql = "SELECT password FROM accounts WHERE username = ? and user_type = 'patient' and is_verified = 1";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('s', $username);
             $stmt->execute();
@@ -133,6 +134,23 @@
             $update->bind_param("ss", $hashedPassword, $token);
             // Execute the update and return the result status
             return $update->execute();
+        }
+
+        public function verify_code($verification_code) {
+            $query = "SELECT * FROM accounts WHERE verification_code = ? AND is_verified = 0";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("s", $verification_code);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            if ($result->num_rows > 0) {
+                $query = "UPDATE accounts SET is_verified = 1, verification_code = NULL WHERE verification_code = ?";
+                $stmt = $this->db->prepare($query);
+                $stmt->bind_param("s", $verification_code);
+                return $stmt->execute();
+            }
+        
+            return false;
         }
 
     
