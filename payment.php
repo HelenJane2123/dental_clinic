@@ -72,9 +72,7 @@
                                         echo "<a href='public/payment/{$member_id}/{$payment['appointment_id']}/{$payment['file_name']}' target='_blank'>View Receipt</a>";
                                     } else {
                                         echo "<button 
-                                            class='btn btn-warning btn-sm' 
-                                            data-toggle='modal' 
-                                            data-target='#uploadProofModal' 
+                                            class='btn btn-warning btn-sm btn-upload-proof' 
                                             data-appointment-id='{$payment['appointment_id']}'>
                                         Upload Payment Proof
                                         </button>";
@@ -85,8 +83,7 @@
 
                                     echo "<button 
                                           class='btn btn-primary btn-sm' 
-                                          data-toggle='modal' 
-                                          data-target='#viewComputationModal' 
+                                          onclick='viewComputation(this)'
                                           data-appointment-id='{$payment['appointment_id']}'>
                                           View Computation
                                         </button>";
@@ -126,47 +123,52 @@
 
 
               <!-- Modal for Payment Proof -->
-                <div class="modal fade" id="uploadProofModal" tabindex="-1" role="dialog" aria-labelledby="uploadProofModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="uploadProofModalLabel">Upload Payment Proof</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form action="controller/uploadPaymentProof.php" method="POST" name="proofPayment" id="proofPayment" enctype="multipart/form-data">
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="paymentReceipt">Upload Receipt</label>
-                                        <input type="file" class="form-control" id="paymentReceipt" name="paymentReceipt" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="appointmentID">Patient ID</label>
-                                        <input type="text" class="form-control" id="patientId" name="patientId" value="<?=$member_id?>">  <!-- This will be set by JS -->
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="appointmentID">Appointment ID</label>
-                                        <input type="text" class="form-control" id="appointmentID" name="appointmentID" readonly>  <!-- This will be set by JS -->
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="remarks">Remarks</label>
-                                        <textarea class="form-control" id="remarks" name="remarks"></textarea>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+              <div class="modal fade" id="uploadProofModal" tabindex="-1" role="dialog" aria-labelledby="uploadProofModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="uploadProofModalLabel">Upload Payment Proof</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <form action="controller/uploadPaymentProof.php" method="POST" name="proofPayment" id="proofPayment" enctype="multipart/form-data">
+                          <div class="modal-body">
+                              <div class="form-group">
+                                  <label for="paymentReceipt">Upload Receipt</label>
+                                  <input type="file" class="form-control" id="paymentReceipt" name="paymentReceipt"  accept=".jpg,.jpeg,.png,.pdf" required>
+                              </div>
+                              <div class="form-group">
+                                  <label for="appointmentID">Patient ID</label>
+                                  <input type="text" class="form-control" id="patientId" name="patientId" value="<?=$member_id?>">  <!-- This will be set by JS -->
+                              </div>
+                              <div class="form-group">
+                                  <label for="appointmentID">Appointment ID</label>
+                                  <input type="text" class="form-control" id="appointmentID" name="appointmentID" readonly>  <!-- This will be set by JS -->
+                              </div>
+                              <div class="form-group">
+                                  <label for="remarks">Remarks</label>
+                                  <textarea class="form-control" id="remarks" name="remarks"></textarea>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary">Close</button>
+                              <button type="submit" class="btn btn-primary">Submit</button>
+                          </div>
+                      </form>
+                  </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Hidden Form -->
+    <form id="computationForm" method="POST" action="controller/fetchComputation.php" target="computationFrame" style="display: none;">
+      <input type="hidden" id="appointmentIdInput" name="appointment_id">
+    </form>
 
     <div class="modal fade" id="viewComputationModal" tabindex="-1" role="dialog" aria-labelledby="viewComputationModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -177,8 +179,9 @@
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
-              <div class="modal-body" id="computation-details">
-                  <!-- Computation details will be inserted here -->
+              <div class="modal-body">
+                  <!-- The iframe will show the fetched computation details -->
+                  <iframe name="computationFrame" id="computationFrame" style="width: 100%; height: 300px; border: none;"></iframe>      
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -186,7 +189,57 @@
           </div>
       </div>
   </div>
+
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function checkFrameContent() {
+            console.log('Iframe content loaded');
+        }
+
+        document.getElementById('computationFrame').onload = checkFrameContent;
+    });
+    function viewComputation(button) {
+        var appointmentId = button.getAttribute('data-appointment-id'); // Get the appointment ID
+        if (!appointmentId) {
+            alert('Invalid Appointment ID');
+            return;
+        }
+        document.getElementById('appointmentIdInput').value = appointmentId; // Set it in the hidden form
+        document.getElementById('computationForm').submit(); // Submit the form
+        $('#viewComputationModal').modal('show'); // Show the modal
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select all "Upload Payment Proof" buttons
+        var uploadButtons = document.querySelectorAll('.btn-upload-proof');
+        
+        // Add event listener to each button
+        uploadButtons.forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                // Get the appointment ID from the button's data-attribute
+                var appointmentId = button.getAttribute('data-appointment-id');
+                
+                // Log the appointment ID to verify it's correct
+                console.log('Appointment ID:', appointmentId);
+
+                // Set the appointment ID in the modal input field
+                var appointmentInput = document.getElementById('appointmentID');
+                if (appointmentInput) {
+                    appointmentInput.value = appointmentId;
+                } else {
+                    console.error('Appointment ID input field not found!');
+                }
+
+                // Show the modal (Bootstrap's native method)
+                var modal = new bootstrap.Modal(document.getElementById('uploadProofModal'));
+                modal.show();
+            });
+        });
+    });
+
+
+  </script>
 <?php
-include_once("inc/myAppointmentModal.php");
 include_once("inc/userDashboardFooter.php");
 ?>

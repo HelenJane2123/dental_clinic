@@ -2,28 +2,57 @@
 include('../model/userDashboard.php');
 session_start();
 
-// Enable error reporting for debugging
+// Enable error reporting for debugging (disable in production)
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-$errors = array();
+// Initialize the UserDashboard class
 $user_dashboard = new UserDashboard();
 
-if (isset($_POST['appointment_id'])) {
-    $appointment_id = $_POST['appointment_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
+    // Sanitize input
+    $appointment_id = filter_input(INPUT_POST, 'appointment_id', FILTER_SANITIZE_NUMBER_INT);
 
-    // Call the method to fetch the selected services and payment details
+    if (!$appointment_id) {
+        echo "<p>Invalid appointment ID.</p>";
+        exit;
+    }
+
+    // Fetch computation details
     $computation = $user_dashboard->getSelectedServicesAndPaymentDetails($appointment_id);
 
     if ($computation) {
-        // Return valid JSON response
-        echo json_encode($computation);
+        // Extract data
+        $totalPrice = $computation['total_price'];
+        $downPayment = $computation['down_payment'];
+        $remainingBalance = $computation['remaining_balance'];
+
+        // Display payment breakdown
+        echo "<p><strong>Total Amount:</strong> $totalPrice</p>";
+        echo "<p><strong>Down Payment (20%):</strong> $downPayment</p>";
+        echo "<p><strong>Remaining Balance:</strong> $remainingBalance</p>";
+
+        // Display services in a table
+        if (!empty($computation['services'])) {
+            echo "<h5>Services:</h5>";
+            echo "<table class='table table-bordered' id='computationDetails'>
+                    <thead>
+                        <tr><th>Service</th><th>Price</th></tr>
+                    </thead>
+                    <tbody>";
+
+            foreach ($computation['services'] as $service) {
+                echo "<tr><td>{$service['sub_category']}</td><td>{$service['price']}</td></tr>";
+            }
+
+            echo "</tbody></table>";
+        } else {
+            echo "<p>No services found for this appointment.</p>";
+        }
     } else {
-        // If computation not found, return an error message
-        echo json_encode(['error' => 'Computation not found for the given appointment ID.']);
+        echo "<p>Error: Appointment not found.</p>";
     }
 } else {
-    // If appointment_id is not provided, return an error
-    echo json_encode(['error' => 'Invalid appointment ID']);
+    echo "<p>Invalid request.</p>";
 }
 ?>

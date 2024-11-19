@@ -219,6 +219,7 @@
                             <option value="Canceled">Canceled</option>
                             <option value="Re-Schedule">Rescheduled</option>
                             <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
                         </select>
                     </div>
 

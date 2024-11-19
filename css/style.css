@@ -9369,3 +9369,37 @@ textarea.form-control {
   .form-sample {
       margin-top: 40px; /* Add space for the button */
   }
+
+  .clinic-name {
+    font-size: 1.5rem; /* Font size for "Roselle Santander" */
+    font-weight: bold;
+    color: #333; /* Adjust to match your theme */
+    line-height: 1.2; /* Spacing between lines */
+    text-align: left; /* Align the text to the left */
+  }
+
+  .clinic-name .subtext {
+      font-size: 1rem; /* Font size for "Dental Clinic" */
+      color: #666; /* Subtle color for the subtext */
+      font-weight: normal; /* Make "Dental Clinic" less bold */
+  }
+
+  @media (max-width: 768px) {
+      .clinic-name {
+          font-size: 1.2rem; /* Slightly smaller on tablets */
+      }
+
+      .clinic-name .subtext {
+          font-size: 0.9rem; /* Reduce size of "Dental Clinic" */
+      }
+  }
+
+  @media (max-width: 576px) {
+      .clinic-name {
+          font-size: 1rem;
+      }
+
+      .clinic-name .subtext {
+          font-size: 0.8rem; /* Further reduce size on small screens */
+      }
+  }

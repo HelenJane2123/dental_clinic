@@ -20,7 +20,7 @@
         $date_created     = date("Y-m-d h:i:sa");
         $fourRandomDigit  = rand(0001,9999);
         $member_id        = "M-".$fourRandomDigit;
-        $verification_code = bin2hex(random_bytes(16)); // Generate a unique code
+        $verification_code = rand(1000, 9999); // 4-digit code
         
         //check if email exists
         $result_email = $funObj->isUserExist($email_address);

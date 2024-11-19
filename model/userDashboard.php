@@ -1264,7 +1264,7 @@
         public function getSelectedServicesAndPaymentDetails($appointment_id) {
             $details = [];
             
-            // Fetch the services, their prices, and total amount from the appointments table
+            // SQL query to fetch services and their prices for the given appointment ID
             $query = "
                 SELECT 
                     ds.sub_category, 
@@ -1278,35 +1278,35 @@
                 WHERE 
                     a.id = ?
             ";
-        
+            
+            // Prepare and execute the query
             $stmt = $this->db->prepare($query);
-            $stmt->bind_param("i", $appointment_id);  // Bind appointment_id
+            $stmt->bind_param("i", $appointment_id);  // Bind appointment_id as integer
             $stmt->execute();
             $servicesResult = $stmt->get_result();
-        
+            
             $services = [];
             $totalPrice = 0;
         
-            // Calculate the total price for all services
+            // Loop through the results to calculate total price and gather services
             while ($service = $servicesResult->fetch_assoc()) {
-                $services[] = $service; // Collect service details
-                $totalPrice += $service['price'];  // Add service price to total price
+                $services[] = $service; // Add service to the array
+                $totalPrice += $service['price']; // Accumulate the total price
             }
-        
-            // Calculate 20% down payment
+            
+            // Calculate the down payment and remaining balance
             $downPayment = $totalPrice * 0.20;
-        
-            // Calculate the remaining balance to pay
             $remainingBalance = $totalPrice - $downPayment;
         
-            // Add services, total price, down payment, and remaining balance to the details array
-            $details['services'] = $services;
-            $details['total_price'] = $totalPrice;
-            $details['down_payment'] = number_format($downPayment, 2);  // Format to 2 decimal places for currency
-            $details['remaining_balance'] = number_format($remainingBalance, 2); // Format remaining balance to 2 decimal places
+            // Populate the details array with services, pricing, and payment breakdown
+            $details['services'] = $services; // Use 'services' as the key for clarity
+            $details['total_price'] = number_format($totalPrice, 2);  // Format as currency
+            $details['down_payment'] = number_format($downPayment, 2); // Format as currency
+            $details['remaining_balance'] = number_format($remainingBalance, 2); // Format as currency
         
-            return $details;  // Return the complete details
+            return $details; // Return the complete details
         }
+        
         
         
         
