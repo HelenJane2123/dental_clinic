@@ -10,17 +10,14 @@
 			}
 		}
         /*** check if user email exist ***/
-        public function isUserExist($email){
-            $sql="SELECT * FROM accounts WHERE email='$email'";
-            $check =  $this->db->query($sql);
-            $count_row = $check->num_rows;
-            if($count_row == 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
+        public function isUserExist($email) {
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result;
         }
+
 		/*** check if user name exist ***/
         public function isUserName($username){
             $sql="SELECT * FROM accounts WHERE username='$username'";
@@ -115,21 +112,22 @@
         }
 
         public function reset_password($token) {
-            // Prepare the SQL statement
-            $query = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration > NOW()");
+            // Prepare the SQL statement to fetch user by token
+            $query = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ?");
             // Bind the token as a parameter
             $query->bind_param("s", $token);
             // Execute the query
             $query->execute();
             // Get the result
             $result = $query->get_result();
-            // Fetch the row if it exists
-            return $result->fetch_assoc();
+            // Check if a row exists and return it, or return false if no match
+            return $result->fetch_assoc() ?: false;
         }
+        
         
         public function update_password($hashedPassword, $token) {
             // Prepare the SQL statement
-            $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ?");
+            $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ? and user_type='patient'");
             // Bind parameters (string, string)
             $update->bind_param("ss", $hashedPassword, $token);
             // Execute the update and return the result status
@@ -152,6 +150,33 @@
         
             return false;
         }
+
+        public function forgot_password($token, $expiration, $email) {
+            // Assuming you have a database connection established in your class
+            $conn = $this->db; // Replace with your database connection instance
+        
+            // Prepare the SQL query to update the user's password reset token and expiration
+            $query = "UPDATE accounts SET reset_token = ?, token_expiration = ? WHERE email = ?";
+        
+            if ($stmt = $conn->prepare($query)) {
+                // Bind the parameters
+                $stmt->bind_param('sss', $token, $expiration, $email);
+        
+                // Execute the statement
+                if ($stmt->execute()) {
+                    // Check if any row was updated
+                    if ($stmt->affected_rows > 0) {
+                        return true; // Successfully updated
+                    }
+                }
+        
+                // Close the statement
+                $stmt->close();
+            }
+        
+            return false; // Failed to update
+        }
+        
 
     
         public function __destruct() {
