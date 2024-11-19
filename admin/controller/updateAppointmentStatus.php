@@ -1,5 +1,6 @@
 <?php
 include('../model/AdminDashboard.php'); 
+include('../../lib/email_configuration.php');
 session_start();   
 
 // Initializing variables
@@ -42,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
            $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
 
            // Send email to patient
-           $headers = "From: no-reply@yourclinic.com\r\n" .
-                      "Reply-To: no-reply@yourclinic.com\r\n" .
+           $headers = "From: rosellesantander@rs-dentalclinic.com\r\n" .
+                      "Reply-To: rosellesantander@rs-dentalclinic.com\r\n" .
                       "X-Mailer: PHP/" . phpversion();
 
            mail($patient_email, $subject, $message, $headers);
@@ -77,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
 
                 // Send email to patient
-                $headers = "From: no-reply@yourclinic.com\r\n" .
-                            "Reply-To: no-reply@yourclinic.com\r\n" .
+                $headers = "From: rosellesantander@rs-dentalclinic.com\r\n" .
+                            "Reply-To: rosellesantander@rs-dentalclinic.com\r\n" .
                             "X-Mailer: PHP/" . phpversion();
 
                 mail($patient_email, $subject, $message, $headers);
@@ -108,8 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 $message .= "Your Roselle Santander Dental Clinic Team";
 
                 // Set the email headers
-                $headers = "From: no-reply@rosellesantanderdental.com" . "\r\n" .
-                    "Reply-To: no-reply@rosellesantanderdental.com" . "\r\n" .
+                $headers = "From: rosellesantander@rs-dentalclinic.com" . "\r\n" .
+                    "Reply-To: rosellesantander@rs-dentalclinic.com" . "\r\n" .
                     "X-Mailer: PHP/" . phpversion();
 
                  mail($patient_email, $subject, $message, $headers);

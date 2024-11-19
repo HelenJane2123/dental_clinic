@@ -1,5 +1,7 @@
 <?php
     include('../model/userDashboard.php');
+    include('../lib/email_configuration.php');
+
     session_start();
     
     // initializing variables
@@ -55,8 +57,8 @@
             $messagePatient .= "Best regards,\nYour Clinic Team";
 
             // Send the email notification to the doctor
-            $headers = "From: no-reply@yourclinic.com" . "\r\n" . 
-                "Reply-To: no-reply@yourclinic.com" . "\r\n" .
+            $headers = "From: rosellesantander@rs-dentalclinic.com" . "\r\n" . 
+                "Reply-To: rosellesantander@rs-dentalclinic.com" . "\r\n" .
                 "X-Mailer: PHP/" . phpversion();
 
             if (mail($doctorEmail['email'], $subjectDoctor, $messageDoctor, $headers)) {

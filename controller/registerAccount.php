@@ -1,5 +1,6 @@
 <?php
     include('../model/registerLogin.php'); 
+    include('../lib/email_configuration.php');
     session_start();   
     // initializing variables
     $email_address  = "";
@@ -68,7 +69,7 @@
         //insert registration details
         $query = $funObj->reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $hashed_password, $email_address, $date_created, $verification_code);
         if ($query) {
-           // Send verification email
+            // Send verification email
             $subject = "Verify Your Account";
             $message = "
                 Hello $first_name,
@@ -78,11 +79,14 @@
                 Verification Code: $verification_code
 
                 Visit the following link to verify: 
-                https://rs-dentalclinic.com/verification.php
+                https://rs-dentalclinic.com/verification.php?code=$verification_code
 
                 Thank you!
             ";
-            $headers = "From: rs-dentalclinic.com";
+            $headers = "From: rosellesantander@rs-dentalclinic.com\r\n";
+            $headers .= "Reply-To: rosellesantander@rs-dentalclinic.com\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
             if (mail($email_address, $subject, $message, $headers)) {
                 $_SESSION['message'] = 'Registration successful. Please check your email for the verification code.';

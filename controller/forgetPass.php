@@ -1,6 +1,7 @@
 <?php
 session_start(); // Start the session
 include('../model/registerLogin.php');
+include('../lib/email_configuration.php');
 
 $funObj = new User();
 
@@ -30,7 +31,7 @@ if (isset($_POST['reset_btn'])) {
         $resetLink = "http://localhost/dental_clinic/reset_password.php?token=" . urlencode($token);
         $subject = "Password Reset Request";
         $message = "Click the link below to reset your password:\n\n" . $resetLink . "\n\nIf you did not request this, please ignore this email.";
-        $headers = "From: noreply@yourdomain.com";
+        $headers = "From: rosellesantander@rs-dentalclinic.com";
 
         if (mail($email, $subject, $message, $headers)) {
             $_SESSION['message'] = "Password reset link has been sent to your email.";

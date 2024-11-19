@@ -1,5 +1,7 @@
 <?php
 include('../model/userDashboard.php');
+include('../lib/email_configuration.php');
+
 session_start();
 
 // initializing variables
@@ -67,7 +69,7 @@ if (isset($_POST['appointmentType'])) {
         // Headers for email format (HTML)
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-        $headers .= "From: no-reply@yourdomain.com" . "\r\n"; // Replace with your domain's email
+        $headers .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n"; // Replace with your domain's email
 
 
         // Send email confirmation to the user
@@ -96,7 +98,7 @@ if (isset($_POST['appointmentType'])) {
 
         $headersUser = "MIME-Version: 1.0" . "\r\n";
         $headersUser .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-        $headersUser .= "From: no-reply@yourdomain.com" . "\r\n"; // Replace with your domain's email
+        $headersUser .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n"; // Replace with your domain's email
 
         // Send email to user
         mail($toUser, $subjectUser, $messageUser, $headersUser);
