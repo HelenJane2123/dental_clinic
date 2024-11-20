@@ -107,7 +107,7 @@ if (isset($_POST['appointmentType'])) {
         mail($to, $subject, $message, $headers);
 
         // Redirect to my_appointments.php after booking
-        header('Location: ../my_appointments.php');
+        header('Location: ../payment.php');
         exit();
     } else {
         $_SESSION['display_message'] = "Error booking appointment. Please try again.";

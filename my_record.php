@@ -110,13 +110,22 @@
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label class="required" for="nationality">Nationality</label>
-                                                <input type="text" class="form-control" id="nationality" name="nationality" value="<?= isset($patient['nationality']) ? $patient['nationality'] : '' ?>" required data-parsley-required-message="This field is required.">
+                                                <input type="text" class="form-control" id="nationality" name="nationality" 
+                                                    value="<?= isset($patient['nationality']) && !empty($patient['nationality']) ? $patient['nationality'] : 'Filipino'; ?>" 
+                                                    required data-parsley-required-message="This field is required.">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-sm-4">
                                                 <label class="required" for="cellphone_no">Cellphone No.</label>
-                                                <input type="text" class="form-control" id="cellphone_no" name="cellphone_no" value="<?= isset($contact_number) ? $contact_number : '' ?>" required data-parsley-required-message="This field is required.">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">+63</span> <!-- Philippines Country Code -->
+                                                    </div>
+                                                    <input type="text" class="form-control" id="cellphone_no" name="cellphone_no" 
+                                                        value="<?= isset($contact_number) ? $contact_number : '' ?>" 
+                                                        required data-parsley-required-message="This field is required.">
+                                                </div>
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label class="required" for="email">Email Address</label>
@@ -188,7 +197,13 @@
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label for="physician_phone_no">Office Number</label>
-                                                <input type="text" class="form-control" id="physician_phone_no" name="physician_phone_no" value="<?= isset($patient['physician_phone_no']) ? $patient['physician_phone_no'] : '' ?>">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">+63</span> <!-- Philippines Country Code -->
+                                                    </div>
+                                                    <input type="text" class="form-control" id="physician_phone_no" name="physician_phone_no" 
+                                                        value="<?= isset($patient['physician_phone_no']) ? $patient['physician_phone_no'] : '' ?>">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -68,7 +68,6 @@
   
 
   <script>
-    
     // Helper function for currency formatting
     function formatCurrency(amount) {
         return parseFloat(amount).toFixed(2); // Format to 2 decimal places

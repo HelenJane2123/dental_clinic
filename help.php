@@ -27,11 +27,10 @@
                                 <div class="card-body">
                                     <p>To book an appointment, follow these steps:</p>
                                     <ol>
-                                        <li>Click on the "Book Appointment" button.</li>
-                                        <li>Choose the doctor from the available list.</li>
+                                        <li>Click on the "Book Appointment" button. (Note: You need to accomplish the patient record first before booking an appointment.)</li>
                                         <li>Select your preferred date and time slot (ensure the timeslot is available).</li>
-                                        <li>Fill in your personal details and any additional information required.</li>
-                                        <li>Click "Confirm" to submit your appointment request.</li>
+                                        <li>Fill in your additional notes required.</li>
+                                        <li>Click "Submit" to submit your appointment request.</li>
                                     </ol>
                                     <p>Once your appointment is confirmed, you will receive an email and an on-screen notification.</p>
                                 </div>
@@ -48,7 +47,6 @@
                                         <li>Appointment confirmation.</li>
                                         <li>Appointment rescheduling or cancellations.</li>
                                         <li>Payment reminders and receipts.</li>
-                                        <li>Doctor availability updates.</li>
                                     </ul>
                                     <p>Notifications will appear both on your dashboard and via email.</p>
                                 </div>
@@ -64,9 +62,9 @@
                                     <ol>
                                         <li>Go to the "Payment" section on your dashboard.</li>
                                         <li>Select the appointment you would like to pay for.</li>
-                                        <li>Choose your preferred payment method (Credit/Debit Card, PayPal, etc.).</li>
-                                        <li>Enter the payment details and confirm the payment.</li>
-                                        <li>Once payment is successful, you will receive a confirmation.</li>
+                                        <li>Choose your preferred payment method (As of the moment we are using generated qr code).</li>
+                                        <li>You can see the computation of the services by clicking the 'View Computation' button.</li>
+                                        <li>Once paid, upload the receipt and you will received a payment confirmation once confirmed..</li>
                                     </ol>
                                     <p>After payment, the booking will be confirmed, and you will receive a payment receipt via email and on your dashboard.</p>
                                 </div>
@@ -80,13 +78,13 @@
                                 <div class="card-body">
                                     <p>If you encounter any issues, please reach out to support. You can contact us via:</p>
                                     <ul>
-                                        <li>Email: support@example.com</li>
+                                        <li>Email: rosellesantander@rs-dentalclinic.com/</li>
                                         <li>Phone: 123-456-7890</li>
                                     </ul>
                                     <p>Our team is available 24/7 to assist you.</p>
                                 </div>
                             </div>
-                        </div>
+                            </div>
                           </div>
                         </div>
                       </div>
