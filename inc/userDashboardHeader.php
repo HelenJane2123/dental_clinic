@@ -8,9 +8,8 @@
     header("Expires: 0");
 
   // Check if the user is logged in
-  if (!isset($_SESSION['username'])) {
-    // Redirect to login page if not logged in
-    header('Location: ../login.php');
+  if (!isset($_SESSION['success']) || $_SESSION['success'] !== true) {
+    header('Location: ../login.php');  // Redirect to login if not logged in
     exit();
   }
 
@@ -95,6 +94,19 @@
 
   <!-- endinject -->
   <link rel="shortcut icon" href="img/logo.png" />
+  <script>
+    // Disable back button and redirect to index.php
+    window.onload = function() {
+      // Push a new history state to block the back button action
+      window.history.pushState(null, "", window.location.href);
+      window.history.pushState(null, "", window.location.href);
+      
+      // Detect the back button and redirect to index.php
+      window.onpopstate = function () {
+        window.location.href = "../index.php"; // Redirect to index.php
+      };
+    };
+  </script>
 </head>
 <body>
   <div class="container-scroller d-flex">

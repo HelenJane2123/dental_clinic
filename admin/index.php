@@ -1,5 +1,20 @@
 <?php
     include_once('inc/header.php');
+    // If the user is already logged in, kill the session and redirect them
+    if (isset($_SESSION['success']) && $_SESSION['success'] === true) {
+        // Destroy the session to kill the login state
+        session_unset(); // Unset all session variables
+        session_destroy(); // Destroy the session
+
+        // Prevent the login page from being cached by the browser
+        header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");  // HTTP/1.1
+        header("Pragma: no-cache");  // HTTP/1.0
+        header("Expires: 0");  // Proxies
+
+        // Redirect to the index page (or any other page)
+        header('Location: index.php');  // Redirect to index.php or home page
+        exit();  // Stop further execution of code
+    }
 ?>
 
 <div class="container-fluid">

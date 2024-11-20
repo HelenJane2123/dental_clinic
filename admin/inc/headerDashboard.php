@@ -1,11 +1,6 @@
 <?php
     session_start();
 
-    // Prevent caching of the login page
-    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-    header("Pragma: no-cache");
-    header("Expires: 0");
-
     // If not logged in, redirect to login page
     if (!isset($_SESSION['success']) || $_SESSION['success'] !== true) {
         header('Location: ../index.php');
