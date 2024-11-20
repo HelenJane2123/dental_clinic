@@ -43,7 +43,20 @@
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="contact_number">Contact Number</label>
-                                    <input type="number" class="form-control" id="contact_number" name="contact_number" value="<?= isset($contact_number) ? $contact_number : '' ?>">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="country-code">+63</span>
+                                        <input 
+                                            type="tel" 
+                                            class="form-control" 
+                                            name="contact_number" 
+                                            id="contact_number" 
+                                            placeholder=" e.g. 9123456789" 
+                                            maxlength="10" 
+                                            value="<?= isset($contact_number) ? $contact_number : '' ?>" 
+                                            required 
+                                            data-parsley-type="digits" 
+                                            data-parsley-length="[10, 10]">
+                                    </div>
                                 </div>
                                 <div class="form-group col-6">
                                     <label for="SelectGender">Gender</label>

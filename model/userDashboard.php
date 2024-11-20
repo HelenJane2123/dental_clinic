@@ -1141,13 +1141,16 @@
                     COALESCE(pp.status, 'Pending') AS status,
                     pp.file_name,
                     COALESCE(pp.remarks, 'No payment uploaded') AS remarks,
-                    a.services
+                    a.services,
+                    ds.sub_category
                 FROM 
                     appointments a
                 LEFT JOIN 
                     proof_of_payment pp ON a.id = pp.appointment_id
                 LEFT JOIN 
                     patients pt ON a.patient_id = pt.patient_id
+                LEFT JOIN 
+                    dental_services ds ON ds.id = a.services
                 WHERE 
                     pt.member_id = ?
             ";

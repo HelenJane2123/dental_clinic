@@ -19,6 +19,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $member_id = $_POST['member_id'];
     $profilePicPath = null;  // Initialize as null in case no picture is uploaded
 
+    if ($contactnumber) {    
+        // Ensure it's 10 digits long and prepend the "+63" country code
+        if (preg_match('/^\d{10}$/', $contact_number)) {
+            $formatted_contact_number = '+63' . $contact_number;
+        } else {
+            $_SESSION['display_message'] = "Invalid contact number. Please enter 10 digits after +63.";
+            $_SESSION['message_type'] = "danger";
+            header('Location: ../my_profile.php');
+            exit();
+        }
+    }
+
     // Handle file upload
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['profile_picture']['tmp_name'];

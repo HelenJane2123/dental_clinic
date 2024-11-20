@@ -159,18 +159,6 @@
                 showSlide(currentIndex + 1);
             }, 5000); // Change slide every 5 seconds
         });
-        
-        var input = document.querySelector("#contact_number");
-        window.intlTelInput(input, {
-            initialCountry: "auto",
-            geoIpLookup: function(callback) {
-                fetch('https://ipinfo.io?token=YOUR_TOKEN', {headers: {'Accept': 'application/json'}})
-                .then(response => response.json())
-                .then(data => callback(data.country))
-                .catch(() => callback('us'));
-            },
-            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js" // For formatting/validation
-        });
 
         // Restrict contact number input to numeric values only
         document.getElementById('contact_number').addEventListener('input', function (e) {

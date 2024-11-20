@@ -36,6 +36,10 @@
             $check =  $this->isUserExist($email_address);
 			$check_username =  $this->isUsername($username);
             if (!$check || !$check_username){
+                // Add '0' at the start of the mobile number if it doesn't already start with '0'
+                if (substr($mobile_number, 0, 1) !== '0') {
+                    $mobile_number = '0' . $mobile_number;
+                }
                 $sql1="INSERT INTO accounts SET member_id='$member_id', 
                             firstname='$first_name', 
                             lastname='$last_name', 

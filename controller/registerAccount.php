@@ -26,7 +26,8 @@
         $result_email = $funObj->isUserExist($email_address);
         if ($result_email->num_rows > 0) {
             $_SESSION['message'] = "Email already exists.";
-            $_SESSION['message_type'] = 'error';
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['form_data'] = $_POST; // Save form data
             header('Location: ../signup.php');
             exit();
         }
@@ -35,7 +36,8 @@
         $result_username = $funObj->isUserName($username);
         if ($result_username->num_rows > 0) {
             $_SESSION['message'] = "Username already exists.";
-            $_SESSION['message_type'] = 'error';
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['form_data'] = $_POST; // Save form data
             header('Location: ../signup.php');
             exit();
         }
@@ -44,12 +46,14 @@
         if ($password_1 != $password_2) {
             $_SESSION['message'] =  "The two passwords do not match";
             $_SESSION['message_type'] = "danger";
+            $_SESSION['form_data'] = $_POST; // Save form data
             header('Location: ../signup.php');
             exit();
         }  //validate email address
         else if (!filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
             $_SESSION['message'] = "The email address '$email_address' is not valid.";
-            $_SESSION['message_type'] = "error";
+            $_SESSION['message_type'] = "danger";
+            $_SESSION['form_data'] = $_POST; // Save form data
             header('Location: ../signup.php');
             exit();
         }
@@ -59,6 +63,7 @@
          if (!preg_match($password_regex, $password_1)) {
              $_SESSION['message'] = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
              $_SESSION['message_type'] = "danger";
+             $_SESSION['form_data'] = $_POST; // Save form data
              header('Location: ../signup.php');
              exit();
          }
@@ -102,6 +107,7 @@
         else {
           $_SESSION['message'] = 'Registration failed. Email or Username already exists, please try again.';
           $_SESSION['message_type'] = "danger";
+          $_SESSION['form_data'] = $_POST; // Save form data
           header('Location:../signup.php');
           exit();
         }
