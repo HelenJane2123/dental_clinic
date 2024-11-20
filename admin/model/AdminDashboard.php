@@ -430,7 +430,9 @@
                     canceled_admin.lastname AS canceled_last_name,
                     rescheduled_admin.firstname AS rescheduled_first_name,
                     rescheduled_admin.lastname AS rescheduled_last_name,
-                    appointments.updated_at
+                    appointments.updated_at,
+                    pp.appointment_id as proof_id,
+                    pp.file_name
                 FROM 
                     appointments
                 LEFT JOIN 
@@ -441,6 +443,8 @@
                     accounts AS canceled_admin ON appointments.canceled_by = canceled_admin.id
                 LEFT JOIN 
                     accounts AS rescheduled_admin ON appointments.rescheduled_by = rescheduled_admin.id
+                LEFT JOIN
+                	proof_of_payment AS pp ON pp.appointment_id = appointments.id
             ";
         
             // Prepare the SQL statement
@@ -544,6 +548,19 @@
             
             if ($stmt->execute()) {
                 $this->log_notification($appointment_id, 'Re-schedule', $notes, $updated_by, $user_id);
+                return true;
+            }
+            return false;
+        }
+
+        public function complete_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id) {
+            // Logic to update the appointment and log the action
+            $status = 'Completed';
+            $stmt = $this->db->prepare("UPDATE appointments SET appointment_date = ?, appointment_time = ?, status= ?, notes = ?, rescheduled_by = ? WHERE id = ?");
+            $stmt->bind_param("sssssi", $new_date, $new_time, $status, $notes, $updated_by, $appointment_id);
+            
+            if ($stmt->execute()) {
+                $this->log_notification($appointment_id, 'Completed', $notes, $updated_by, $user_id);
                 return true;
             }
             return false;
@@ -1172,11 +1189,11 @@
             $stmt->execute();
             $result = $stmt->get_result();
             
-            $guardians = [];
-            while ($row = $result->fetch_assoc()) {
-                $guardians[] = $row;
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc(); // Assuming one row per patient
+            } else {
+                return null;
             }
-            return $guardians; // Return an array of guardians' details
         }
 
         // Method to get consultations of a patient
@@ -1186,12 +1203,44 @@
             $stmt->bind_param("i", $patient_id);
             $stmt->execute();
             $result = $stmt->get_result();
-            
-            $consultations = [];
-            while ($row = $result->fetch_assoc()) {
-                $consultations[] = $row;
+           
+            if ($result->num_rows > 0) {
+                return $result->fetch_assoc(); // Assuming one row per patient
+            } else {
+                return null;
             }
-            return $consultations; // Return an array of consultations' details
+        }
+
+        public function get_patient_allergies($patient_id) {
+            $query = "SELECT allergic_medicine FROM medical_history WHERE patient_id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                // Decode JSON data into a PHP array
+                return json_decode($row['allergic_medicine'], true); 
+            }
+        
+            return []; // Return an empty array if no conditions found
+        }
+
+        public function get_patient_medical_conditions($patient_id) {
+            $query = "SELECT illness_conditions FROM medical_history WHERE patient_id = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("i", $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                // Decode JSON data into a PHP array
+                return json_decode($row['illness_conditions'], true); 
+            }
+        
+            return []; // Return an empty array if no conditions found
         }
 
         public function save_dental_record($patient_id, $date, $tooth_no, $procedure, $dentist, $amount_charged, $amount_paid, $balance, $next_appointment) {

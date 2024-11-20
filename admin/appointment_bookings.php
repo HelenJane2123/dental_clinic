@@ -35,8 +35,8 @@ include_once('inc/sidebarMenu.php');
                         <table class="table table-striped" id="table1">
                             <thead>
                                 <tr>
+                                    <th>Appointment ID</th>
                                     <th>Patient ID</th>
-                                    <th>Member ID</th>
                                     <th>Name</th>
                                     <th>Appointment Date</th>
                                     <th>Appointment Time</th>
@@ -56,7 +56,7 @@ include_once('inc/sidebarMenu.php');
                                 <?php if (!empty($get_appointments)) : ?>
                                     <?php foreach ($get_appointments as $appointments) : ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($appointments['patient_id']) ?></td>
+                                            <td><?= htmlspecialchars($appointments['appointment_id']) ?></td>
                                             <td><?= htmlspecialchars($appointments['patient_member_id']) ?></td>
                                             <td><?= htmlspecialchars($appointments['patient_first_name'])." ".htmlspecialchars($appointments['patient_last_name']) ?></td>
                                             <td>
@@ -86,6 +86,8 @@ include_once('inc/sidebarMenu.php');
                                                         echo '<span class="badge bg-danger">Canceled</span>';
                                                     } elseif ($status === 'Re-schedule') {
                                                         echo '<span class="badge bg-info">Re-Scheduled</span>';
+                                                    } elseif ($status === 'Comppleted') {
+                                                        echo '<span class="badge bg-primary">Completed</span>';
                                                     } else {
                                                         echo '<span class="badge bg-secondary">Unknown</span>';
                                                     }
@@ -122,9 +124,15 @@ include_once('inc/sidebarMenu.php');
                                                 ?>
                                             </td>
                                             <td>
-                                                 <?php if ($status !== 'Canceled') : ?>
+                                                <?php if (empty($appointments['proof_id'])) : ?>
+                                                    <!-- If there is no proof of payment -->
+                                                    <p class="text-muted">No proof of payment uploaded yet.</p>
+                                                    <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
+                                                <?php elseif ($status !== 'Canceled') : ?>
+                                                    <!-- If proof of payment exists and the appointment is not canceled -->
                                                     <button type="button" class="btn btn-success btn-sm approve-button" data-bs-toggle="modal" data-bs-target="#approveModal<?= $appointments['appointment_id'] ?>">Approve</button>
                                                     <button type="button" class="btn btn-info btn-sm reschedule-button" data-bs-toggle="modal" data-bs-target="#rescheduleModal<?= $appointments['appointment_id'] ?>">Reschedule</button>
+                                                    <button type="button" class="btn btn-primary btn-sm complete-button" data-bs-toggle="modal" data-bs-target="#completeModal<?= $appointments['appointment_id'] ?>">Complete</button>
                                                     <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
                                                 <?php endif; ?>
                                             </td>

@@ -36,7 +36,6 @@ include_once('inc/sidebarMenu.php');
                             <thead>
                                 <tr>
                                     <th>Patient ID</th>
-                                    <th>Member ID</th>
                                     <th>Name</th>
                                     <th>Birthday</th>
                                     <th>Gender</th>
@@ -49,7 +48,6 @@ include_once('inc/sidebarMenu.php');
                                 <?php if (!empty($get_patients)) : ?>
                                     <?php foreach ($get_patients as $patients) : ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($patients['patient_id']) ?></td>
                                             <td><?= htmlspecialchars($patients['member_id']) ?></td>
                                             <td><?= htmlspecialchars($patients['first_name'])." ".htmlspecialchars($patients['last_name']) ?></td>
                                             <td>

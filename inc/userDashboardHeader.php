@@ -3,10 +3,16 @@
 
 <?php
     session_start();
-    if (!isset($_SESSION['username'])) {
-        header('Location: login.php'); // Redirect to login page if not logged in
-        exit();
-    }
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+
+  // Check if the user is logged in
+  if (!isset($_SESSION['username'])) {
+    // Redirect to login page if not logged in
+    header('Location: ../login.php');
+    exit();
+  }
 
     // Generate CSRF token if not already set
   if (empty($_SESSION['csrf_token'])) {

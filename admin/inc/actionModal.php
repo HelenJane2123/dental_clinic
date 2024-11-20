@@ -25,6 +25,33 @@
         </div>
     </div>
 
+    <div class="modal fade" id="completeModal<?= $appointments['appointment_id'] ?>" tabindex="-1" aria-labelledby="completeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeModalLabel">Complete Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to complete the appointment for <?= htmlspecialchars($appointments['patient_first_name']) ?> <?= htmlspecialchars($appointments['patient_last_name']) ?>?</p>
+                    <p><strong>Note:</strong> Completing this appointment confirms that the services have been successfully rendered and the patient has fully paid.</p>
+                    <form action="controller/updateAppointmentStatus.php" method="POST">
+                        <input type="hidden" name="appointment_id" value="<?= $appointments['appointment_id'] ?>">
+                        <input type="hidden" name="patient_id" value="<?= $appointments['patient_id'] ?>">
+                        <input type="hidden" name="user_id_admin" value="<?= $user_id_admin ?>">
+                        <input type="hidden" name="action" value="complete">
+                        <textarea class="form-control" name="notes" placeholder="Add notes..." rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Complete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Reschedule Modal -->
     <div class="modal fade" id="rescheduleModal<?= $appointments['appointment_id'] ?>" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog">

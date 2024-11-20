@@ -80,6 +80,12 @@
                     <span>Documentation</span>
                 </a>
             </li>
+            <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'logout.php' ? 'active' : '' ?>">
+                <a href="logout.php" class='sidebar-link'>
+                    <i class="bi bi-unlock"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
 
         </ul>
     </div>

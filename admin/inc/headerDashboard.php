@@ -1,7 +1,14 @@
 <?php
     session_start();
-    if (!isset($_SESSION['username'])) {
-        header('Location: login.php'); // Redirect to login page if not logged in
+
+    // Prevent caching of the login page
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+
+    // If not logged in, redirect to login page
+    if (!isset($_SESSION['success']) || $_SESSION['success'] !== true) {
+        header('Location: ../index.php');
         exit();
     }
     
