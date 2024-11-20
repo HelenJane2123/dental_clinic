@@ -52,41 +52,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         }
     } 
     // Check if new date and time are provided for rescheduling
-    else if (isset($_POST['new_date']) && isset($_POST['new_time'])) {
-        // Rescheduling logic
-        $new_date = $_POST['new_date'];
-        $new_time = $_POST['new_time'];
-        $notes = isset($_POST['notes']) ? $_POST['notes'] : '';
+    // else if (isset($_POST['new_date']) && isset($_POST['new_time']) && $_POST['action'] === 'reschedule') {
+    //     // Rescheduling logic
+    //     $new_date = $_POST['new_date'];
+    //     $new_time = $_POST['new_time'];
+    //     $notes = isset($_POST['notes']) ? $_POST['notes'] : ''; 
         
-        if ($funObj->reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id)) {
-           // Fetch patient's email after rescheduling
-           $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
+    //     if ($funObj->reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id)) {
+    //        // Fetch patient's email after rescheduling
+    //        $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
 
-           // Prepare email content
-           $subject = "Your Appointment has been Rescheduled";
-           $message = "Dear Patient,\n\n";
-           $message .= "Your appointment has been rescheduled to:\n";
-           $message .= "New Date: " . $new_date . "\n";
-           $message .= "New Time: " . $new_time . "\n";
-           $message .= "Notes: " . $notes . "\n\n";
-           $message .= "If you have any questions, please feel free to contact us.\n\n";
-           $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
+    //        // Prepare email content
+    //        $subject = "Your Appointment has been Rescheduled";
+    //        $message = "Dear Patient,\n\n";
+    //        $message .= "Your appointment has been rescheduled to:\n";
+    //        $message .= "New Date: " . $new_date . "\n";
+    //        $message .= "New Time: " . $new_time . "\n";
+    //        $message .= "Notes: " . $notes . "\n\n";
+    //        $message .= "If you have any questions, please feel free to contact us.\n\n";
+    //        $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
 
-           // Send email to patient
-           $headers = "From: rosellesantander@rs-dentalclinic.com\r\n" .
-                      "Reply-To: rosellesantander@rs-dentalclinic.com\r\n" .
-                      "X-Mailer: PHP/" . phpversion();
+    //        // Send email to patient
+    //        $headers = "From: rosellesantander@rs-dentalclinic.com\r\n" .
+    //                   "Reply-To: rosellesantander@rs-dentalclinic.com\r\n" .
+    //                   "X-Mailer: PHP/" . phpversion();
 
-           mail($patient_email, $subject, $message, $headers);
+    //        mail($patient_email, $subject, $message, $headers);
            
-            // Redirect to a success page
-            header("Location: ../appointment_bookings.php");
-            exit;
-        } else {
-            // Return an error message
-            echo json_encode(['status' => 'error', 'message' => 'Error rescheduling appointment.']);
-        }
-    } 
+    //         // Redirect to a success page
+    //         header("Location: ../appointment_bookings.php");
+    //         exit;
+    //     } else {
+    //         // Return an error message
+    //         echo json_encode(['status' => 'error', 'message' => 'Error rescheduling appointment.']);
+    //     }
+    // } 
     // Check if notes are provided for approval or cancellation
     else if (isset($_POST['notes'])) {
         $notes = $_POST['notes'];
@@ -120,7 +120,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 // Return an error message
                 echo json_encode(['status' => 'error', 'message' => 'Error canceling appointment.']);
             }
-        } else {
+        } 
+        else if (isset($_POST['action']) && $_POST['action'] === 'reschedule') {
+            $new_date = $_POST['new_date'];
+            $new_time = $_POST['appointment_time'];
+            $notes = isset($_POST['notes']) ? $_POST['notes'] : ''; 
+            
+            if ($funObj->reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id)) {
+               // Fetch patient's email after rescheduling
+               $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
+    
+               // Prepare email content
+               $subject = "Your Appointment has been Rescheduled";
+               $message = "Dear Patient,\n\n";
+               $message .= "Your appointment has been rescheduled to:\n";
+               $message .= "New Date: " . $new_date . "\n";
+               $message .= "New Time: " . $new_time . "\n";
+               $message .= "Notes: " . $notes . "\n\n";
+               $message .= "If you have any questions, please feel free to contact us.\n\n";
+               $message .= "Best regards,\nYour Roselle Santander Dental Clinic Team";
+    
+               // Send email to patient
+               $headers = "From: rosellesantander@rs-dentalclinic.com\r\n" .
+                          "Reply-To: rosellesantander@rs-dentalclinic.com\r\n" .
+                          "X-Mailer: PHP/" . phpversion();
+    
+               mail($patient_email, $subject, $message, $headers);
+               
+                // Redirect to a success page
+                header("Location: ../appointment_bookings.php");
+                exit;
+            } else {
+                // Return an error message
+                echo json_encode(['status' => 'error', 'message' => 'Error rescheduling appointment.']);
+            }
+        }
+        else {
             // Approval logic
             if ($funObj->approve_appointment($appointment_id, $notes, $updated_by, $user_id)) { // Ensure user_id is included
                 

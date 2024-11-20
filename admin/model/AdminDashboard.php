@@ -494,7 +494,9 @@
                     canceled_admin.lastname AS canceled_last_name,
                     rescheduled_admin.firstname AS rescheduled_first_name,
                     rescheduled_admin.lastname AS rescheduled_last_name,
-                    appointments.updated_at
+                    appointments.updated_at,
+                    pp.appointment_id as proof_id,
+                    pp.file_name
                 FROM 
                     appointments
                 LEFT JOIN 
@@ -505,6 +507,8 @@
                     accounts AS canceled_admin ON appointments.canceled_by = canceled_admin.id
                 LEFT JOIN 
                     accounts AS rescheduled_admin ON appointments.rescheduled_by = rescheduled_admin.id
+                LEFT JOIN
+                	proof_of_payment AS pp ON pp.appointment_id = appointments.id
                 WHERE 
                     patients.assigned_doctor = ?
             ";
