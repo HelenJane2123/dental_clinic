@@ -12,25 +12,25 @@
                     <div class="card-body">
                         <h4 class="card-title">Set Appointments</h4>
                         <div class="status-legend">
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #FFC107;"></div>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #FFC107;"></div>
                                 <span>Pending</span>
                             </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #28A745;"></div>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #28A745;"></div>
                                 <span>Confirmed</span>
                             </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #DC3545;"></div>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #DC3545;"></div>
                                 <span>Canceled</span>
                             </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #007BFF;"></div>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #007BFF;"></div>
                                 <span>Completed</span>
                             </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background-color: #A020F0;"></div>
-                                <span>Re-Scheduled</span>
+                            <div class="status-item">
+                                <div class="color-box" style="background-color: #A020F0;"></div>
+                                <span>Re-schedule</span>
                             </div>
                         </div>
 

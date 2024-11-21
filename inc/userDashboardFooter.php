@@ -140,7 +140,13 @@
       ];
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: ['interaction', 'dayGrid'],
+        plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        initialView: 'dayGridMonth',    
         defaultDate: '2024-09-24',
         editable: true,
         eventLimit: true, // allow "more" link when too many events
@@ -150,6 +156,12 @@
             start: new Date() // Disable dates before today
         },
 
+        eventDidMount: function(info) {
+            const status = info.event.extendedProps.status;
+            const color = statusColors[status] || '#000';
+            info.el.style.backgroundColor = color;
+            info.el.style.color = '#fff';
+        },
         eventRender: function(info) {
             const status = info.event.extendedProps.status; // Get the status from event props
             const color = statusColors[status] || '#000'; // Default color if status not found

@@ -22514,6 +22514,60 @@ dl li {
   }
 }
 
+@media (max-width: 768px) {
+  #calendar {
+      font-size: 12px; /* Smaller font for mobile screens */
+  }
+  .fc-toolbar {
+      flex-wrap: wrap; /* Stack toolbar buttons for small screens */
+  }
+  .fc .fc-daygrid-event {
+      font-size: 10px; /* Adjust event font size for compact view */
+  }
+}
+
+/* General styling for status legend */
+.status-legend {
+  display: flex;
+  flex-wrap: wrap; /* Ensure items wrap to the next line in smaller screens */
+  justify-content: space-between; /* Adjust spacing between items */
+  margin-bottom: 20px;
+  gap: 10px; /* Add spacing between items */
+}
+
+/* For individual status items */
+.status-item {
+  display: flex;
+  align-items: center;
+  margin-right: 10px; /* Adjust spacing between items */
+  font-size: 14px; /* Adjust text size for better readability */
+}
+
+/* For the color indicator in each status item */
+.status-item .color-box {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  border-radius: 3px; /* Optional: rounded corners */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .status-legend {
+      flex-direction: column; /* Stack items vertically */
+      align-items: flex-start; /* Align items to the left */
+  }
+
+  .status-item {
+      margin-bottom: 10px; /* Add spacing between stacked items */
+      font-size: 12px; /* Slightly smaller text for mobile */
+  }
+
+  .status-item .color-box {
+      width: 12px;
+      height: 12px; /* Smaller indicators for mobile */
+  }
+}
 
 
 
