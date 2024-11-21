@@ -796,13 +796,95 @@
             return false;
         }
 
+        public function get_doctor_details($id) {
+            // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID
+            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id, first_name, last_name FROM doctors WHERE account_id = ?");
+            
+            // Bind the input parameter (account_id)
+            $stmt->bind_param("i", $id);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Store the result
+            $stmt->store_result();
+            
+            // Check if the doctor exists
+            if ($stmt->num_rows > 0) {
+                // Bind the result to the variables (id, email, account_id)
+                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name);
+                
+                // Fetch the data
+                $stmt->fetch();
+                
+                // Close the statement
+                $stmt->close();
+                
+                // Return the doctor details as an associative array
+                return array(
+                    'doctor_id' => $doctor_id,
+                    'email' => $email,
+                    'account_id' => $account_id,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name
+                );
+            } else {
+                // Close the statement
+                $stmt->close();
+                
+                // Return false if no doctor is found with the given ID
+                return false;
+            }
+        }  
+
+        public function get_patient_details($id) {
+            // Prepare the query to fetch patient's details (email, id, and account_id) by the provided patient ID
+            $stmt = $this->db->prepare("SELECT patient_id, email,  first_name, last_name, member_id FROM patients WHERE patient_id = ?");
+            
+            // Bind the input parameter (patient_id)
+            $stmt->bind_param("i", $id);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Store the result
+            $stmt->store_result();
+            
+            // Check if the patient exists
+            if ($stmt->num_rows > 0) {
+                // Bind the result to the variables (patient_id, email, account_id, first_name, last_name)
+                $stmt->bind_result($patient_id, $email, $first_name, $last_name, $member_id);
+                
+                // Fetch the data
+                $stmt->fetch();
+                
+                // Close the statement
+                $stmt->close();
+                
+                // Return the patient details as an associative array
+                return array(
+                    'patient_id' => $patient_id,
+                    'email' => $email,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'member_id' => $member_id
+                );
+            } else {
+                // Close the statement
+                $stmt->close();
+                
+                // Return false if no patient is found with the given ID
+                return false;
+            }
+        }  
+
         public function delete_doctor($doctor_id) {
             // Start a transaction to ensure both deletions succeed or fail together
             $this->db->begin_transaction();
         
             try {
                 // First, delete from the doctors table
-                $query1 = "DELETE FROM doctors WHERE doctor_id = ?";
+                $query1 = "DELETE FROM doctors WHERE account_id = ?";
                 $stmt1 = $this->db->prepare($query1);
                 $stmt1->bind_param("i", $doctor_id);
         

@@ -82,7 +82,7 @@ include_once('inc/sidebarMenu.php');
                                                 <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">
                                                     <i class="fas fa-edit"></i>
                                                 </button> -->
-                                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDoctorDelete(<?= htmlspecialchars($doctors['doctor_id']) ?>)">
+                                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDoctorDelete(<?= htmlspecialchars($doctors['account_id']) ?>)">
                                                     <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
                                                 </button>                                        
                                             </td>
