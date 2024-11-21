@@ -32,7 +32,6 @@
         }
 		/*** for registration process ***/
 		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created, $verification_code) {
-            $password = md5($password_1);
             // Add '0' at the start of the mobile number if it doesn't already start with '0'
             if (substr($mobile_number, 0, 1) !== '0') {
                 $mobile_number = '0' . $mobile_number;
@@ -55,7 +54,7 @@
                     $mobile_number, 
                     $agree_terms, 
                     $username, 
-                    $password, 
+                    $password_1, 
                     $email_address, 
                     $date_created, 
                     $verification_code
@@ -135,17 +134,20 @@
         }
 
         public function reset_password($token) {
-            // Prepare the SQL statement to fetch user by token
-            $query = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ?");
-            // Bind the token as a parameter
-            $query->bind_param("s", $token);
-            // Execute the query
-            $query->execute();
-            // Get the result
-            $result = $query->get_result();
-            // Check if a row exists and return it, or return false if no match
-            return $result->fetch_assoc() ?: false;
+            $currentDateTime = date("Y-m-d H:i:s"); // Get current time
+        
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration >= ?");
+            $stmt->bind_param("ss", $token, $currentDateTime);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            if ($result->num_rows === 1) {
+                return $result->fetch_assoc(); // Return user details
+            } else {
+                return false; // Token is invalid or expired
+            }
         }
+        
         
         
         public function update_password($hashedPassword, $token) {

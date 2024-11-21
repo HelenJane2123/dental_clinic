@@ -20,7 +20,7 @@ if (isset($_POST['reset_btn'])) {
     $query = $funObj->isUserExist($email);
     if ($query->num_rows > 0) { // Ensure method returns rows properly
         // Generate token and expiration
-        $token = bin2hex(random_bytes(32));
+        $token = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 12);
         $expiration = date("Y-m-d H:i:s", strtotime("+1 hour"));
 
         // Save token in the database
@@ -28,7 +28,7 @@ if (isset($_POST['reset_btn'])) {
 
         if ($update) {
            // Generate the reset link
-            $resetLink = "https://rs-dentalclinic.com/reset_password.php?token=" . urlencode($token);
+            $resetLink = "http://localhost/dental_clinic/reset_password.php?token=" . urlencode($token);
 
             // Email subject
             $subject = "Password Reset Request";
@@ -114,8 +114,8 @@ if (isset($_POST['reset_btn'])) {
             ';
 
             // Headers for HTML email
-            $headers = "From: noreply@rs-dentalclinic.com\r\n";
-            $headers .= "Reply-To: noreply@rs-dentalclinic.com\r\n";
+            $headers = "From: rosellesantander@rs-dentalclinic.com\r\n";
+            $headers .= "Reply-To: rosellesantander@rs-dentalclinic.com\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
             $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
