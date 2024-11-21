@@ -43,8 +43,10 @@ include_once('inc/sidebarMenu.php');
                                     <th>Services</th>
                                     <th>Status</th>
                                     <th>Notes</th>
-                                    <th>Approved By</th>
-                                    <th>Date Approved</th>
+                                    <th>Confirmed By</th>
+                                    <th>Date Confirmed</th>
+                                    <th>Completed By</th>
+                                    <th>Date Completed</th>
                                     <th>Re-Scheduled By</th>
                                     <th>Date Re-schedule</th>
                                     <th>Canceled By</th>
@@ -72,7 +74,7 @@ include_once('inc/sidebarMenu.php');
                                                 ?>
                                             </td>
                                             <td>
-                                                <?= $appointments['services']?>
+                                                <?= $appointments['services_name']?>
                                             </td>
                                             <td>
                                                 <?php
@@ -86,7 +88,7 @@ include_once('inc/sidebarMenu.php');
                                                         echo '<span class="badge bg-danger">Canceled</span>';
                                                     } elseif ($status === 'Re-schedule') {
                                                         echo '<span class="badge bg-info">Re-Scheduled</span>';
-                                                    } elseif ($status === 'Comppleted') {
+                                                    } elseif ($status === 'Completed') {
                                                         echo '<span class="badge bg-primary">Completed</span>';
                                                     } else {
                                                         echo '<span class="badge bg-secondary">Unknown</span>';
@@ -100,8 +102,17 @@ include_once('inc/sidebarMenu.php');
                                             <td>
                                                 <?php
                                                     // Format the appointment date using date() and strtotime()
-                                                    if($appointments['updated_at'] != "") {
-                                                        echo date('F j, Y', strtotime($appointments['updated_at'])); // Format as "Month Day, Year"
+                                                    if($appointments['date_approved'] != "") {
+                                                        echo date('F j, Y', strtotime($appointments['date_approved'])); // Format as "Month Day, Year"
+                                                    } 
+                                                ?>
+                                            </td>
+                                            <td><?= htmlspecialchars($appointments['completed_first_name'])." ".htmlspecialchars($appointments['completed_last_name']) ?></td>
+                                            <td>
+                                                <?php
+                                                    // Format the appointment date using date() and strtotime()
+                                                    if($appointments['date_completed'] != "") {
+                                                        echo date('F j, Y', strtotime($appointments['date_completed'])); // Format as "Month Day, Year"
                                                     } 
                                                 ?>
                                             </td>
@@ -109,8 +120,8 @@ include_once('inc/sidebarMenu.php');
                                             <td>
                                                 <?php
                                                     // Format the appointment date using date() and strtotime()
-                                                    if($appointments['updated_at'] != "") {
-                                                        echo date('F j, Y', strtotime($appointments['updated_at'])); // Format as "Month Day, Year"
+                                                    if($appointments['date_rescheduled'] != "") {
+                                                        echo date('F j, Y', strtotime($appointments['date_rescheduled'])); // Format as "Month Day, Year"
                                                     } 
                                                 ?>
                                             </td>
@@ -118,29 +129,38 @@ include_once('inc/sidebarMenu.php');
                                             <td>
                                                 <?php
                                                     // Format the appointment date using date() and strtotime()
-                                                    if($appointments['updated_at'] != "") {
-                                                        echo date('F j, Y', strtotime($appointments['updated_at'])); // Format as "Month Day, Year"
+                                                    if($appointments['date_canceled'] != "") {
+                                                        echo date('F j, Y', strtotime($appointments['date_canceled'])); // Format as "Month Day, Year"
                                                     } 
                                                 ?>
                                             </td>
                                             <td>
-                                                <?php if (empty($appointments['proof_id'])) : ?>
-                                                    <!-- If there is no proof of payment -->
-                                                    <p class="text-muted">No proof of payment uploaded yet.</p>
-                                                    <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
-                                                <?php elseif ($status !== 'Canceled') : ?>
-                                                    <!-- If proof of payment exists and the appointment is not canceled -->
-                                                    <button type="button" class="btn btn-success btn-sm approve-button" data-bs-toggle="modal" data-bs-target="#approveModal<?= $appointments['appointment_id'] ?>">Approve</button>
-                                                    <button type="button" class="btn btn-info btn-sm reschedule-button" data-bs-toggle="modal" data-bs-target="#rescheduleModal<?= $appointments['appointment_id'] ?>">Reschedule</button>
+                                                <?php if ($appointments['status'] === 'Confirmed') : ?>
+                                                    <!-- If the appointment is confirmed, hide Cancel and Reschedule buttons -->
                                                     <button type="button" class="btn btn-primary btn-sm complete-button" data-bs-toggle="modal" data-bs-target="#completeModal<?= $appointments['appointment_id'] ?>">Complete</button>
-                                                    <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
+                                                <?php elseif ($appointments['status'] === 'Completed') : ?>
+                                                    <!-- If the appointment is completed, hide all buttons -->
+                                                    <p class="text-muted">Appointment Completed</p>
+                                                <?php else : ?>
+                                                    <!-- Default case: buttons visible for other statuses -->
+                                                    <?php if (empty($appointments['proof_id'])) : ?>
+                                                        <!-- If there is no proof of payment -->
+                                                        <p class="text-muted">No proof of payment uploaded yet.</p>
+                                                        <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
+                                                    <?php elseif ($appointments['status'] !== 'Canceled') : ?>
+                                                        <!-- If proof of payment exists and the appointment is not canceled -->
+                                                        <button type="button" class="btn btn-success btn-sm approve-button" data-bs-toggle="modal" data-bs-target="#approveModal<?= $appointments['appointment_id'] ?>">Approve</button>
+                                                        <button type="button" class="btn btn-info btn-sm reschedule-button" data-bs-toggle="modal" data-bs-target="#rescheduleModal<?= $appointments['appointment_id'] ?>">Reschedule</button>
+                                                        <button type="button" class="btn btn-primary btn-sm complete-button" data-bs-toggle="modal" data-bs-target="#completeModal<?= $appointments['appointment_id'] ?>">Complete</button>
+                                                        <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else : ?>
                                     <tr>
-                                        <td colspan="15" class="text-center">No Patient record found.</td>
+                                        <td colspan="17" class="text-center">No Patient record found.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>

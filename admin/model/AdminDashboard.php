@@ -421,18 +421,24 @@
                     appointments.status,
                     appointments.notes,
                     patients.patient_id,
-                    patients.member_id as patient_member_id,
+                    patients.member_id AS patient_member_id,
                     patients.first_name AS patient_first_name,
                     patients.last_name AS patient_last_name,
+                    completed_admin.firstname AS completed_first_name,
+                    completed_admin.lastname AS completed_last_name,
                     approved_admin.firstname AS approved_first_name,
                     approved_admin.lastname AS approved_last_name,
                     canceled_admin.firstname AS canceled_first_name,
                     canceled_admin.lastname AS canceled_last_name,
                     rescheduled_admin.firstname AS rescheduled_first_name,
                     rescheduled_admin.lastname AS rescheduled_last_name,
-                    appointments.updated_at,
+                    appointments.completed_at as date_completed,
+                    appointments.approved_at as date_approved,
+                    appointments.canceled_at as date_canceled,
+                    appointments.rescheduled_at as date_rescheduled,
                     pp.appointment_id as proof_id,
-                    pp.file_name
+                    pp.file_name,
+                    ds.sub_category as services_name
                 FROM 
                     appointments
                 LEFT JOIN 
@@ -443,9 +449,12 @@
                     accounts AS canceled_admin ON appointments.canceled_by = canceled_admin.id
                 LEFT JOIN 
                     accounts AS rescheduled_admin ON appointments.rescheduled_by = rescheduled_admin.id
+                LEFT JOIN 
+                    accounts AS completed_admin ON appointments.completed_by = completed_admin.id
                 LEFT JOIN
                 	proof_of_payment AS pp ON pp.appointment_id = appointments.id
-            ";
+                LEFT JOIN
+                	dental_services AS ds ON ds.id = appointments.services";
         
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -494,9 +503,10 @@
                     canceled_admin.lastname AS canceled_last_name,
                     rescheduled_admin.firstname AS rescheduled_first_name,
                     rescheduled_admin.lastname AS rescheduled_last_name,
-                    appointments.updated_at,
+                    appointments.completed_at as date_completed,
                     pp.appointment_id as proof_id,
-                    pp.file_name
+                    pp.file_name,
+                    ds.sub_category as services_name
                 FROM 
                     appointments
                 LEFT JOIN 
@@ -507,8 +517,12 @@
                     accounts AS canceled_admin ON appointments.canceled_by = canceled_admin.id
                 LEFT JOIN 
                     accounts AS rescheduled_admin ON appointments.rescheduled_by = rescheduled_admin.id
+                LEFT JOIN 
+                    accounts AS completed_admin ON appointments.completed_by = completed_admin.id
                 LEFT JOIN
                 	proof_of_payment AS pp ON pp.appointment_id = appointments.id
+                LEFT JOIN
+                	dental_services AS ds ON ds.id = appointments.services
                 WHERE 
                     patients.assigned_doctor = ?
             ";
@@ -547,8 +561,9 @@
         public function reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id) {
             // Logic to update the appointment and log the action
             $status = 'Re-schedule';
-            $stmt = $this->db->prepare("UPDATE appointments SET appointment_date = ?, appointment_time = ?, status= ?, notes = ?, rescheduled_by = ? WHERE id = ?");
-            $stmt->bind_param("sssssi", $new_date, $new_time, $status, $notes, $updated_by, $appointment_id);
+            $rescheduled_at = date('Y-m-d H:i:s');
+            $stmt = $this->db->prepare("UPDATE appointments SET appointment_date = ?, appointment_time = ?, status= ?, notes = ?, rescheduled_by = ?, rescheduled_at = ? WHERE id = ?");
+            $stmt->bind_param("ssssssi", $new_date, $new_time, $status, $notes, $user_id, $rescheduled_at, $appointment_id);
             
             if ($stmt->execute()) {
                 $this->log_notification($appointment_id, 'Re-schedule', $notes, $updated_by, $user_id);
@@ -557,27 +572,34 @@
             return false;
         }
 
-        public function complete_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id) {
+        public function complete_appointment($appointment_id, $notes, $updated_by, $user_id) {
             // Logic to update the appointment and log the action
             $status = 'Completed';
-            $stmt = $this->db->prepare("UPDATE appointments SET appointment_date = ?, appointment_time = ?, status= ?, notes = ?, rescheduled_by = ? WHERE id = ?");
-            $stmt->bind_param("sssssi", $new_date, $new_time, $status, $notes, $updated_by, $appointment_id);
-            
+            $completed_at = date('Y-m-d H:i:s'); // Get the current date and time in the appropriate format
+        
+            // Prepare the SQL statement
+            $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, completed_by = ?, completed_at = ? WHERE id = ?");
+        
+            // Bind the parameters for the query
+            $stmt->bind_param("sssii", $status, $notes, $user_id, $completed_at, $appointment_id);
+        
+            // Execute the query and handle success/failure
             if ($stmt->execute()) {
+                // Log the action in a notification (assuming a separate logging function exists)
                 $this->log_notification($appointment_id, 'Completed', $notes, $updated_by, $user_id);
                 return true;
             }
+        
             return false;
         }
         
         public function cancel_appointment($appointment_id, $notes, $updated_by, $user_id) {
             $status = 'Canceled';
             $canceled_at = date('Y-m-d H:i:s');
-            $updated_at = date('Y-m-d H:i:s');
             // Logic to cancel the appointment
-            $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, canceled_at = ?, updated_at = ?, updated_by = ?, canceled_by = ? WHERE id = ?");
+            $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, canceled_at = ?, canceled_by = ? WHERE id = ?");
             // Bind the parameters; assuming updated_by is a string
-            $stmt->bind_param("ssssssi", $status, $notes, $canceled_at, $updated_at, $user_id,  $user_id, $appointment_id);
+            $stmt->bind_param("ssii", $status, $notes, $canceled_at, $user_id,  $appointment_id);
             
             if ($stmt->execute()) {
                 $this->log_notification($appointment_id, 'canceled', $notes, $updated_by, $user_id);
@@ -592,10 +614,10 @@
             $updated_date = date('Y-m-d H:i:s'); // Get the current date and time in the appropriate format
             
             // Prepare the SQL statement to include updated_by and updated_date
-            $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, updated_at = ?, updated_by = ?, approved_by = ? WHERE id = ?");
+            $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, approved_by = ?, approved_at = ? WHERE id = ?");
             
             // Bind the parameters; assuming updated_by is a string
-            $stmt->bind_param("sssssi", $status, $notes, $updated_date, $user_id,  $user_id, $appointment_id);
+            $stmt->bind_param("ssisi", $status, $notes,  $user_id, $updated_date, $appointment_id);
             
             if ($stmt->execute()) {
                 $this->log_notification($appointment_id, 'Confirmed', $notes, $updated_by, $user_id);
@@ -1448,7 +1470,87 @@
         
             // Close the prepared statement
             $stmt->close();
-        }        
+        }
+        
+        //send adjustment braces
+        public function send_adjustment_notifications() {
+            // Set up the date interval for adjustment (e.g., 30 days after completed_at)
+            $adjustment_interval = 30; // Days
+            $notification_days = [2, 3]; // Notify 2 and 3 days before adjustment
+        
+            // Query to find relevant appointments
+            $query = "
+                SELECT 
+                    a.id AS appointment_id, 
+                    a.patient_member_id,
+                    a.completed_at,
+                    ds.sub_category,
+                    p.first_name, 
+                    p.last_name, 
+                    p.email
+                FROM 
+                    appointments AS a
+                INNER JOIN 
+                    dental_services AS ds 
+                ON 
+                    a.services = ds.id
+                INNER JOIN 
+                    patients AS p 
+                ON 
+                    a.patient_member_id = p.id
+                WHERE 
+                    ds.sub_category LIKE '%braces%'
+                    AND a.status = 'Completed'
+                    AND a.completed_at IS NOT NULL
+            ";
+        
+            $result = $this->db->query($query);
+        
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $appointment_id = $row['appointment_id'];
+                    $patient_id = $row['patient_member_id'];
+                    $completed_at = $row['completed_at'];
+                    $patient_name = $row['first_name'] . ' ' . $row['last_name'];
+                    $patient_email = $row['email'];
+        
+                    // Calculate the adjustment date
+                    $adjustment_date = date('Y-m-d', strtotime($completed_at . " +{$adjustment_interval} days"));
+        
+                    foreach ($notification_days as $days_before) {
+                        $notification_date = date('Y-m-d', strtotime($adjustment_date . " -{$days_before} days"));
+                        $current_date = date('Y-m-d');
+        
+                        // Check if the notification date matches today's date
+                        if ($notification_date === $current_date) {
+                            // Send notification
+                            $this->send_notification($patient_id, $patient_name, $appointment_id, $adjustment_date, $patient_email);
+                        }
+                    }
+                }
+            }
+        }
+        
+        private function send_notification($patient_id, $patient_name, $appointment_id, $adjustment_date, $patient_email) {
+            $subject = "Upcoming Adjustment Reminder";
+            $message = "
+                <p>Dear {$patient_name},</p>
+                <p>This is a friendly reminder that your next braces adjustment is scheduled to occur on <strong>{$adjustment_date}</strong>.</p>
+                <p>We encourage you to book your appointment now to avoid delays.</p>
+                <p><a href='https://yourclinicwebsite.com/book'>Click here to book an appointment</a>.</p>
+                <p>Thank you!</p>
+                <p>Your Dental Clinic Team</p>
+            ";
+        
+            // Send email
+            mail($patient_email, $subject, $message, "Content-Type: text/html");
+        
+            // Log the notification in the database
+            $stmt = $this->db->prepare("INSERT INTO notifications (patient_id, appointment_id, message, sent_at) VALUES (?, ?, ?, ?)");
+            $sent_at = date('Y-m-d H:i:s');
+            $stmt->bind_param("iiss", $patient_id, $appointment_id, $message, $sent_at);
+            $stmt->execute();
+        }
 
         
 	}

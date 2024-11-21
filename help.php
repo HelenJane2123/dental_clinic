@@ -10,7 +10,7 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Notifications</h4>
+                  <h4 class="card-title">Help</h4>
                     <div class="content">
                       <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
@@ -66,7 +66,7 @@
                                         <li>You can view the computation of the services by clicking the 'View Computation' button.</li>
                                         <li>Once paid, upload the receipt, and you will receive a payment confirmation once it is confirmed.</li>
                                     </ol>
-                                    <p>After payment, your booking will be confirmed, and you will receive a payment receipt via email and on your dashboard.</p>
+                                    <p>After payment, your booking will be confirmed, and you will receive a payment receipt via email.</p>
                                 </div>
                             </div>
 
