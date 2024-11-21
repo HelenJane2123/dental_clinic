@@ -1353,6 +1353,35 @@
             }
             return $services; // Returns an associative array grouped by category
         }
+
+        public function get_dental_service_by_id($id) {
+            // Prepare the query to fetch the service by its ID
+            $sql = "SELECT category, sub_category, id, price 
+                    FROM dental_services 
+                    WHERE id = ?"; // Using a parameterized query for security
+            
+            // Prepare and bind parameters
+            if ($stmt = $this->db->prepare($sql)) {
+                $stmt->bind_param("i", $id); // Bind the ID as an integer parameter
+                $stmt->execute();
+                $result = $stmt->get_result();
+        
+                // Check if the result exists
+                if ($result->num_rows > 0) {
+                    // Fetch the service data
+                    $row = $result->fetch_assoc();
+                    return [
+                        'id' => $row['id'],
+                        'category' => $row['category'],
+                        'sub_category' => $row['sub_category'],
+                        'price' => $row['price']
+                    ];
+                } else {
+                    return null; // No service found for the given ID
+                }
+            }
+            return null; // Error executing query
+        }
         
 
         public function getSelectedServicesAndPaymentDetails($appointment_id) {

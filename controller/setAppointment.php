@@ -46,6 +46,9 @@ if (isset($_POST['appointmentType'])) {
         $get_doctor_email = $user_dashboard->get_doctor_details($user_admin_id);
         // Send email notification to the doctor (or any relevant recipient)
         $to = $get_doctor_email['email']; // Replace with the doctor's email
+        $get_services = $user_dashboard->get_dental_services_by_id($services); // Assuming this returns an array
+        $service_sub_category = isset($get_services['sub_category']) ? $get_services['sub_category'] : 'N/A'; // Default value in case of missing data
+        $service_sub_category = htmlspecialchars($service_sub_category);
         // Email to Doctor
         $doctorMessage = "
         <html>
@@ -104,7 +107,7 @@ if (isset($_POST['appointmentType'])) {
                         <li><strong>Patient Name:</strong> $firstname $lastname</li>
                         <li><strong>Date:</strong> $appointmentDate</li>
                         <li><strong>Time:</strong> $appointmentTime</li>
-                        <li><strong>Services:</strong> $services</li>
+                       <li><strong>Services:</strong> $service_sub_category</li>
                         <li><strong>Contact Number:</strong> $contactNumber</li>
                         <li><strong>Email Address:</strong> $emailAddress</li>
                         <li><strong>Notes:</strong> $notes</li>
