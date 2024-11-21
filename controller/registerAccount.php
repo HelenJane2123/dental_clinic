@@ -77,21 +77,95 @@
             // Send verification email
             $subject = "Verify Your Account";
             $message = "
-                Hello $first_name,
-
-                Thank you for registering! Please verify your account using the code below:
-
-                Verification Code: $verification_code
-
-                Visit the following link to verify: 
-                https://rs-dentalclinic.com/verification.php?code=$verification_code
-
-                Thank you!
+            <!DOCTYPE html>
+            <html lang='en'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }
+                    .email-container {
+                        background: #ffffff;
+                        max-width: 600px;
+                        margin: 20px auto;
+                        padding: 20px;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    }
+                    .header {
+                        text-align: center;
+                        padding-bottom: 20px;
+                    }
+                    .header img {
+                        max-width: 150px;
+                    }
+                    .content {
+                        text-align: center;
+                    }
+                    .content h1 {
+                        color: #007bff;
+                    }
+                    .content p {
+                        margin: 10px 0;
+                    }
+                    .verification-code {
+                        font-size: 24px;
+                        font-weight: bold;
+                        color: #007bff;
+                        margin: 20px 0;
+                    }
+                    .button {
+                        display: inline-block;
+                        margin: 20px 0;
+                        padding: 10px 20px;
+                        background-color: #007bff;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 5px;
+                        font-weight: bold;
+                    }
+                    .footer {
+                        margin-top: 20px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #888;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='header'>
+                        <img src='https://rs-dentalclinic.com/img/logo.png'>
+                    </div>
+                    <div class='content'>
+                        <h1>Welcome, $first_name!</h1>
+                        <p>Thank you for registering with RS Dental Clinic! To complete your account setup, please verify your email using the code below:</p>
+                        <div class='verification-code'>$verification_code</div>
+                        <p>Click the button below to verify your account:</p>
+                        <a href='https://rs-dentalclinic.com/verification.php?code=$verification_code' class='button'>Verify Account</a>
+                        <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+                        <p><a href='https://rs-dentalclinic.com/verification.php?code=$verification_code'>https://rs-dentalclinic.com/verification.php?code=$verification_code</a></p>
+                    </div>
+                    <div class='footer'>
+                        <p>&copy; 2024 Roselle Santander Dental Clinic. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
             ";
+
             $headers = "From: rosellesantander@rs-dentalclinic.com\r\n";
             $headers .= "Reply-To: rosellesantander@rs-dentalclinic.com\r\n";
             $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
             if (mail($email_address, $subject, $message, $headers)) {
                 $_SESSION['message'] = 'Registration successful. Please check your email for the verification code.';

@@ -185,6 +185,7 @@
               <div class="modal-body">
                   <div class="form-group">
                       <label for="paymentReceipt">Upload Receipt</label>
+                      <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
                       <input type="file" class="form-control" id="paymentReceipt" name="paymentReceipt"  accept=".jpg,.jpeg,.png,.pdf" required>
                   </div>
                   <div class="form-group">

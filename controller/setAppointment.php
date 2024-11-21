@@ -46,65 +46,167 @@ if (isset($_POST['appointmentType'])) {
         $get_doctor_email = $user_dashboard->get_doctor_details($user_admin_id);
         // Send email notification to the doctor (or any relevant recipient)
         $to = $get_doctor_email['email']; // Replace with the doctor's email
-        $subject = "New Appointment Booking";
-        $message = "
+        // Email to Doctor
+        $doctorMessage = "
         <html>
         <head>
-            <title>New Appointment</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    background-color: #f9f9f9;
+                    color: #333;
+                }
+                .email-container {
+                    max-width: 600px;
+                    margin: 20px auto;
+                    padding: 20px;
+                    background: #ffffff;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                }
+                .header {
+                    text-align: center;
+                    background-color: #007bff;
+                    color: white;
+                    padding: 10px;
+                    border-radius: 8px 8px 0 0;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 20px;
+                }
+                .content {
+                    padding: 20px;
+                }
+                .content p {
+                    margin: 10px 0;
+                }
+                .content ul {
+                    padding-left: 20px;
+                }
+                .footer {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #777;
+                    margin-top: 20px;
+                }
+            </style>
         </head>
         <body>
-            <p>A new appointment has been booked:</p>
-            <ul>
-                <li><strong>Patient:</strong> $firstname $lastname</li>
-                <li><strong>Appointment Date:</strong> $appointmentDate</li>
-                <li><strong>Appointment Time:</strong> $appointmentTime</li>
-                <li><strong>Services:</strong> $services</li>
-                <li><strong>Contact Number:</strong> $contactNumber</li>
-                <li><strong>Email Address:</strong> $emailAddress</li>
-                <li><strong>Notes:</strong> $notes</li>
-            </ul>
+            <div class='email-container'>
+                <div class='header'>
+                    <h1>New Appointment Booked</h1>
+                </div>
+                <div class='content'>
+                    <p>A new appointment has been booked for you. Here are the details:</p>
+                    <ul>
+                        <li><strong>Patient Name:</strong> $firstname $lastname</li>
+                        <li><strong>Date:</strong> $appointmentDate</li>
+                        <li><strong>Time:</strong> $appointmentTime</li>
+                        <li><strong>Services:</strong> $services</li>
+                        <li><strong>Contact Number:</strong> $contactNumber</li>
+                        <li><strong>Email Address:</strong> $emailAddress</li>
+                        <li><strong>Notes:</strong> $notes</li>
+                    </ul>
+                </div>
+                <p>You may log in to the <a href='https://rs-dentalclinic.com/admin'>Roselle Santander Website</a> for more information and to manage your appointments.</p>
+                <div class='footer'>
+                    <p>&copy; 2024 Roselle Santander Dental Clinic. All rights reserved.</p>
+                </div>
+            </div>
         </body>
-        </html>";
+        </html>
+        ";
 
-        // Headers for email format (HTML)
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-        $headers .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n"; // Replace with your domain's email
-
-
-        // Send email confirmation to the user
-        $toUser = $emailAddress; // User's email address
-        $subjectUser = "Appointment Sent for Confirmation";
-        $messageUser = "
+        // Email to User
+        $userMessage = "
         <html>
         <head>
-            <title>Appointment Sent for Confirmation</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    background-color: #f9f9f9;
+                    color: #333;
+                }
+                .email-container {
+                    max-width: 600px;
+                    margin: 20px auto;
+                    padding: 20px;
+                    background: #ffffff;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                }
+                .header {
+                    text-align: center;
+                    background-color: #28a745;
+                    color: white;
+                    padding: 10px;
+                    border-radius: 8px 8px 0 0;
+                }
+                .header h1 {
+                    margin: 0;
+                    font-size: 20px;
+                }
+                .content {
+                    padding: 20px;
+                }
+                .content p {
+                    margin: 10px 0;
+                }
+                .content ul {
+                    padding-left: 20px;
+                }
+                .footer {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #777;
+                    margin-top: 20px;
+                }
+            </style>
         </head>
         <body>
-            <p>Dear $firstname $lastname,</p>
-            <p>Your appointment has been successfully booked. Below are the details:</p>
-            <ul>
-                <li><strong>Appointment Date:</strong> $appointmentDate</li>
-                <li><strong>Appointment Time:</strong> $appointmentTime</li>
-                <li><strong>Services:</strong> $services</li>
-                <li><strong>Contact Number:</strong> $contactNumber</li>
-                <li><strong>Email Address:</strong> $emailAddress</li>
-                <li><strong>Notes:</strong> $notes</li>
-            </ul>
-            <p>If you need to make any changes to your appointment, please contact us as soon as possible.</p>
-            <p>Thank you for choosing our services!</p>
+            <div class='email-container'>
+                <div class='header'>
+                    <h1>Appointment Confirmation</h1>
+                </div>
+                <div class='content'>
+                    <p>Dear $firstname $lastname,</p>
+                    <p>Your appointment has been successfully booked. Here are the details:</p>
+                    <ul>
+                        <li><strong>Date:</strong> $appointmentDate</li>
+                        <li><strong>Time:</strong> $appointmentTime</li>
+                        <li><strong>Services:</strong> $services</li>
+                        <li><strong>Contact Number:</strong> $contactNumber</li>
+                        <li><strong>Email Address:</strong> $emailAddress</li>
+                        <li><strong>Notes:</strong> $notes</li>
+                    </ul>
+                    <p>If you need to reschedule or cancel, please contact us promptly.</p>
+                    <p>Thank you for choosing Roselle Santander Dental Clinic!</p>
+                    <p>You may log in to the <a href='https://rs-dentalclinic.com/login.php'>Roselle Santander Website</a> for more information and to manage your appointments.</p>
+                </div>
+               <div class='footer'>
+                    <p>&copy; 2024 Roselle Santander Dental Clinic. All rights reserved.</p>
+                </div>
+            </div>
         </body>
-        </html>";
+        </html>
+        ";
 
-        $headersUser = "MIME-Version: 1.0" . "\r\n";
-        $headersUser .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-        $headersUser .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n"; // Replace with your domain's email
+        // Headers for Doctor
+        $doctorHeaders = "MIME-Version: 1.0" . "\r\n";
+        $doctorHeaders .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+        $doctorHeaders .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n";
 
-        // Send email to user
-        mail($toUser, $subjectUser, $messageUser, $headersUser);
+        // Headers for User
+        $userHeaders = "MIME-Version: 1.0" . "\r\n";
+        $userHeaders .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
+        $userHeaders .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n";
 
-        // Send email
-        mail($to, $subject, $message, $headers);
+        // Send emails
+        mail($to, "New Appointment Booking", $doctorMessage, $doctorHeaders); // Email to Doctor
+        mail($emailAddress, "Appointment Confirmation", $userMessage, $userHeaders); // Email to User
 
         // Redirect to my_appointments.php after booking
         header('Location: ../payment.php');

@@ -56,7 +56,7 @@ include_once('inc/header.php');
                 <i class="fas fa-user"></i>
               </span>
             </div>
-            <input type="text" class="form-control" placeholder="Username" name="username" required style="padding-left: 10px;"> <!-- Padding added to input -->
+            <input type="text" class="form-control" placeholder="Enter Username or Email" name="username" required style="padding-left: 10px;"> <!-- Padding added to input -->
           </div>
 
           <!-- Input field for Password with Icon -->

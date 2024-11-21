@@ -1,6 +1,5 @@
 <?php
 include_once('inc/header.php');
-session_start();
 if (isset($_SESSION['form_data'])) {
   foreach ($_SESSION['form_data'] as $key => $value) {
       $_POST[$key] = $value;

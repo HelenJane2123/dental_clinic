@@ -964,7 +964,7 @@
                 // Initialize an array to store the notifications with details
                 $notifications_with_details = [];
                 
-                // Loop through the result and add each notification to the array
+                // Loop through the result and add each notification to the arrayf
                 while ($row = $result->fetch_assoc()) {
                     $notifications_with_details[] = $row;
                 }
@@ -982,7 +982,7 @@
 
         public function get_doctor_details($id) {
             // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID
-            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id FROM doctors WHERE account_id = ?");
+            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id, first_name, last_name FROM doctors WHERE account_id = ?");
             
             // Bind the input parameter (account_id)
             $stmt->bind_param("i", $id);
@@ -996,7 +996,7 @@
             // Check if the doctor exists
             if ($stmt->num_rows > 0) {
                 // Bind the result to the variables (id, email, account_id)
-                $stmt->bind_result($doctor_id, $email, $account_id);
+                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name);
                 
                 // Fetch the data
                 $stmt->fetch();
@@ -1008,7 +1008,9 @@
                 return array(
                     'doctor_id' => $doctor_id,
                     'email' => $email,
-                    'account_id' => $account_id
+                    'account_id' => $account_id,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name
                 );
             } else {
                 // Close the statement

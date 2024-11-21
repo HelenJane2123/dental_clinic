@@ -31,33 +31,50 @@
             }
         }
 		/*** for registration process ***/
-		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created, $verification_code){
-			$password = md5($password_1);
-            $check =  $this->isUserExist($email_address);
-			$check_username =  $this->isUsername($username);
-            if (!$check || !$check_username){
-                // Add '0' at the start of the mobile number if it doesn't already start with '0'
-                if (substr($mobile_number, 0, 1) !== '0') {
-                    $mobile_number = '0' . $mobile_number;
-                }
-                $sql1="INSERT INTO accounts SET member_id='$member_id', 
-                            firstname='$first_name', 
-                            lastname='$last_name', 
-                            contactnumber='$mobile_number',
-                            termscondition='$agree_terms',
-							username = '$username',
-                            password='$password_1',
-                            user_type='patient',
-							email='$email_address',
-                            date_created='$date_created',
-                            verification_code = '$verification_code'";
-                $result = mysqli_query($this->db,$sql1) or die(mysqli_connect_errno()."Data cannot inserted");
+		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created, $verification_code) {
+            $password = md5($password_1);
+            // Add '0' at the start of the mobile number if it doesn't already start with '0'
+            if (substr($mobile_number, 0, 1) !== '0') {
+                $mobile_number = '0' . $mobile_number;
+            }
+    
+            // Prepare the SQL statement
+            $sql = "INSERT INTO accounts (member_id, firstname, lastname, contactnumber, termscondition, username, password, user_type, email, date_created, verification_code) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, 'patient', ?, ?, ?)";
+    
+            // Initialize the prepared statement
+            $stmt = $this->db->prepare($sql);
+    
+            if ($stmt) {
+                // Bind the parameters to the statement
+                $stmt->bind_param(
+                    "ssssssssss", 
+                    $member_id, 
+                    $first_name, 
+                    $last_name, 
+                    $mobile_number, 
+                    $agree_terms, 
+                    $username, 
+                    $password, 
+                    $email_address, 
+                    $date_created, 
+                    $verification_code
+                );
+    
+                // Execute the statement
+                $result = $stmt->execute();
+    
+                // Close the statement
+                $stmt->close();
+    
+                // Return the result of the execution
                 return $result;
+            } else {
+                // Handle SQL error (e.g., if prepare() fails)
+                die("SQL Error: " . $this->db->error);
             }
-            else{
-                return false;
-            }
-		}
+          
+        }        
 
 		
     	/*** starting the session ***/
@@ -66,10 +83,11 @@
 	    }
 
         /*** validate login details ***/
-        public function check_login($username, $password) {
-            $sql = "SELECT password FROM accounts WHERE username = ? and user_type = 'patient' and is_verified = 1";
+        public function check_login($login_input, $password) {
+            // Adjust query to check for both username and email
+            $sql = "SELECT password FROM accounts WHERE (username = ? OR email = ?) AND user_type = 'patient' AND is_verified = 1";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param('s', $username);
+            $stmt->bind_param('ss', $login_input, $login_input); // Bind the input twice for username and email
             $stmt->execute();
             $stmt->store_result();
         
@@ -101,10 +119,11 @@
             }
         }
             
-        public function getUserByUsername($username) {
-            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber FROM accounts WHERE username = ?";
+        public function getUserByUsername($login_input) {
+            // Adjusted query to select by either username or email
+            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber FROM accounts WHERE (username = ? OR email = ?)";
             $stmt = $this->db->prepare($sql);
-            $stmt->bind_param('s', $username);
+            $stmt->bind_param('ss', $login_input, $login_input); // Bind the input twice for username and email
             $stmt->execute();
             $result = $stmt->get_result();
             
