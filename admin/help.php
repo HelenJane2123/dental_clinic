@@ -37,9 +37,9 @@ include_once('inc/sidebarMenu.php');
                 <div class="card-body">
                     <p>Welcome to the Admin Dashboard! Here are some key functionalities:</p>
                     <ul>
-                        <li><strong>Dashboard:</strong> View overall statistics and manage general settings.</li>
+                        <li><strong>Dashboard:</strong> View overall statistics, notifications and appointments for today.</li>
                         <li><strong>Dental Services:</strong> Add, edit, or remove dental services provided in the clinic.</li>
-                        <li><strong>Appointments:</strong> View, edit, and manage appointments made by patients.</li>
+                        <li><strong>Appointments:</strong> View and manage appointments made by patients. (Can approve, reschedule, cancel and confirmed the appointment)</li>
                         <li><strong>Patients:</strong> Manage patient information and assign doctors to patients.</li>
                     </ul>
                     <p>If you need help with any of the features, feel free to contact support or check out the specific sections in this documentation.</p>
@@ -52,7 +52,7 @@ include_once('inc/sidebarMenu.php');
                     <h4>Managing Dental Services</h4>
                 </div>
                 <div class="card-body">
-                    <p>To add, edit, or delete dental services, use the respective buttons in the Dental Services section. Make sure to enter the correct details, such as category, subcategory, price range, and price.</p>
+                    <p>To add, edit, or delete dental services, use the respective buttons in the Dental Services section. Make sure to enter the correct details, such as category, subcategory, price range, price, and down payment.</p>
                     <p>For any changes to pricing or categories, ensure that all related data is updated accordingly across the system.</p>
                 </div>
             </div>
