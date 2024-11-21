@@ -10,9 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subCategory = $_POST['sub_category'];
     $priceRange = $_POST['price_range'];
     $price = $_POST['price'];
+    $down_payment = $_POST['down_payment'];
 
     // Call the method to insert the new dental service
-    $sql = $funObj->add_dental_service($category, $subCategory, $priceRange, $price);
+    $sql = $funObj->add_dental_service($category, $subCategory, $priceRange, $price, $down_payment);
 
     if ($sql) {
         // Success message

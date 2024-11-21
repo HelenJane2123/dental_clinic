@@ -23,18 +23,17 @@
                       }
                     ?>
                     <p class="mb-4">
-                      To proceed with your appointment, a **20% down payment** of the total amount is required. 
+                      To proceed with your appointment, a down payment is required. 
                       Please use one of the QR codes below to complete your payment. Once payment is confirmed, your appointment will be finalized.
                     </p>
                     <div class="mt-4">
                       <h4>Steps to Complete Payment:</h4>
                       <ol>
                         <li>Scan the QR code corresponding to your preferred payment method using a mobile banking app or e-wallet.</li>
-                        <li>Enter the required amount (20% of the total).</li>
+                        <li>Enter the required amount. <strong>Note:</strong> You can view the computation of the amount you need to pay by clicking the <b>"View Computation"</b> button in the table. This will show you the breakdown of the total amount, the 20% down payment, and the remaining balance.</li>
                         <li>Complete the payment and take a screenshot or save the receipt.</li>
                         <li>Upload the proof of payment in the <b>Upload Payment Proof</b> section below.</li>
                       </ol>
-                      <p><strong>Note:</strong> You can view the computation of the amount you need to pay by clicking the <b>"View Computation"</b> button in the table. This will show you the breakdown of the total amount, the 20% down payment, and the remaining balance.</p>
                     </div>
                     <div class="mt-5">
                       <h4 class="card-title">Payment Status</h4>

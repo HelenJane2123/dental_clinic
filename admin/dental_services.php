@@ -58,6 +58,7 @@ include_once('inc/sidebarMenu.php');
                                     <th>Sub Category</th>
                                     <th>Price Range</th>
                                     <th>Price</th>
+                                    <th>Down Payment</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -70,6 +71,7 @@ include_once('inc/sidebarMenu.php');
                                             <td><?= htmlspecialchars($dental_services['sub_category']) ?></td>
                                             <td><?= htmlspecialchars($dental_services['price_range']) ?></td>
                                             <td><?= htmlspecialchars($dental_services['price']) ?></td>
+                                            <td><?= htmlspecialchars($dental_services['down_payment']) ?></td>
                                             <td>
                                                 <!-- Edit Button -->
                                                 <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDentalServiceModal" 

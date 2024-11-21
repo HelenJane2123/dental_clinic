@@ -11,9 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $subCategory = $_POST['sub_category'];
     $priceRange = $_POST['price_range'];
     $price = $_POST['price'];
+    $down_payment = $_POST['down_payment'];
 
     // Update the dental service
-    $sql = $funObj->update_dental_services($id, $category, $subCategory, $priceRange, $price);
+    $sql = $funObj->update_dental_services($id, $category, $subCategory, $priceRange, $price, $down_payment);
 
     if ($sql) {
         // Success message

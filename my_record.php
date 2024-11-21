@@ -258,8 +258,8 @@
                                                 <label class="required">Are you taking any prescription/non-prescription medication?</label>
                                                 <select class="form-control" id="taking_medication" name="taking_medication" required data-parsley-required-message="This field is required.">
                                                     <option value="">--Please Select--</option>
-                                                    <option value="1" <?= isset($patient['under_medical_treatment']) && $patient['under_medical_treatment'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                                    <option value="0" <?= isset($patient['under_medical_treatment']) && $patient['under_medical_treatment'] == 0 ? 'selected' : '' ?>>No</option>
+                                                    <option value="1" <?= isset($patient['taking_medication']) && $patient['taking_medication'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                                    <option value="0" <?= isset($patient['taking_medication']) && $patient['taking_medication'] == 0 ? 'selected' : '' ?>>No</option>
                                                 </select>
                                                 <div id="medication_details_group" style="display: none;">
                                                     <label class="required">If yes, what medication?</label>
@@ -356,8 +356,8 @@
                                                 <label class="required">Are you taking birth control pills?</label>
                                                 <select class="form-control" id="birth_control" name="birth_control" required data-parsley-required-message="This field is required.">
                                                     <option value="">--Please Select--</option>
-                                                    <option value="1" <?= isset($patient['birth_control']) && $patient['birth_control'] == 1 ? 'selected' : '' ?>>Yes</option>
-                                                    <option value="0" <?= isset($patient['birth_control']) && $patient['birth_control'] == 0 ? 'selected' : '' ?>>No</option>
+                                                    <option value="1" <?= isset($patient['taking_birth_control']) && $patient['taking_birth_control'] == 1 ? 'selected' : '' ?>>Yes</option>
+                                                    <option value="0" <?= isset($patient['taking_birth_control']) && $patient['taking_birth_control'] == 0 ? 'selected' : '' ?>>No</option>
                                                 </select>
                                             </div>
                                         </div>

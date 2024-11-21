@@ -32,35 +32,121 @@
             // Fetch patient's email from the database
             $patientEmail = $user_dashboard->get_patient_email($member_id);
 
-            // Prepare the email content for the doctor
             $subjectDoctor = "Appointment Updated - " . $appointmentId;
-            $messageDoctor = "Dear Dr. " . $doctorEmail['first_name'] . " " . $doctorEmail['last_name'] . ",\n\n";
-            $messageDoctor .= "The appointment details have been updated:\n\n";
-            $messageDoctor .= "Appointment ID: " . $appointmentId . "\n";
-            $messageDoctor .= "Patient Name: " . $firstname . " " . $lastname . "\n";
-            $messageDoctor .= "Member ID: " . $member_id . "\n";
-            $messageDoctor .= "New Appointment Date: " . $appointmentDate . "\n";
-            $messageDoctor .= "New Appointment Time: " . $appointmentTime . "\n";
-            $messageDoctor .= "Status: " . $status . "\n";
-            $messageDoctor .= "Notes: " . $notes . "\n\n";
-            $messageDoctor .= "Best regards,\nYour Clinic Team";
 
+            $messageDoctor = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f9f9f9;
+                        color: #333;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .email-container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                    }
+                    .email-header {
+                        background-color: #007bff;
+                        color: #ffffff;
+                        text-align: center;
+                        padding: 20px;
+                        font-size: 24px;
+                    }
+                    .email-body {
+                        padding: 20px;
+                    }
+                    .email-body p {
+                        margin: 10px 0;
+                    }
+                    .email-footer {
+                        text-align: center;
+                        font-size: 12px;
+                        color: #888;
+                        margin: 20px 0;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        Appointment Update Notification
+                    </div>
+                    <div class='email-body'>
+                        <p>Dear Dr. {$doctorEmail['first_name']} {$doctorEmail['last_name']},</p>
+                        <p>The appointment details have been updated. Here are the new details:</p>
+                        <ul>
+                            <li><strong>Appointment ID:</strong> {$appointmentId}</li>
+                            <li><strong>Patient Name:</strong> {$firstname} {$lastname}</li>
+                            <li><strong>Member ID:</strong> {$member_id}</li>
+                            <li><strong>New Appointment Date:</strong> {$appointmentDate}</li>
+                            <li><strong>New Appointment Time:</strong> {$appointmentTime}</li>
+                            <li><strong>Status:</strong> {$status}</li>
+                            <li><strong>Notes:</strong> {$notes}</li>
+                        </ul>
+                        <p>Thank you,<br>Your Clinic Team</p>
+                    </div>
+                    <div class='email-footer'>
+                        &copy; " . date("Y") . " Roselle Santander Dental Clinic. All rights reserved.
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+            
             // Prepare the email content for the patient
             $subjectPatient = "Your Appointment Has Been Updated - " . $appointmentId;
-            $messagePatient = "Dear " . $firstname . " " . $lastname . ",\n\n";
-            $messagePatient .= "Your appointment details have been updated:\n\n";
-            $messagePatient .= "Appointment ID: " . $appointmentId . "\n";
-            $messagePatient .= "New Appointment Date: " . $appointmentDate . "\n";
-            $messagePatient .= "New Appointment Time: " . $appointmentTime . "\n";
-            $messagePatient .= "Status: " . $status . "\n";
-            $messagePatient .= "Notes: " . $notes . "\n\n";
-            $messagePatient .= "Best regards,\nYour Clinic Team";
-
+            
+            $messagePatient = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    /* Reuse the same styles as above */
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        Appointment Update Notification
+                    </div>
+                    <div class='email-body'>
+                        <p>Dear {$firstname} {$lastname},</p>
+                        <p>Your appointment details have been updated. Here are the new details:</p>
+                        <ul>
+                            <li><strong>Appointment ID:</strong> {$appointmentId}</li>
+                            <li><strong>New Appointment Date:</strong> {$appointmentDate}</li>
+                            <li><strong>New Appointment Time:</strong> {$appointmentTime}</li>
+                            <li><strong>Status:</strong> {$status}</li>
+                            <li><strong>Notes:</strong> {$notes}</li>
+                        </ul>
+                        <p>Thank you,<br>Your Clinic Team</p>
+                    </div>
+                    <div class='email-footer'>
+                        &copy; " . date("Y") . " Roselle Santander Dental Clinic. All rights reserved.
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+            
+            // Headers for HTML email
+            $headers = "From: rosellesantander@rs-dentalclinic.com\r\n";
+            $headers .= "Reply-To: rosellesantander@rs-dentalclinic.com\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+            
             // Send the email notification to the doctor
-            $headers = "From: rosellesantander@rs-dentalclinic.com" . "\r\n" . 
-                "Reply-To: rosellesantander@rs-dentalclinic.com" . "\r\n" .
-                "X-Mailer: PHP/" . phpversion();
-
             if (mail($doctorEmail['email'], $subjectDoctor, $messageDoctor, $headers)) {
                 $_SESSION['email_message'] = "Email notification sent to the doctor.";
                 $_SESSION['email_type'] = "success";
@@ -68,7 +154,7 @@
                 $_SESSION['email_message'] = "Failed to send email notification to the doctor.";
                 $_SESSION['email_type'] = "danger";
             }
-
+            
             // Send the email notification to the patient
             if (mail($patientEmail, $subjectPatient, $messagePatient, $headers)) {
                 $_SESSION['patient_email_message'] = "Email notification sent to the patient.";

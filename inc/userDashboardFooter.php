@@ -256,7 +256,7 @@
       // Get the current time in 24-hour format (HH:mm)
       const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 
-      pendingAppointments.forEach(appointment => {
+        pendingAppointments.forEach(appointment => {
           if (appointment.start === today) {
               // Compare current time with appointment time
               if (currentTime > convertTo24Hour(appointment.time)) {  // Convert appointment time to 24-hour format for comparison
@@ -272,7 +272,7 @@
                 });
               }
           }
-      });
+        });
     });
 
     function convertTo24Hour(timeStr) {

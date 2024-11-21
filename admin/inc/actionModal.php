@@ -318,6 +318,10 @@
                         <label for="editPrice" class="form-label">Price</label>
                         <input type="text" class="form-control" id="editPrice" name="price" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="editDownPayment" class="form-label">Down Payment</label>
+                        <input type="text" class="form-control" id="editDownPayment" name="down_payment" required>
+                    </div>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
@@ -370,6 +374,10 @@
           <div class="mb-3">
             <label for="price" class="form-label">Price</label>
             <input type="number" class="form-control" id="price" name="price" required>
+          </div>
+          <div class="mb-3">
+            <label for="down_payment" class="form-label">Down Payment</label>
+            <input type="text" class="form-control" id="down_payment" name="down_payment">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -428,11 +436,38 @@
         document.getElementById('editSubCategory').value = dentalService.sub_category;
         document.getElementById('editPriceRange').value = dentalService.price_range;
         document.getElementById('editPrice').value = dentalService.price;
+        document.getElementById('editDownPayment').value = dentalService.down_payment;
+
     }
 
     // Confirm the deletion by setting the service ID
     function confirmDelete(serviceId) {
         document.getElementById('deleteServiceId').value = serviceId;
     }
+
+    // Listen for changes in the price input field
+    document.getElementById('price').addEventListener('input', function() {
+        var price = parseFloat(this.value);
+        if (!isNaN(price)) {
+        // Calculate the 20% down payment
+        var downPayment = price * 0.20;
+        // Update the down payment field
+        document.getElementById('down_payment').value = downPayment.toFixed(2);
+        } else {
+        document.getElementById('down_payment').value = '0.00'; // Set to 0 if price is invalid
+        }
+    });
+
+    document.getElementById('editPrice').addEventListener('input', function() {
+        var price = parseFloat(this.value);
+        if (!isNaN(price)) {
+        // Calculate the 20% down payment
+        var downPayment = price * 0.20;
+        // Update the down payment field
+        document.getElementById('editDownPayment').value = downPayment.toFixed(2);
+        } else {
+        document.getElementById('editDownPayment').value = '0.00'; // Set to 0 if price is invalid
+        }
+    });
 
 </script>

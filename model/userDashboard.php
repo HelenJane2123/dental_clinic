@@ -340,26 +340,81 @@
             return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         }
 
-        public function automatic_cancel_appointment($member_id,$appointmentId) {
+        public function automatic_cancel_appointment($member_id, $appointmentId) {
             // Get today's date and current time
-            $today = date('Y-m-d');
-
+            $today = date('Y-m-d H:i:s');
+        
             // Prepare the cancellation SQL query
             $sql = "UPDATE appointments 
-                SET status = 'Canceled', canceled_at = NOW(), notes = 'Scheduled appointment is still pending and past the set appointment time.'
-                WHERE id = ? AND member_id = ?";
-
+                    SET status = 'Canceled', canceled_at = NOW(), notes = 'Scheduled appointment is still pending and past the set appointment time.' 
+                    WHERE id = ?";
+        
             $stmt = $this->db->prepare($sql);
             if ($stmt === false) {
                 return "Failed to prepare cancellation query.";
             }
-
-            // Bind parameters: 'i' for integer (appointmentId) and 'i' for integer (member_id)
-            $stmt->bind_param('ii', $appointmentId, $member_id);
+        
+            // Bind parameters: 'i' for integer (appointmentId)
+            $stmt->bind_param('i', $appointmentId);
             $stmt->execute();
+            
             // Free the statement
             $stmt->close();
+        
+            // Fetch the doctor's and patient's email addresses
+            $patientEmail = $this->get_patient_email($member_id);
+        
+            // Prepare the email content for the patient
+            $subjectPatient = "Your Appointment Has Been Canceled - " . $appointmentId;
+            $messagePatient = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    /* Reuse the same styles as above */
+                </style>
+            </head>
+            <body>
+                <div class='email-container'>
+                    <div class='email-header'>
+                        Appointment Cancellation Notification
+                    </div>
+                    <div class='email-body'>
+                        <p>Dear Patient,</p>
+                        <p>Your appointment schedule has been automatically canceled due to it remaining pending and past the scheduled time.</p>
+                        <p>Details:</p>
+                        <ul>
+                            <li><strong>Appointment ID:</strong> {$appointmentId}</li>
+                            <li><strong>Status:</strong> Canceled</li>
+                            <li><strong>Notes:</strong> Scheduled appointment is still pending and past the set appointment time.</li>
+                        </ul>
+                        <p>Thank you,<br>Your Clinic Team</p>
+                    </div>
+                    <div class='email-footer'>
+                        &copy; " . date("Y") . " Roselle Santander Dental Clinic. All rights reserved.
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+        
+            // Headers for HTML email
+            $headers = "From: rosellesantander@rs-dentalclinic.com" . "\r\n" . 
+            "Reply-To: rosellesantander@rs-dentalclinic.com" . "\r\n" .
+            "X-Mailer: PHP/" . phpversion() . "\r\n" .
+            "Content-Type: text/html; charset=UTF-8";  // Ensure the email is sent as HTML
+                    
+        
+            // Send the email notification to the patient
+            if (mail($patientEmail, $subjectPatient, $messagePatient, $headers)) {
+                $_SESSION['patient_email_message'] = "Email notification sent to the patient.";
+                $_SESSION['patient_email_type'] = "success";
+            } else {
+                $_SESSION['patient_email_message'] = "Failed to send email notification to the patient.";
+                $_SESSION['patient_email_type'] = "danger";
+            }
         }
+        
 
         public function update_profile($firstname, $lastname, $contactnumber, $email, $gender, $address, $profilePicPath, $remarks, $member_id) {
             $sql = "UPDATE accounts 
@@ -936,24 +991,17 @@
             return $stmt->get_result()->fetch_assoc();
         }
 
-        public function get_all_notifications($member_id = null) {
-            // SQL query to get notifications along with patient and account details
+        public function get_all_notifications($member_id) {
             $query = "
-                SELECT p.*, a.member_id, a.first_name AS first_name, a.last_name AS last_name, a.patient_id
+                SELECT p.*, a.member_id, a.first_name, a.last_name, a.patient_id
                 FROM notifications p
-                LEFT JOIN patients a ON p.notif_to = a.patient_id";
+                LEFT JOIN patients a ON p.notif_to = a.patient_id
+                WHERE a.member_id = ?"; 
             
-            // Add condition to filter notifications for a specific member_id if provided
-            if ($member_id !== null) {
-                $query .= " WHERE a.member_id = ?";
-            }
-        
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
-                // Bind the member_id parameter if it's provided
-                if ($member_id !== null) {
-                    $stmt->bind_param("i", $member_id);
-                }
+                // Bind the member_id parameter
+                $stmt->bind_param("i", $member_id);
                 
                 // Execute the query
                 $stmt->execute();
@@ -961,10 +1009,10 @@
                 // Fetch the result
                 $result = $stmt->get_result();
                 
-                // Initialize an array to store the notifications with details
+                // Initialize an array to store the notifications
                 $notifications_with_details = [];
                 
-                // Loop through the result and add each notification to the arrayf
+                // Loop through the result and add each notification to the array
                 while ($row = $result->fetch_assoc()) {
                     $notifications_with_details[] = $row;
                 }
@@ -972,17 +1020,20 @@
                 // Close the statement
                 $stmt->close();
                 
-                // Return the array of notifications with details
+                // Return the notifications array
                 return $notifications_with_details;
             } else {
-                // If the query preparation fails, return an empty array
+                // Return an empty array if query preparation fails
                 return [];
             }
         }
 
         public function get_doctor_details($id) {
             // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID
-            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id, first_name, last_name FROM doctors WHERE account_id = ?");
+            $stmt = $this->db->prepare("SELECT doctors.doctor_id, doctors.email, doctors.account_id, doctors.first_name, doctors.last_name, accounts.member_id
+                                            FROM doctors 
+                                            LEFT JOIN accounts ON doctors.account_id = accounts.id
+                                    WHERE doctors.account_id = ?");
             
             // Bind the input parameter (account_id)
             $stmt->bind_param("i", $id);
@@ -996,7 +1047,7 @@
             // Check if the doctor exists
             if ($stmt->num_rows > 0) {
                 // Bind the result to the variables (id, email, account_id)
-                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name);
+                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name, $member_id);
                 
                 // Fetch the data
                 $stmt->fetch();
@@ -1010,7 +1061,8 @@
                     'email' => $email,
                     'account_id' => $account_id,
                     'first_name' => $first_name,
-                    'last_name' => $last_name
+                    'last_name' => $last_name,
+                    'member_id' => $member_id
                 );
             } else {
                 // Close the statement
@@ -1019,7 +1071,44 @@
                 // Return false if no doctor is found with the given ID
                 return false;
             }
-        }       
+        }   
+        
+        public function get_doctor_details_member_id($id) {
+            // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID
+            $sql = "SELECT doctors.doctor_id, doctors.email, doctors.account_id, doctors.first_name, doctors.last_name, accounts.member_id
+                    FROM doctors
+                    LEFT JOIN accounts ON doctors.account_id = accounts.id
+                    WHERE accounts.member_id = ?";
+            
+            // Prepare the statement
+            if ($stmt = $this->db->prepare($sql)) {
+                // Bind the parameter
+                $stmt->bind_param("s", $id);
+                
+                // Execute the statement
+                $stmt->execute();
+
+                // Get the result
+                $result = $stmt->get_result();
+
+                // Fetch the data
+                $doctor_details = $result->fetch_assoc();
+
+                // Close the statement
+                $stmt->close();
+
+                // Check if the query returned any results
+                if ($doctor_details) {
+                    return $doctor_details;
+                } else {
+                    // Handle the case when no data is returned
+                    return false; // You can return a specific message if needed
+                }
+            } else {
+                // Handle error if the query fails
+                return false;
+            }
+        }
         
         public function get_doctor_admin() {
             // Prepare the query to fetch the account id where user_type is 'super_admin'
@@ -1269,11 +1358,12 @@
         public function getSelectedServicesAndPaymentDetails($appointment_id) {
             $details = [];
             
-            // SQL query to fetch services and their prices for the given appointment ID
+            // SQL query to fetch services, prices, and down payment for the given appointment ID
             $query = "
                 SELECT 
                     ds.sub_category, 
-                    ds.price
+                    ds.price,
+                    ds.down_payment
                 FROM 
                     appointments AS a
                 LEFT JOIN 
@@ -1292,25 +1382,27 @@
             
             $services = [];
             $totalPrice = 0;
-        
-            // Loop through the results to calculate total price and gather services
+            $totalDownPayment = 0;
+            
+            // Loop through the results to calculate total price, down payment and gather services
             while ($service = $servicesResult->fetch_assoc()) {
                 $services[] = $service; // Add service to the array
                 $totalPrice += $service['price']; // Accumulate the total price
+                $totalDownPayment += $service['down_payment']; // Accumulate the total down payment
             }
             
-            // Calculate the down payment and remaining balance
-            $downPayment = $totalPrice * 0.20;
-            $remainingBalance = $totalPrice - $downPayment;
-        
+            // Calculate remaining balance
+            $remainingBalance = $totalPrice - $totalDownPayment;
+            
             // Populate the details array with services, pricing, and payment breakdown
             $details['services'] = $services; // Use 'services' as the key for clarity
             $details['total_price'] = number_format($totalPrice, 2);  // Format as currency
-            $details['down_payment'] = number_format($downPayment, 2); // Format as currency
+            $details['down_payment'] = number_format($totalDownPayment, 2); // Format as currency
             $details['remaining_balance'] = number_format($remainingBalance, 2); // Format as currency
-        
-            return $details; // Return the complete details
+            
+            return $details;
         }
+        
         
         
         

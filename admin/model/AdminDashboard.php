@@ -1203,11 +1203,11 @@
         }
 
         // Example method in Admin class to update a dental service
-        public function update_dental_services($id, $category, $subCategory, $priceRange, $price) {
-            $query = "UPDATE dental_services SET category = ?, sub_category = ?, price_range = ?, price = ? WHERE id = ?";
+        public function update_dental_services($id, $category, $subCategory, $priceRange, $price, $down_payment) {
+            $query = "UPDATE dental_services SET category = ?, sub_category = ?, price_range = ?, price = ?, down_payment = ? WHERE id = ?";
 
             if ($stmt = $this->db->prepare($query)) {
-                $stmt->bind_param("ssssi", $category, $subCategory, $priceRange, $price, $id);
+                $stmt->bind_param("sssssi", $category, $subCategory, $priceRange, $price, $down_payment, $id);
                 return $stmt->execute();
             } else {
                 return false;
@@ -1215,12 +1215,12 @@
         }
 
         // Example method in Admin class to add dental service
-        public function add_dental_service($category, $subCategory, $priceRange, $price) {
-            $query = "INSERT INTO dental_services (category, sub_category, price_range, price) 
-                    VALUES (?, ?, ?, ?)";
+        public function add_dental_service($category, $subCategory, $priceRange, $price, $down_payment) {
+            $query = "INSERT INTO dental_services (category, sub_category, price_range, price, down_payment) 
+                    VALUES (?, ?, ?, ?, ?)";
 
             if ($stmt = $this->db->prepare($query)) {
-                $stmt->bind_param("sssd", $category, $subCategory, $priceRange, $price);
+                $stmt->bind_param("sssdd", $category, $subCategory, $priceRange, $price, $down_payment);
                 return $stmt->execute();
             } else {
                 return false;
