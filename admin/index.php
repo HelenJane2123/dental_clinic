@@ -25,7 +25,7 @@
                 <div class="auth-logo">
                     <a href="../index.php"><h5 class="auth-subtitle"><img src="images/logo/logo.png" alt="Logo" style="height:113px;"></h5></a>
                 </div>
-                <h1 class="auth-title">Log in.</h1>
+                <h1 class="auth-title text-black">Log in.</h1>
                 <p class="auth-subtitle mb-5">Log in to Admin Panel.</p>
 
                 <form action="controller/loginAccount.php" id="login_form" class="needs-validation" method="POST" novalidate enctype="multipart/form-data">

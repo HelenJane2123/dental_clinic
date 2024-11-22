@@ -11,17 +11,14 @@
 			}
 		}
         /*** check if user email exist ***/
-        public function isUserExist($email){
-            $sql="SELECT * FROM accounts WHERE email='$email'";
-            $check =  $this->db->query($sql);
-            $count_row = $check->num_rows;
-            if($count_row == 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
+        public function isUserExist($email) {
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result;
         }
+
 		/*** check if user name exist ***/
         public function isUserName($username){
             $sql="SELECT * FROM accounts WHERE username='$username'";
@@ -33,6 +30,47 @@
             else {
                 return true;
             }
+        }
+
+        public function reset_password($token) {
+            $currentDateTime = date("Y-m-d H:i:s"); // Get current time
+        
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration >= ?");
+            $stmt->bind_param("ss", $token, $currentDateTime);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            if ($result->num_rows === 1) {
+                return $result->fetch_assoc(); // Return user details
+            } else {
+                return false; // Token is invalid or expired
+            }
+        }
+
+        public function forgot_password($token, $expiration, $email) {
+            // Assuming you have a database connection established in your class
+            $conn = $this->db; // Replace with your database connection instance
+        
+            // Prepare the SQL query to update the user's password reset token and expiration
+            $query = "UPDATE accounts SET reset_token = ?, token_expiration = ? WHERE email = ?";
+        
+            if ($stmt = $conn->prepare($query)) {
+                // Bind the parameters
+                $stmt->bind_param('sss', $token, $expiration, $email);
+        
+                // Execute the statement
+                if ($stmt->execute()) {
+                    // Check if any row was updated
+                    if ($stmt->affected_rows > 0) {
+                        return true; // Successfully updated
+                    }
+                }
+        
+                // Close the statement
+                $stmt->close();
+            }
+        
+            return false; // Failed to update
         }
 
         public function get_user_id_from_account($member_id) {
