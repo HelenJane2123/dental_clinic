@@ -1,6 +1,6 @@
 <?php
     include('../model/userDashboard.php');
-    include('../lib/email_configuration.php');
+    include('../lib/email_config.php');
 
     session_start();
     

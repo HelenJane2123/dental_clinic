@@ -728,7 +728,7 @@
             // Prepare the statement
             if ($stmt = $this->db->prepare($query)) {
                 // Bind the patient_id to the prepared statement
-                $stmt->bind_param("s", $patient_id);  // Assuming patient_id is a string, use 'i' for integers
+                $stmt->bind_param("i", $patient_id);  // Assuming patient_id is a string, use 'i' for integers
                 
                 // Execute the statement
                 $stmt->execute();

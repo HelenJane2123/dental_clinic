@@ -1,6 +1,6 @@
 <?php
 include('../model/registerLogin.php');
-include('../lib/email_configuration.php'); // Ensure this file contains SMTP settings
+include('../lib/email_config.php'); // Ensure this file contains SMTP settings
 session_start();
 
 $funObj = new User();

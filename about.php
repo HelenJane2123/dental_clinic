@@ -16,7 +16,7 @@
       </div>
     </section>
 
-		<section class="ftco-section">
+	<section class="ftco-section">
     	<div class="container">
     		<div class="row d-md-flex">
 	    		<div class="col-md-6 ftco-animate img about-image order-md-last" style="background-image: url(img/about.jpg);">
@@ -72,12 +72,22 @@
 		    </div>
     	</div>
     </section>
+
+    <!-- New Section for Doctor's Info -->
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row d-flex align-items-center">
+          <div class="col-md-4">
+            <img src="img/doctor.jpg" alt="Dr. Roselle Santander" class="img-fluid rounded-circle">
+          </div>
+          <div class="col-md-8">
+            <h2>Dr. Roselle Santander</h2>
+            <p>Dr. Roselle Santander is a highly skilled and compassionate dentist with years of experience in providing exceptional dental care. Her expertise spans a wide range of dental services, from routine checkups to complex procedures. Dr. Santander is dedicated to ensuring each patient receives the best care in a comfortable and welcoming environment. With a strong commitment to continuing education and staying at the forefront of dental technology, she strives to make every patient’s visit a positive and rewarding experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
 <?php
   include_once('inc/footer.php');
 ?>
-
-  
-
-    
-
-    

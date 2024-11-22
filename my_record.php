@@ -323,6 +323,12 @@
                                                     <label class="form-check-label">Latex</label>
                                                 </div>
                                                 <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="None of the above" 
+                                                        <?= in_array("None of the above", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
+                                                        data-parsley-required-message="Please choose at least one allergy.">
+                                                    <label class="form-check-label">Nove of the above</label>
+                                                </div>
+                                                <div class="form-check">
                                                     <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Others" 
                                                         <?= in_array("Others", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
                                                         data-parsley-required-message="Please choose at least one allergy.">
@@ -391,6 +397,10 @@
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input medical_conditions" name="medical_conditions[]" value="Diabetes" <?= in_array("Diabetes", $patient_medical_conditions) ? 'checked' : '' ?>>
                                                     <label class="form-check-label">Diabetes</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input medical_conditions" name="medical_conditions[]" value="None of the above" <?= in_array("None of the above", $patient_medical_conditions) ? 'checked' : '' ?>>
+                                                    <label class="form-check-label">None of the above</label>
                                                 </div>
                                                 <!-- Add additional medical condition checkboxes as needed -->
                                             </div>

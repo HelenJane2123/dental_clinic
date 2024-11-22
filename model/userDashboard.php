@@ -469,6 +469,7 @@
             }
         }
 
+
         public function update_medical_record($data) {
             // Step 1: Check if the patient record exists
             $checkQuery = "SELECT patient_id FROM patients WHERE patient_id = ?";
@@ -969,7 +970,7 @@
             ");
             
             // Bind parameters: `member_id` and `limit`
-            $stmt->bind_param("ii", $member_id, $limit);
+            $stmt->bind_param("si", $member_id, $limit);
             $stmt->execute();
             
             $result = $stmt->get_result();
@@ -1001,7 +1002,7 @@
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
                 // Bind the member_id parameter
-                $stmt->bind_param("i", $member_id);
+                $stmt->bind_param("s", $member_id);
                 
                 // Execute the query
                 $stmt->execute();
