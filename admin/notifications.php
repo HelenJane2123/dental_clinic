@@ -37,7 +37,6 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Patient ID</th>
-                                            <th>Member ID</th>
                                             <th>Message</th>
                                             <th>Type</th>
                                             <th>Status</th>
@@ -48,8 +47,7 @@
                                             <?php foreach ($notification_lists as $notification) : ?>
                                                 <tr>
                                                     <td><?= htmlspecialchars($notification['first_name'])." ".htmlspecialchars($notification['last_name']) ?></td>
-                                                    <td><?= htmlspecialchars($notification['patient_id']) ?></td>
-                                                    <td><?= htmlspecialchars($notification['member_id']) ?></td>
+                                                    <td><?= htmlspecialchars($notification['patient_member_id']) ?></td>
                                                     <td><?= htmlspecialchars($notification['message']) ?></td>
                                                     <td>
                                                         <label class="badge bg-info">

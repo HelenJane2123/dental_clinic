@@ -63,9 +63,9 @@
                         </div>
                     </div>
                     <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="password" class="form-control form-control-xl" placeholder="Password" name="password">
-                        <div class="form-control-icon">
-                            <i class="bi bi-shield-lock"></i>
+                        <input type="password" class="form-control form-control-xl" id="password" placeholder="Password" name="password">
+                        <div class="form-control-icon" style="cursor: pointer;" onclick="togglePasswordVisibility()">
+                            <i class="bi bi-eye" id="toggleIcon"></i>
                         </div>
                     </div>
                     <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" type="submit" name="login_user">Log in</button>
@@ -83,7 +83,22 @@
         </div>
     </div>
 </div>
-
+<script>
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('bi-eye');
+        toggleIcon.classList.add('bi-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('bi-eye-slash');
+        toggleIcon.classList.add('bi-eye');
+    }
+}
+</script>
 <?php
     include_once('inc/footer.php');
 ?>

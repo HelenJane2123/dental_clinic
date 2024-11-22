@@ -33,7 +33,7 @@
         $stored_password = $funObj->get_current_password($member_id);
 
        
-        if ($stored_password !== false) {
+        //if ($stored_password !== false) {
             // Verify the current password with the stored hash
             if (password_verify($current_password, $stored_password)) {
                 // Hash the new password
@@ -53,10 +53,10 @@
                 $_SESSION['display_message'] = "Current password is incorrect!";
                 $_SESSION['message_type'] = "danger";
             }
-        } else {
-            $_SESSION['display_message'] = "User not found!";
-            $_SESSION['message_type'] = "danger";
-        }
+        // } else {
+        //     $_SESSION['display_message'] = "User not found!";
+        //     $_SESSION['message_type'] = "danger";
+        // }
     
         // Redirect back to the password change page
         header("Location: ../change_password.php");

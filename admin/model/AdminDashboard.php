@@ -259,7 +259,7 @@
             
             // Add condition to exclude notifications based on the user ID, if provided
             if ($exclude_user_id !== null) {
-                $query .= " WHERE notif_to = ?";
+                $query .= " WHERE notif_to = ? ";
             }
             
             // Append the ordering and limit
@@ -324,14 +324,14 @@
         public function get_all_notifications($exclude_user_id = null) {
             // SQL query to get patient details along with member ID, first name, and last name
             $query = "
-                SELECT p.*, o.member_id, a.first_name AS first_name, a.last_name AS last_name, a.patient_id
+                SELECT p.*, a.member_id as patient_member_id, a.first_name AS first_name, a.last_name AS last_name, a.patient_id
                 FROM notifications p
                 LEFT JOIN patients a ON p.user_id = a.patient_id
                 LEFT JOIN accounts o ON o.id = p.user_id";
             
             // Add a condition to exclude notifications for the specified user ID if provided
             if ($exclude_user_id !== null) {
-                $query .= " WHERE p.notif_to = ?";
+                $query .= " WHERE p.notif_to = ? ORDER BY created_at DESC";
             }
             
             // Prepare the SQL statement
@@ -371,7 +371,8 @@
             // SQL query to get patient details along with member ID, first name, and last name
             $query = "SELECT patients.*, doctors.first_name AS doctor_first_name, doctors.last_name AS doctor_last_name
                         FROM patients
-                    LEFT JOIN doctors ON patients.assigned_doctor = doctors.account_id";
+                    LEFT JOIN doctors ON patients.assigned_doctor = doctors.account_id
+                    ORDER BY patients.patient_id DESC";
 
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -415,6 +416,7 @@
                     doctors ON patients.assigned_doctor = doctors.account_id
                 WHERE 
                     doctors.account_id = ?
+                ORDER BY patients.patient_id DESC
             ";
         
             // Prepare the SQL statement
@@ -492,7 +494,10 @@
                 LEFT JOIN
                 	proof_of_payment AS pp ON pp.appointment_id = appointments.id
                 LEFT JOIN
-                	dental_services AS ds ON ds.id = appointments.services";
+                	dental_services AS ds ON ds.id = appointments.services
+                ORDER BY 
+                    appointments.appointment_date DESC, 
+                    appointments.appointment_time DESC;";
         
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -563,6 +568,9 @@
                 	dental_services AS ds ON ds.id = appointments.services
                 WHERE 
                     patients.assigned_doctor = ?
+                ORDER BY 
+                    appointments.appointment_date DESC, 
+                    appointments.appointment_time DESC;
             ";
         
             // Prepare the SQL statement
@@ -1081,7 +1089,7 @@
         public function get_current_password($member_id) {
             $query = "SELECT password FROM accounts WHERE member_id = ?";
             $stmt = $this->db->prepare($query);
-            $stmt->bind_param("i", $member_id);
+            $stmt->bind_param("s", $member_id);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -1219,6 +1227,7 @@
                     patients pt ON a.patient_id = pt.patient_id
                 LEFT JOIN
                     doctors d ON d.account_id = pt.assigned_doctor
+                ORDER BY pp.uploaded_at DESC
             ";
         
             // Prepare the statement
@@ -1635,6 +1644,81 @@
             $stmt->execute();
         }
 
+        public function get_all_appointment_per_date($start_date, $end_date) {
+            // SQL query to fetch appointments within the date range
+            $query = "SELECT 
+                        appointments.id as appointment_id,
+                        patients.member_id as patient_id, 
+                        CONCAT(patients.first_name, ' ', patients.last_name) AS patient_name,
+                        appointments.appointment_date, 
+                        appointments.appointment_time, 
+                        CONCAT(doctors.first_name, ' ', doctors.last_name) AS doctor_name,
+                        appointments.status as appointment_status,
+                        dental_services.sub_category as service_name
+                      FROM appointments 
+                      LEFT JOIN patients ON patients.patient_id = appointments.patient_id
+                      LEFT JOIN doctors ON doctors.account_id = patients.assigned_doctor
+                      LEFT JOIN dental_services ON dental_services.id = appointments.services
+                      WHERE appointment_date BETWEEN ? AND ?";
+            
+            // Database connection and prepared statement
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("ss", $start_date, $end_date); // Bind start_date and end_date
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            return $result; // Return the result set
+        }
+        
+        public function get_all_dental_records_per_date($start_date, $end_date) {
+            // SQL query to fetch dental records within the date range
+            $query = "SELECT 
+                        patients.member_id as patient_id,
+                        CONCAT(patients.first_name, ' ', patients.last_name) AS patient_name,
+                        dental_records.date,
+                        dental_records.tooth_no,
+                        dental_records.procedure,
+                        dental_records.dentist,
+                        dental_records.amount_charged,
+                        dental_records.amount_paid,
+                        dental_records.balance,
+                        dental_records.next_appointment
+                      FROM dental_records 
+                      LEFT JOIN patients ON patients.patient_id = dental_records.patient_id
+                      WHERE created_at BETWEEN ? AND ?";
+            
+            // Database connection and prepared statement
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("ss", $start_date, $end_date); // Bind start_date and end_date
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            return $result; // Return the result set
+        }
+        
+        public function get_all_proof_of_payment_per_date($start_date, $end_date) {
+            // SQL query to fetch payment proofs within the date range
+            $query = "SELECT 
+                        patients.member_id as patient_id, 
+                        CONCAT(patients.first_name, ' ', patients.last_name) AS patient_name,
+                        dental_services.sub_category as service_name,
+                        proof_of_payment.status as payment_status,
+                        proof_of_payment.remarks,
+                        proof_of_payment.uploaded_at as payment_date
+                      FROM proof_of_payment 
+                      LEFT JOIN appointments ON appointments.id = proof_of_payment.appointment_id
+                      LEFT JOIN patients ON patients.patient_id = appointments.patient_id
+                      LEFT JOIN dental_services ON dental_services.id = appointments.services
+                      WHERE uploaded_at BETWEEN ? AND ?";
+            
+            // Database connection and prepared statement
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("ss", $start_date, $end_date); // Bind start_date and end_date
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            return $result; // Return the result set
+        }
         
 	}
 ?>

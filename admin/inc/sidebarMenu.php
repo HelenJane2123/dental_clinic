@@ -51,7 +51,7 @@
             </li>
             <li class="sidebar-title">Managing Dental Service</li>
             <?php if ($_SESSION['user_type'] == 'super_admin'): ?>
-                <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : '' ?>">
+                <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'dental_services.php' ? 'active' : '' ?>">
                     <a href="dental_services.php" class='sidebar-link'>
                         <i class="bi bi-gear-fill"></i>
                         <span>Dental Services</span>

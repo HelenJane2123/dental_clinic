@@ -123,7 +123,9 @@
                     dental_services AS ds ON a.services = ds.id 
                 WHERE 
                     p.member_id = ?
-            ";
+                ORDER BY 
+                    a.appointment_date DESC, 
+                    a.appointment_time DESC";
         
             // Initialize the statement
             $stmt = $this->db->prepare($query);

@@ -66,7 +66,12 @@ include_once('inc/header.php');
                 <i class="fas fa-lock"></i>
               </span>
             </div>
-            <input type="password" class="form-control" placeholder="Password" name="password" required style="padding-left: 10px;"> <!-- Padding added to input -->
+            <input type="password" class="form-control" placeholder="Password" id="password" name="password" required style="padding-left: 10px;"> <!-- Padding added to input -->
+            <div class="input-group-append">
+              <span class="input-group-text bg-secondary text-white px-3 toggle-password" style="cursor: pointer;">
+                <i id="toggleIcon" class="fas fa-eye"></i>
+              </span>
+            </div>
           </div>
 
           <!-- Login Button -->
@@ -98,6 +103,7 @@ include_once('inc/header.php');
 <?php include_once('inc/footer.php'); ?>
 
 <script>
+  
   window.addEventListener('load', function() {
     const alertElement = document.querySelector('.alert');
     if (alertElement) {
@@ -109,5 +115,21 @@ include_once('inc/header.php');
         }, 1500);
       }, 5000);
     }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    togglePassword.addEventListener('click', function () {
+      // Toggle the password input type
+      const isPasswordVisible = passwordInput.type === 'password';
+      passwordInput.type = isPasswordVisible ? 'text' : 'password';
+      
+      // Toggle the icon class
+      toggleIcon.classList.toggle('fa-eye', !isPasswordVisible);
+      toggleIcon.classList.toggle('fa-eye-slash', isPasswordVisible);
+    });
   });
 </script>
