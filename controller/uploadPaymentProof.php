@@ -88,6 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['paymentReceipt'])) {
                 </head>
                 <body>
                     <div class='content'>
+                        <div class='header'>
+                            <img src='https://rs-dentalclinic.com/img/logo.png'>
+                        </div>
                         <h2>Payment Proof Uploaded</h2>
                         <p>Dear Dr. $doctorName,</p>
                         <p>A patient has uploaded proof of payment for their appointment. Here are the details:</p>

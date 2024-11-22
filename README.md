@@ -58,3 +58,14 @@ ADMIN/DENTIST SIDE
     - Once added by Super Admin -> create account in account table with user_type = ádmin
     - account id should be the same in doctor_id
 
+
+Email Notification
+1. Patient
+    - When booking an appointment
+    - When editing an appointment
+
+2. Doctor
+    - When booking an appointment
+    - When editing an appointment
+    - When user uploaded the proof of payment
+

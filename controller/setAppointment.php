@@ -21,18 +21,18 @@ if (isset($_POST['appointmentType'])) {
     $patient_id = isset($_POST['patient_id']) ? $_POST['patient_id'] : null;
   
     // Check if the appointment is for myself
-    if ($appointmentType === 'myself') {
+    //if ($appointmentType === 'myself') {
         // Use session data for first and last name
         $firstname = $_POST['old_firstname'];
         $lastname = $_POST['old_lastname'];
         $emailAddress = $_POST['old_emailaddress'];
-    } elseif ($appointmentType === 'newPatient') {
-        // Get data from the form
-        $firstname = $_POST['firstname'];
-        $lastname = $_POST['lastname'];
-        $contactNumber = $_POST['contactnumber'];
-        $emailAddress = $_POST['emailaddress'];
-    }
+    // } elseif ($appointmentType === 'newPatient') {
+    //     // Get data from the form
+    //     $firstname = $_POST['firstname'];
+    //     $lastname = $_POST['lastname'];
+    //     $contactNumber = $_POST['contactnumber'];
+    //     $emailAddress = $_POST['emailaddress'];
+    // }
 
     // Insert appointment details
     $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id,$user_admin_id);
@@ -171,6 +171,9 @@ if (isset($_POST['appointmentType'])) {
         </head>
         <body>
             <div class='email-container'>
+                <div class='header'>
+                    <img src='https://rs-dentalclinic.com/img/logo.png'>
+                </div>
                 <div class='header'>
                     <h1>Appointment Confirmation</h1>
                 </div>

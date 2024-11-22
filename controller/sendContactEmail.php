@@ -65,6 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
         <div class='email-container'>
             <div class='header'>
+                <img src='https://rs-dentalclinic.com/img/logo.png'>
+            </div>
+            <div class='header'>
                 <h1>Contact Form Submission</h1>
             </div>
             <div class='content'>

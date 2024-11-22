@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         Patient ID: $patient_id<br />
                         Patient Name: $patient_name<br />
                         <p>If you have any questions, please feel free to contact the administration team.</p>
-                        <p>Best regards,<br />Dental Clinic Team</p>
+                        <p>Best regards,<br />Roselle Santander Dental Clinic Team</p>
                         <p class='footer'>This is an automated email. Please do not reply.</p>
                     </div>
                 </body>

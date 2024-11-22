@@ -18,16 +18,23 @@ $updated_by = $_SESSION['username']; // Get the username from the session
 $user_id = $_POST['user_id_admin'];
 $patient_id = $_POST['patient_id'];
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
     $appointment_id = intval($_POST['appointment_id']); // Use POST data
+    // Fetch patient's email
+    $patient = $funObj->get_patient_by_appointment_id($appointment_id);
+    $firstName = $patient['first_name'];
+    $lastName = $patient['last_name'];
+    $serviceName = $patient['service_name'];
+    $appointmentTime = date("h:i A", strtotime($patient['appointment_time']));
+    $appointmentDate = date("F j, Y", strtotime($patient['appointment_date']));
+    $patient_email = $patient['email'];
+
     if (isset($_POST['action']) && $_POST['action'] === 'complete') {
         $notes = isset($_POST['notes']) ? $_POST['notes'] : '';
 
         // Mark the appointment as completed
         if ($funObj->complete_appointment($appointment_id, $notes, $updated_by, $user_id)) {
-
-            // Fetch patient's email
-            $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
 
             // Prepare email content for completion
             $subject = "Your Appointment is Completed";
@@ -75,18 +82,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
             <body>
 
             <div class='container'>
-                <h2>Dear Patient,</h2>
-                <p>We are pleased to inform you that your appointment has been successfully completed. We appreciate your trust in Roselle Santander Dental Clinic for your dental care.</p>
-                <p>If you have any further concerns or need assistance, please don't hesitate to reach out.</p>
-                
-                <p>Thank you for choosing us, and we look forward to seeing you again!</p>
-                
-                <a href='https://rs-dentalclinic.com/contact.php' class='button'>Contact Us</a>
+                 <h2>Dear $firstName $lastName,</h2>
+                <p>Your appointment for <strong>$serviceName</strong> has been successfully completed.</p>
+                <p><strong>Service Description:</strong> $serviceDescription</p>
+                <p><strong>Appointment Date:</strong> $appointmentDate</p>
+                <p><strong>Time:</strong> $appointmentTime</p>
+                <p>If you have further questions, feel free to reach out.</p>
+                <p>Thank you for choosing our clinic!</p>
+                <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
+                <p><a href='https://rs-dentalclinic.com/contact.php' class='btn'>Contact Support</a></p>
                 
                 <div class='footer'>
                     <p>Best regards,</p>
                     <p>Your Roselle Santander Dental Clinic Team</p>
                 </div>
+            </div>
+            <div class='footer'>
+                <p>&copy; " . date('Y') . " Roselle Santander Dental Clinic. All rights reserved.</p>
             </div>
 
             </body>
@@ -118,9 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         if (isset($_POST['action']) && $_POST['action'] === 'cancel') {
             // Cancellation logic
             if ($funObj->cancel_appointment($appointment_id, $notes, $updated_by, $user_id)) {
-
-                // Fetch patient's email after cancelation
-                $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
 
                 // Prepare email content with HTML
                 $subject = "Your Appointment has been Canceled";
@@ -168,19 +177,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 <body>
 
                 <div class='container'>
-                    <h2>Dear Patient,</h2>
-                    <p>We regret to inform you that your appointment has been canceled due to the following reason:</p>
-                    <p><strong>$notes</strong></p>
-                    <p>If you have any questions or need assistance, please don't hesitate to reach out to us. We apologize for any inconvenience caused.</p>
-
+                     <h2>Dear $firstName $lastName,</h2>
+                    <p>Unfortunately, your appointment for <strong>$serviceName</strong> has been canceled.</p>
+                    <p><strong>Reason:</strong> $notes</p>
+                    <p>We apologize for the inconvenience. Please contact us to reschedule.</p>
                     <p>We look forward to rescheduling your appointment at a more convenient time.</p>
                     
-                    <a href='#' class='button'>Contact Us</a>
+                    <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
+                    <p><a href='https://rs-dentalclinic.com/contact.php' class='btn'>Contact Support</a></p>
                     
                     <div class='footer'>
                         <p>Best regards,</p>
                         <p>Your Roselle Santander Dental Clinic Team</p>
                     </div>
+                </div>
+                <div class='footer'>
+                    <p>&copy; " . date('Y') . " Roselle Santander Dental Clinic. All rights reserved.</p>
                 </div>
 
                 </body>
@@ -209,8 +221,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
             $notes = isset($_POST['notes']) ? $_POST['notes'] : ''; 
             
             if ($funObj->reschedule_appointment($appointment_id, $new_date, $new_time, $notes, $updated_by, $user_id)) {
-               // Fetch patient's email after rescheduling
-               $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
     
                 // Prepare email content with HTML
                 $subject = "Your Appointment has been Rescheduled";
@@ -258,22 +268,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 <body>
 
                 <div class='container'>
-                    <h2>Dear Patient,</h2>
-                    <p>We are writing to inform you that your appointment has been successfully rescheduled. The details of your new appointment are as follows:</p>
+                   <h2>Dear $firstName $lastName,</h2>
+                        <p>Your appointment for <strong>$serviceName</strong> has been rescheduled.</p>
+                        <p><strong>New Date:</strong> $new_date</p>
+                        <p><strong>New Time:</strong> $new_time</p>
+                        <p>If you need further assistance, let us know.</p>
 
-                    <p><strong>New Date:</strong> $new_date</p>
-                    <p><strong>New Time:</strong> $new_time</p>
-                    <p><strong>Notes:</strong> $notes</p>
-
-                    <p>If you have any questions or need to further adjust your appointment, please don't hesitate to reach out to us. We're here to assist you.</p>
-                    
-                    <a href='#' class='button'>Contact Us</a>
+                    <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
+                    <p><a href='https://rs-dentalclinic.com/contact.php' class='btn'>Contact Support</a></p>
                     
                     <div class='footer'>
                         <p>Best regards,</p>
                         <p>Your Roselle Santander Dental Clinic Team</p>
                     </div>
                 </div>
+                <div class='footer'>
+                    <p>&copy; " . date('Y') . " Roselle Santander Dental Clinic. All rights reserved.</p>
+                </div>
+
 
                 </body>
                 </html>
@@ -299,9 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         else {
             // Approval logic
             if ($funObj->approve_appointment($appointment_id, $notes, $updated_by, $user_id)) { // Ensure user_id is included
-                
-                // Fetch patient's email after rescheduling
-                $patient_email = $funObj->get_patient_email_by_appointment($patient_id);
+            
 
                 // Prepare email content with HTML
                 $subject = "Your Appointment has been Approved";
@@ -349,20 +359,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 <body>
 
                 <div class='container'>
-                    <h2>Dear Patient,</h2>
-                    <p>We are pleased to inform you that your appointment has been approved. The details of your appointment are as follows:</p>
-
+                    <h2>Dear $firstName $lastName,</h2>
+                    <p>Your appointment for <strong>$serviceName</strong> has been approved.</p>
+                    <p><strong>Date:</strong> $appointmentDate</p>
+                    <p><strong>Time:</strong> $appointmentTime</p>
                     <p><strong>Notes:</strong> $notes</p>
-
-                    <p>If you have any questions or concerns, please feel free to reach out to us. We're here to assist you.</p>
-                    
-                    <a href='#' class='button'>Contact Us</a>
+                
+                    <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
+                    <p><a href='https://rs-dentalclinic.com/contact.php' class='btn'>Contact Support</a></p>
                     
                     <div class='footer'>
                         <p>Best regards,</p>
                         <p>Your Roselle Santander Dental Clinic Team</p>
                     </div>
                 </div>
+                <div class='footer'>
+                    <p>&copy; " . date('Y') . " Roselle Santander Dental Clinic. All rights reserved.</p>
+                </div>
+
 
                 </body>
                 </html>

@@ -599,7 +599,7 @@
             // Logic to cancel the appointment
             $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, canceled_at = ?, canceled_by = ? WHERE id = ?");
             // Bind the parameters; assuming updated_by is a string
-            $stmt->bind_param("ssii", $status, $notes, $canceled_at, $user_id,  $appointment_id);
+            $stmt->bind_param("sssii", $status, $notes, $canceled_at, $user_id,  $appointment_id);
             
             if ($stmt->execute()) {
                 $this->log_notification($appointment_id, 'canceled', $notes, $updated_by, $user_id);
@@ -749,6 +749,51 @@
                 $stmt->close();
             } else {
                 // Handle error if query preparation fails
+                return null;
+            }
+        }
+
+        public function get_patient_by_appointment_id($appointment_id) {
+            // Prepare the SQL query to fetch patient details by appointment ID
+            $query = "
+                SELECT p.email, p.first_name, p.last_name, ds.sub_category as service_name, a.appointment_time, a.appointment_date
+                FROM appointments a
+                LEFT JOIN patients p ON p.patient_id = a.patient_id
+                LEFT JOIN dental_services ds ON ds.id = a.services
+                WHERE a.id = ?
+            ";
+        
+            // Prepare the statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind the appointment_id to the prepared statement
+                $stmt->bind_param("i", $appointment_id);  // 'i' for integers
+        
+                // Execute the statement
+                $stmt->execute();
+        
+                // Bind the result variables
+                $stmt->bind_result($email, $first_name, $last_name, $service_name, $appointment_time, $appointment_date);
+        
+                // Fetch the result
+                if ($stmt->fetch()) {
+                    // Return patient details as an associative array
+                    return [
+                        'email' => $email,
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                        'service_name' => $service_name,
+                        'appointment_time' => $appointment_time,
+                        'appointment_date' => $appointment_date
+                    ];
+                } else {
+                    // Return null if no result
+                    return null;
+                }
+        
+                // Close the statement
+                $stmt->close();
+            } else {
+                // Log or handle error if query preparation fails
                 return null;
             }
         }
