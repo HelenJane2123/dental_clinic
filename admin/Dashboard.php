@@ -190,8 +190,10 @@
                                                                 echo '<span class="badge bg-warning text-dark">Pending</span>';
                                                             } elseif ($status === 'Canceled') {
                                                                 echo '<span class="badge bg-danger">Canceled</span>';
-                                                            } elseif ($status === 'Re-scheduled') {
+                                                            } elseif ($status === 'Re-schedule') {
                                                                 echo '<span class="badge bg-info">Re-Scheduled</span>';
+                                                            } elseif ($status === 'Completed') {
+                                                                echo '<span class="badge bg-primary">Completed</span>';
                                                             } else {
                                                                 echo '<span class="badge bg-secondary">Unknown</span>';
                                                             }
