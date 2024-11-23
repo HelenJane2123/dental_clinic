@@ -72,24 +72,43 @@
                                                   <td>
                                                     <label class="badge <?= htmlspecialchars($appointment['status'] == 'Canceled' ? 'badge-danger' : 
                                                         ($appointment['status'] == 'Confirmed' ? 'badge-success' : 
-                                                        ($appointment['status'] == 'Re-schedule' ? 'badge-info' : 'badge-warning'))) ?>">
+                                                        ($appointment['status'] == 'Completed' ? 'badge-primary' : 
+                                                        ($appointment['status'] == 'Re-schedule' ? 'badge-info' : 'badge-warning')))) ?>">
                                                         <?= htmlspecialchars($appointment['status']) ?>
                                                     </label>
                                                   </td>
                                                   <td><?= htmlspecialchars($appointment['notes']) ?></td>
                                                   <td>
-                                                        <button class="btn btn-info btn-sm" onclick="window.location.href='my_appointments.php?id=<?= $appointment['id'] ?>'" title="View">
-                                                          <i class="mdi mdi-eye"></i>
-                                                        </button>
-                                                        <?php if ($appointment['status'] !== 'Canceled') : ?>
-                                                          <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, '<?= htmlspecialchars($appointment['services']) ?>','<?= htmlspecialchars($appointment['appointment_date']) ?>', '<?= htmlspecialchars($appointment['appointment_time']) ?>', '<?= htmlspecialchars($appointment['notes']) ?>', '<?= htmlspecialchars($appointment['status']) ?>', '<?= htmlspecialchars($appointment['patient_first_name']) ?>', '<?= htmlspecialchars($appointment['patient_last_name']) ?>','<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
-                                                              <i class="mdi mdi-pencil"></i>
-                                                          </button>
-                                                          <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">
-                                                              <i class="mdi mdi-delete"></i>
-                                                          </button>
+                                                    <!-- View Button -->
+                                                    <button class="btn btn-info btn-sm" onclick="window.location.href='my_appointments.php?id=<?= $appointment['id'] ?>'" title="View">
+                                                        <i class="mdi mdi-eye"></i>
+                                                    </button>
+
+                                                    <?php if ($appointment['status'] !== 'Canceled') : ?>
+                                                        <?php if (empty($appointment['proof_id'])) : ?>
+                                                            <!-- Message if no proof of payment -->
+                                                            <p class="text-muted">Cannot re-schedule appointment. No proof of payment uploaded yet.</p>
+                                                        <?php else : ?>
+                                                            <!-- Edit Button -->
+                                                            <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, 
+                                                                '<?= htmlspecialchars($appointment['services']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['appointment_date']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['appointment_time']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['notes']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['status']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['patient_first_name']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['patient_last_name']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
+                                                                <i class="mdi mdi-pencil"></i>
+                                                            </button>
                                                         <?php endif; ?>
-                                                  </td>
+
+                                                        <!-- Delete Button -->
+                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">
+                                                            <i class="mdi mdi-delete"></i>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </td>
                                               </tr>
                                           <?php endforeach; ?>
                                       <?php else : ?>

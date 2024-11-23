@@ -39,33 +39,29 @@ PATIENT SIDE:
         - My Profile
         - Change Password
         - Notification
+    4. Email Notification
+        - When booking an appointment
+        - When editing an appointment
+        - Once Doctor confirmed the payment
 
 ADMIN/DENTIST SIDE
-1. Admin Login
-    Example:
-        User: RoselleSantander
-        Password: P@@swoord1223
-    Logic:
-        - Validates invalid username and password
-2. Admin Dashboard
-    - Dashboard
-    - Patient Records
-    - Appointment Recordss
-    - Doctors Profile
-    - My Profile
-    - Change Password
-3. Doctor
-    - Once added by Super Admin -> create account in account table with user_type = ádmin
-    - account id should be the same in doctor_id
-
-
-Email Notification
-1. Patient
-    - When booking an appointment
-    - When editing an appointment
-
-2. Doctor
-    - When booking an appointment
-    - When editing an appointment
-    - When user uploaded the proof of payment
-
+    1. Admin Login
+        Example:
+            User: RoselleSantander
+            Password: P@@swoord1223
+        Logic:
+            - Validates invalid username and passwords
+    2. Admin Dashboard
+        - Dashboard
+        - Patient Records
+        - Appointment Recordss
+        - Doctors Profile
+        - My Profile
+        - Change Password
+    3. Doctor
+        - Once added by Super Admin -> create account in account table with user_type = ádmin
+        - account id should be the same in doctor_id
+    4. Notification
+        - When booking an appointment
+        - When editing an appointment
+        - When user uploaded the proof of payment

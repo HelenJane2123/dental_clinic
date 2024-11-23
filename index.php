@@ -36,11 +36,11 @@
     			<div class="col-md-6 color-2 p-4">
     				<h3 class="mb-4">Opening Hours</h3>
     				<p class="openinghours d-flex">
-    					<span>Tuesdayy - Friday</span>
+    					<span>Tuesday - Friday</span>
     					<span>9:00 AM - 5:00 PM</span>
     				</p>
     				<p class="openinghours d-flex">
-    					<span>Saturday and Sunday</span>
+    					<span>Sunday and Monday</span>
     					<span>(by Appointment)</span>
     				</p>
     			</div>

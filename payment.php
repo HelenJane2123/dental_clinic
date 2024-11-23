@@ -42,6 +42,7 @@
                               <thead>
                                   <tr>
                                       <th>Appointment ID</th>
+                                      <th>Appointment Status</th>
                                       <th>Dental Service</th>
                                       <th>Patient ID</th>
                                       <th>Status</th>
@@ -52,44 +53,60 @@
                               </thead>
                               <tbody>
                                   <?php
-                                  // Fetch payment details from the database
-                                  $paymentStatus = $appointment->getPaymentStatus($member_id); // Example function to fetch data
+                                    // Fetch payment details from the database
+                                    $paymentStatus = $appointment->getPaymentStatus($member_id); // Example function to fetch data
 
-                                  
-                                  if ($paymentStatus && count($paymentStatus) > 0) {
-                                      foreach ($paymentStatus as $payment) {
-                                          echo "<tr>";
-                                          echo "<td>{$payment['appointment_id']}</td>";
-                                          echo "<td>{$payment['sub_category']}</td>";
-                                          echo "<td>{$payment['patient_member_id']}</td>";
-                                          echo "<td>{$payment['status']}</td>";
-                                          echo "<td>";
-                                          if ($payment['file_name']) {
-                                              echo "<a href='public/payment/{$member_id}/{$payment['appointment_id']}/{$payment['file_name']}' target='_blank'>View Receipt</a>";
-                                          } else {
-                                              echo "<button 
-                                                  class='btn btn-warning btn-sm btn-upload-proof' 
-                                                  data-appointment-id='{$payment['appointment_id']}'>
-                                              Upload Payment Proof
-                                              </button>";
-                                          }
-                                          echo "</td>";
-                                          echo "<td>{$payment['remarks']}</td>";
-                                          echo "<td>";
-
-                                          echo "<button 
-                                                class='btn btn-primary btn-sm' 
-                                                onclick='viewComputation(this)'
-                                                data-appointment-id='{$payment['appointment_id']}'>
-                                                View Computation
-                                              </button>";
-                                          echo "</td>";
-                                          echo "</tr>";
-                                      }
-                                  } else {
-                                      echo "<tr><td colspan='6'>No payment found.</td></tr>";
-                                  }
-                                  ?>
+                                    if ($paymentStatus && count($paymentStatus) > 0) {
+                                        foreach ($paymentStatus as $payment) {
+                                            echo "<tr>";
+                                            echo "<td>{$payment['appointment_id']}</td>";
+                                            // Appointment Status with Badge
+                                            $statusClass = htmlspecialchars(
+                                                $payment['appointment_status'] == 'Canceled' ? 'badge-danger' : 
+                                                ($payment['appointment_status'] == 'Confirmed' ? 'badge-success' : 
+                                                ($payment['appointment_status'] == 'Completed' ? 'badge-primary' : 
+                                                ($payment['appointment_status'] == 'Re-schedule' ? 'badge-info' : 'badge-warning')))
+                                            );
+                                            echo "<td><label class='badge {$statusClass}'>{$payment['appointment_status']}</label></td>";
+                                            echo "<td>{$payment['sub_category']}</td>";
+                                            echo "<td>{$payment['patient_member_id']}</td>";
+                                            echo "<td>{$payment['status']}</td>";
+                                            // Payment Proof
+                                            echo "<td>";
+                                            // Disable the "Upload Payment Proof" button if the status is "Canceled"
+                                            if ($payment['appointment_status'] != 'Canceled') {
+                                                if ($payment['file_name']) {
+                                                    echo "<a href='public/payment/{$member_id}/{$payment['appointment_id']}/{$payment['file_name']}' target='_blank'>View Receipt</a>";
+                                                } else {
+                                                    echo "<button 
+                                                        class='btn btn-warning btn-sm btn-upload-proof' 
+                                                        data-appointment-id='{$payment['appointment_id']}'>
+                                                        Upload Payment Proof
+                                                        </button>";
+                                                }
+                                            } else {
+                                                echo "<p class='text-muted'>Appointment Canceled. Upload disabled.</p>";
+                                            }
+                                            echo "</td>";
+                                    
+                                            // Remarks
+                                            echo "<td>{$payment['remarks']}</td>";
+                                    
+                                            // View Computation Button
+                                            echo "<td>";
+                                            echo "<button 
+                                                    class='btn btn-primary btn-sm' 
+                                                    onclick='viewComputation(this)'
+                                                    data-appointment-id='{$payment['appointment_id']}'>
+                                                    View Computation
+                                                </button>";
+                                            echo "</td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='7'>No payment found.</td></tr>";
+                                    }
+                                ?>
                               </tbody>
                           </table>
                       </div>

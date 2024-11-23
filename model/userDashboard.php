@@ -103,7 +103,7 @@
         
         
         public function get_all_appointments_by_member_id($member_id) {
-            // Prepare the SQL statement with a LEFT JOIN to get doctor details
+            // Prepare the SQL statement with a LEFT JOIN to get doctor and other details
             $query = "
                 SELECT 
                     a.*, 
@@ -112,15 +112,18 @@
                     p.member_id,
                     d.first_name AS doctor_first_name, 
                     d.last_name AS doctor_last_name,
-                    ds.sub_category as service_name
+                    ds.sub_category AS service_name,
+                    pp.id AS proof_id
                 FROM 
-                    appointments AS a
-                JOIN 
+                    appointments a
+                LEFT JOIN 
                     patients AS p ON a.patient_id = p.patient_id
                 LEFT JOIN 
                     doctors AS d ON p.assigned_doctor = d.account_id
                 LEFT JOIN 
                     dental_services AS ds ON a.services = ds.id 
+                LEFT JOIN
+                    proof_of_payment AS pp ON pp.appointment_id = a.id
                 WHERE 
                     p.member_id = ?
                 ORDER BY 
@@ -154,6 +157,7 @@
             // Return the appointments
             return $appointments;
         }
+        
         
 
         public function view_appointment_by_id ($id) {
@@ -951,7 +955,6 @@
         }
 
         public function update_password($member_id, $new_password) {
-        
             // SQL query to update the password for the given member_id
             $update_query = "UPDATE accounts SET password = ? WHERE member_id = ?";
             $update_stmt = $this->db->prepare($update_query); // Use $this->db for the database connection
@@ -1236,7 +1239,8 @@
                     pp.file_name,
                     COALESCE(pp.remarks, 'No payment uploaded') AS remarks,
                     a.services,
-                    ds.sub_category
+                    ds.sub_category,
+                    a.status as appointment_status
                 FROM 
                     appointments a
                 LEFT JOIN 
