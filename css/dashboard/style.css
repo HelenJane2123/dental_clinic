@@ -22575,6 +22575,10 @@ dl li {
   color: #333;
 }
 
+.text-white {
+  color: white !important;
+  font-weight: 500;
+}
 
 
 

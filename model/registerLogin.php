@@ -120,7 +120,7 @@
             
         public function getUserByUsername($login_input) {
             // Adjusted query to select by either username or email
-            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber FROM accounts WHERE (username = ? OR email = ?)";
+            $sql = "SELECT id, firstname, lastname, member_id, email, contactnumber, user_type FROM accounts WHERE (username = ? OR email = ?) AND  user_type='patient'";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('ss', $login_input, $login_input); // Bind the input twice for username and email
             $stmt->execute();

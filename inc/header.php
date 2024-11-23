@@ -35,19 +35,6 @@
             margin-top: 5px;
         }
     </style>
-    <script>
-        // Disable back button and redirect to index.php
-        window.onload = function() {
-          // Push a new history state to block the back button action
-          window.history.pushState(null, "", window.location.href);
-          window.history.pushState(null, "", window.location.href);
-          
-          // Detect the back button and redirect to index.php
-          window.onpopstate = function () {
-            window.location.href = "../index.php"; // Redirect to index.php
-          };
-        };
-    </script>
   </head>
   <?php
     session_start();
@@ -83,7 +70,7 @@
       <!-- User Dropdown -->
       <div class="ml-lg-3 d-flex align-items-center"> <!-- Add margin-left and center align -->
         <?php
-          if (isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) {
+          if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'patient') {
               // User is logged in, display their name and dropdown
               echo '<div class="dropdown">';
               echo '<a class="nav-link dropdown-toggle text-primary" href="#" id="profileDropdown" data-toggle="dropdown">';

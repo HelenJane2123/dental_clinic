@@ -7,11 +7,21 @@
     header("Pragma: no-cache");
     header("Expires: 0");
 
-  // Check if the user is logged in
-  if (!isset($_SESSION['success']) || $_SESSION['success'] !== true) {
-    header('Location: ../login.php');  // Redirect to login if not logged in
-    exit();
-  }
+    if (!isset($_SESSION['success']) || $_SESSION['success'] !== true || $_SESSION['user_type'] !== 'patient') {
+        session_unset();
+        session_destroy();
+        header('Location: ../login.php');
+        exit();
+    }
+
+    // Update last activity for timeout
+    if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
+        session_unset();
+        session_destroy();
+        header('Location: ../login.php');
+        exit();
+    }
+    $_SESSION['LAST_ACTIVITY'] = time();
 
     // Generate CSRF token if not already set
   if (empty($_SESSION['csrf_token'])) {
@@ -95,16 +105,20 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="img/logo.png" />
   <script>
-    // Disable back button and redirect to index.php
-    window.onload = function() {
-      // Push a new history state to block the back button action
-      window.history.pushState(null, "", window.location.href);
-      window.history.pushState(null, "", window.location.href);
-      
-      // Detect the back button and redirect to index.php
-      window.onpopstate = function () {
-        window.location.href = "../index.php"; // Redirect to index.php
-      };
+     window.onload = function () {
+        // Push the current state to the history stack
+        history.pushState(null, null, location.href);
+
+        // Detect back/forward navigation
+        window.onpopstate = function () {
+            // Send AJAX request to destroy session
+            fetch('destroy_session.php', {
+                method: 'POST'
+            }).then(response => {
+                // Redirect to login page after session destruction
+                window.location.href = '../login.php';
+            });
+        };
     };
   </script>
 </head>

@@ -44,7 +44,7 @@
           <li class="nav-item">
             <a class="nav-link" href="appointment.php">
               <i class="mdi mdi-view-quilt menu-icon"></i>
-              <span class="menu-title">Dashboard</span>
+              <span class="menu-title text-white">Dashboard</span>
             </a>
           </li>
           <li class="nav-item sidebar-category">
@@ -54,37 +54,37 @@
           <li class="nav-item">
             <a class="nav-link" href="my_appointments.php">
               <i class="mdi mdi-grid-large menu-icon"></i>
-              <span class="menu-title">My Appointments</span>
+              <span class="menu-title text-white">My Appointments</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="notifications.php">
               <i class="mdi mdi-bell menu-icon"></i>
-              <span class="menu-title">Notifications</span>
+              <span class="menu-title text-white">Notifications</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="my_record.php">
               <i class="mdi mdi-notebook menu-icon"></i>
-              <span class="menu-title">My Record</span>
+              <span class="menu-title text-white">My Record</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="my_profile.php">
               <i class="mdi mdi-emoticon menu-icon"></i>
-              <span class="menu-title">My Profile</span>
+              <span class="menu-title text-white">My Profile</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="change_password.php">
               <i class="mdi mdi-lock menu-icon"></i>
-              <span class="menu-title">Change Password</span>
+              <span class="menu-title text-white">Change Password</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="payment.php">
               <i class="mdi mdi-note menu-icon"></i>
-              <span class="menu-title">Payment</span>
+              <span class="menu-title text-white">Payment</span>
             </a>
           </li>
           <li class="nav-item sidebar-category">
@@ -94,19 +94,19 @@
           <li class="nav-item">
             <a class="nav-link" href="help.php">
               <i class="mdi mdi-book menu-icon"></i>
-              <span class="menu-title">Help</span>
+              <span class="menu-title text-white">Help</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="index.php">
               <i class="mdi mdi-home menu-icon"></i>
-              <span class="menu-title">Back to Home Page</span>
+              <span class="menu-title text-white">Back to Home Page</span>
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="logout.php">
               <i class="mdi mdi-home menu-icon"></i>
-              <span class="menu-logout">Logout</span>
+              <span class="menu-logout text-white">Logout</span>
             </a>
           </li>
         </ul>

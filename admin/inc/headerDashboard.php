@@ -1,11 +1,23 @@
 <?php
     session_start();
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Pragma: no-cache");
+    header("Expires: 0");
 
     // If not logged in, redirect to login page
-    if (!isset($_SESSION['success']) || $_SESSION['success'] !== true) {
+    if (!isset($_SESSION['success']) || $_SESSION['success'] !== true || $_SESSION['user_type'] === 'admin' || $_SESSION['user_type'] === 'super_admin') {
         header('Location: ../index.php');
         exit();
     }
+
+    // Update last activity for timeout
+    if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
+        session_unset();
+        session_destroy();
+        header('Location: ../index.php');
+        exit();
+    }
+    $_SESSION['LAST_ACTIVITY'] = time();
     
     // Generate CSRF token if not already set
     if (empty($_SESSION['csrf_token'])) {

@@ -31,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_user'])) {
            $_SESSION['email'] = $user_info['email'];
            $_SESSION['member_id'] = $user_info['member_id'];
            $_SESSION['user_id'] = $user_info['id'];
+           $_SESSION['user_type'] = $user_info['user_type'];
+
        }
 
        header('Location: ../appointment.php');
