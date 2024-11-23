@@ -133,16 +133,20 @@
             }
         }
 
-        public function reset_password($token) {
-            $currentDateTime = date("Y-m-d H:i:s"); // Get current time
-        
-            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration >= ?");
+        public function validate_reset_token($token) {
+            // Get current date and time
+            $currentDateTime = date("Y-m-d H:i:s");
+
+            // Query to validate the token and its expiration
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration >= ? AND user_type = 'patient'");
             $stmt->bind_param("ss", $token, $currentDateTime);
+
             $stmt->execute();
             $result = $stmt->get_result();
-        
+
+            // If a matching record is found, return user details
             if ($result->num_rows === 1) {
-                return $result->fetch_assoc(); // Return user details
+                return $result->fetch_assoc(); // Token is valid
             } else {
                 return false; // Token is invalid or expired
             }
@@ -152,7 +156,7 @@
         
         public function update_password($hashedPassword, $token) {
             // Prepare the SQL statement
-            $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ? and user_type='patient'");
+            $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ? and user_type = 'patient'");
             // Bind parameters (string, string)
             $update->bind_param("ss", $hashedPassword, $token);
             // Execute the update and return the result status

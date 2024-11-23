@@ -1,5 +1,7 @@
 <?php
 include_once('inc/header.php');
+// Get the token from the URL
+$token = $_GET['token'] ?? '';
 ?>
 <div class="container">
     <div class="row justify-content-center align-items-center" style="height: 100vh;">
@@ -8,7 +10,7 @@ include_once('inc/header.php');
             <div id="auth-left">
                 <div class="auth-logo">
                     <a href="../index.php">
-                        <img src="images/logo/logo.png" alt="Logo" style="height:113px;">
+                        <img src="../img/logo.png" alt="Logo" style="height:113px;">
                     </a>
                 </div>
 
@@ -18,18 +20,22 @@ include_once('inc/header.php');
                     <!-- Hidden field to pass the token -->
                     <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>" required>
                     
-                    <div class="form-group">
+                    <!-- Password Input with Show/Hide Icon -->
+                    <div class="form-group position-relative mb-3">
                         <label for="password">New Password</label>
-                        <input type="password" name="password" class="form-control" required>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <i class="toggle-password bi bi-eye position-absolute"></i>
                     </div>
                     
-                    <div class="form-group">
+                    <!-- Confirm Password Input with Show/Hide Icon -->
+                    <div class="form-group position-relative mb-3">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" name="confirm_password" class="form-control" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                        <i class="toggle-password bi bi-eye position-absolute"></i>
                     </div>
                     
                     <button type="submit" class="btn btn-primary">Reset Password</button>
-                    </form>
+                </form>
             </div>
         </div>
 
@@ -40,12 +46,48 @@ include_once('inc/header.php');
     </div>
 </div>
 
-
 <!-- Footer -->
 <?php include_once('inc/footer.php'); ?>
 
+<style>
+    .position-relative {
+        position: relative;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: calc(50% + 5px); /* Adjusted for proper alignment */
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #6c757d; /* Muted gray color for the icon */
+    }
+
+    .toggle-password:hover {
+        color: #000; /* Change icon color on hover */
+    }
+</style>
+
 <script>
-   window.addEventListener('load', function() {
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(item => {
+        item.addEventListener('click', function() {
+            const input = this.previousElementSibling; // Get the input field before the icon
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.classList.remove('bi-eye');
+                this.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                this.classList.remove('bi-eye-slash');
+                this.classList.add('bi-eye');
+            }
+        });
+    });
+
+    // Alert auto-hide logic
+    window.addEventListener('load', function() {
         const alertElement = document.querySelector('.alert');
         if (alertElement) {
             setTimeout(() => {
@@ -57,5 +99,4 @@ include_once('inc/header.php');
             }, 5000); // Time before the alert starts fading out (5 seconds)
         }
     });
-
 </script>

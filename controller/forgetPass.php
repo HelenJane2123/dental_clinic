@@ -28,7 +28,7 @@ if (isset($_POST['reset_btn'])) {
 
         if ($update) {
            // Generate the reset link
-            $resetLink = "https://rs-dentalclinic.com/reset_password.php?token=" . urlencode($token);
+            $resetLink = "http://localhost/dental_clinic/reset_password.php?token=" . urlencode($token);
 
             // Email subject
             $subject = "Password Reset Request";

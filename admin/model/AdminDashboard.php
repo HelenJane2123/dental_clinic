@@ -32,16 +32,20 @@
             }
         }
 
-        public function reset_password($token) {
-            $currentDateTime = date("Y-m-d H:i:s"); // Get current time
-        
-            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration >= ?");
+        public function validate_reset_token($token) {
+            // Get current date and time
+            $currentDateTime = date("Y-m-d H:i:s");
+
+            // Query to validate the token and its expiration
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE reset_token = ? AND token_expiration >= ? AND user_type <> 'patient'");
             $stmt->bind_param("ss", $token, $currentDateTime);
+
             $stmt->execute();
             $result = $stmt->get_result();
-        
+
+            // If a matching record is found, return user details
             if ($result->num_rows === 1) {
-                return $result->fetch_assoc(); // Return user details
+                return $result->fetch_assoc(); // Token is valid
             } else {
                 return false; // Token is invalid or expired
             }
@@ -52,7 +56,7 @@
             $conn = $this->db; // Replace with your database connection instance
         
             // Prepare the SQL query to update the user's password reset token and expiration
-            $query = "UPDATE accounts SET reset_token = ?, token_expiration = ? WHERE email = ?";
+            $query = "UPDATE accounts SET reset_token = ?, token_expiration = ? WHERE email = ? and user_type != 'patient'";
         
             if ($stmt = $conn->prepare($query)) {
                 // Bind the parameters
@@ -1102,12 +1106,21 @@
             return false; // Return false if no password is found (e.g., member_id doesn't exist)
         }
 
+        public function update_reset_password($hashedPassword, $token) {
+            // Prepare the SQL statement
+            $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ? and user_type !='patient'");
+            // Bind parameters (string, string)
+            $update->bind_param("ss", $hashedPassword, $token);
+            // Execute the update and return the result status
+            return $update->execute();
+        }
+
         public function update_password($member_id, $new_password) {
         
             // SQL query to update the password for the given member_id
-            $update_query = "UPDATE accounts SET password = ? WHERE member_id = ?";
+            $update_query = "UPDATE accounts SET password = ? WHERE member_id = ? AND user_type != 'patient'";
             $update_stmt = $this->db->prepare($update_query); // Use $this->db for the database connection
-            $update_stmt->bind_param("si", $new_password, $member_id); // Bind the hashed password and member_id
+            $update_stmt->bind_param("ss", $new_password, $member_id); // Bind the hashed password and member_id
             $result = $update_stmt->execute(); // Execute the query
 
             return $result; // Return true if the update was successful, false otherwise

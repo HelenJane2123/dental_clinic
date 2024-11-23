@@ -937,7 +937,7 @@
         public function get_current_password($member_id) {
             $query = "SELECT password FROM accounts WHERE member_id = ?";
             $stmt = $this->db->prepare($query);
-            $stmt->bind_param("i", $member_id);
+            $stmt->bind_param("s", $member_id);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -955,7 +955,7 @@
             // SQL query to update the password for the given member_id
             $update_query = "UPDATE accounts SET password = ? WHERE member_id = ?";
             $update_stmt = $this->db->prepare($update_query); // Use $this->db for the database connection
-            $update_stmt->bind_param("si", $new_password, $member_id); // Bind the hashed password and member_id
+            $update_stmt->bind_param("ss", $new_password, $member_id); // Bind the hashed password and member_id
             $result = $update_stmt->execute(); // Execute the query
 
             return $result; // Return true if the update was successful, false otherwise

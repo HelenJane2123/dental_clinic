@@ -10,7 +10,7 @@ if (isset($_POST['token'], $_POST['password'], $_POST['confirm_password'])) {
     $confirm_password = $_POST['confirm_password'];
 
     // Validate the token
-    $user = $funObj->reset_password($token);
+    $user = $funObj->validate_reset_token($token);
 
     if (!$user) {
         $_SESSION['message'] = "Invalid or expired token.";
@@ -40,7 +40,7 @@ if (isset($_POST['token'], $_POST['password'], $_POST['confirm_password'])) {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Update the password in the database
-    $update = $funObj->update_password($hashed_password, $token); // Assume you have an `update_password` function
+    $update = $funObj->update_reset_password($hashed_password, $token); // Assume you have an `update_password` function
     
     if ($update) {
         $_SESSION['message'] = "Password has been successfully updated. Please login.";
