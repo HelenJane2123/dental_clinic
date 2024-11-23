@@ -1094,18 +1094,17 @@
             $query = "SELECT password FROM accounts WHERE member_id = ?";
             $stmt = $this->db->prepare($query);
             $stmt->bind_param("s", $member_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc(); // Fetch the password from the result row
-                return $row['password']; // Return the password from the database
+        
+            if ($stmt->execute()) {
+                $result = $stmt->get_result();
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    return $row['password']; // Return the stored hash
+                }
             }
-
-            return false; // Return false if no password is found (e.g., member_id doesn't exist)
+            return false; // Return false if no user is found
         }
-
+        
         public function update_reset_password($hashedPassword, $token) {
             // Prepare the SQL statement
             $update = $this->db->prepare("UPDATE accounts SET password = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ? and user_type !='patient'");
@@ -1231,7 +1230,8 @@
                     pt.last_name as patient_last_name,
                     d.first_name as doctor_first_name,
                     d.last_name as doctor_last_name,
-                    COALESCE(pp.remarks, 'No payment uploaded') AS remarks
+                    COALESCE(pp.remarks, 'No payment uploaded') AS remarks,
+                    a.status as appointment_status
                 FROM 
                     appointments a
                 LEFT JOIN 
