@@ -5,6 +5,7 @@
     $patient_record = $appointment->get_patientid_by_member_id($member_id);
     $patient_allergies = [];
     $patient_medical_conditions = [];
+
     if (!empty($patient_record)) {
 
         if ($patient_record['patient_id']) {
@@ -31,7 +32,7 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Notifications</h4>
+                  <h4 class="card-title">Patient Record</h4>
                     <div class="content">
                       <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
@@ -98,8 +99,15 @@
                                                     <option value="F" <?= isset($patient['sex']) && $patient['sex'] == 'F' ? 'selected' : '' ?>>Female</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label class="required">Marital Status</label>
+                                                <select class="form-control" id="marital_status" name="marital_status" required data-parsley-required-message="Please select gender">
+                                                    <option>--Please Select--</option>
+                                                    <option value="Single" <?= isset($patient['marital_status']) && $patient['marital_status'] == 'Single' ? 'selected' : '' ?>>Single</option>
+                                                    <option value="Married" <?= isset($patient['marital_status']) && $patient['marital_status'] == 'Married' ? 'selected' : '' ?>>Married</option>
+                                                    <option value="Separated" <?= isset($patient['marital_status']) && $patient['marital_status'] == 'Separated' ? 'selected' : '' ?>>Separated</option>
+                                                </select>
+                                            </div>
                                             <div class="form-group col-sm-4">
                                                 <label for="nickname">Nickname</label>
                                                 <input type="text" class="form-control" id="nickname" name="nickname" value="<?= isset($patient['nickname']) ? $patient['nickname'] : '' ?>">
@@ -114,8 +122,6 @@
                                                     value="<?= isset($patient['nationality']) && !empty($patient['nationality']) ? $patient['nationality'] : 'Filipino'; ?>" 
                                                     required data-parsley-required-message="This field is required.">
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="form-group col-sm-4">
                                                 <label class="required" for="cellphone_no">Cellphone No.</label>
                                                 <div class="input-group">
@@ -135,8 +141,6 @@
                                                 <label class="required" for="home_address">Home Address</label>
                                                 <input type="text" class="form-control" id="home_address" name="home_address" value="<?= isset($patient['home_address']) ? $patient['home_address'] : '' ?>" required data-parsley-required-message="This field is required.">
                                             </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="form-group col-sm-4">
                                                 <label class="required" for="occupation">Occupation</label>
                                                 <input type="text" class="form-control" id="occupation" name="occupation" value="<?= isset($patient['occupation']) ? $patient['occupation'] : '' ?>" required data-parsley-required-message="This field is required.">
@@ -155,7 +159,7 @@
                                         <div class="row">
                                             <div class="form-group col-sm-6">
                                                 <label for="referral_source">Whom may we thank for referring you?</label>
-                                                <input type="text" class="form-control" id="referral_source" name="referral_source" value="<?= isset($patient['referral_source']) ? $patient['referral_source'] : '' ?>">
+                                                <input type="text" class="form-control" id="referral_source" name="referral_source" placeholder="Please enter full name" value="<?= isset($patient['referral_source']) ? $patient['referral_source'] : '' ?>">
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label class="required" for="reason_for_consultation">Reason for consultation</label>
@@ -326,7 +330,7 @@
                                                     <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="None of the above" 
                                                         <?= in_array("None of the above", $patient_allergies) ? 'checked' : '' ?> data-parsley-mincheck="1" 
                                                         data-parsley-required-message="Please choose at least one allergy.">
-                                                    <label class="form-check-label">Nove of the above</label>
+                                                    <label class="form-check-label">None of the above</label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input allergy" name="allergies[]" value="Others" 

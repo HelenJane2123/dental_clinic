@@ -162,7 +162,7 @@
         /*** validate login details ***/
         public function check_login($username, $password) {
             // Correct the SQL query to use AND instead of &
-            $sql = "SELECT password FROM accounts WHERE username = ? AND user_type != 'patient'";
+            $sql = "SELECT password FROM accounts WHERE username = ? AND user_type = 'admin' OR user_type = 'super_admin'";
             $stmt = $this->db->prepare($sql);
             $stmt->bind_param('s', $username);
             $stmt->execute();

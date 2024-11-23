@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'age' => $_POST['age'] ?? 0,
         'sex' => $_POST['sex'] ?? '',
         'nickname' => $_POST['nickname'] ?? '',
+        'marital_status' => $_POST['marital_status'] ?? '',
         'religion' => $_POST['religion'] ?? '',
         'nationality' => $_POST['nationality'] ?? '',
         'cellphone_no' => $_POST['cellphone_no'] ?? '',

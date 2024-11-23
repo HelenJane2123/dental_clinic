@@ -1,12 +1,12 @@
 <?php
 session_start();
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Pragma: no-cache");
-header("Expires: 0");
-if (isset($_SESSION['success']) && $_SESSION['success'] === true) {
-    header('Location: ../admin/dashboard.php'); // Redirect to dashboard if session exists
-    exit();
-}
+// header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+// header("Pragma: no-cache");
+// header("Expires: 0");
+// if (isset($_SESSION['success']) && $_SESSION['success'] === true) {
+//     header('Location: ../admin/dashboard.php'); // Redirect to dashboard if session exists
+//     exit();
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">

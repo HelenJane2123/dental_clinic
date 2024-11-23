@@ -5,7 +5,7 @@
     header("Expires: 0");
 
     // If not logged in, redirect to login page
-    if (!isset($_SESSION['success']) || $_SESSION['success'] !== true || $_SESSION['user_type'] === 'admin' || $_SESSION['user_type'] === 'super_admin') {
+    if (!isset($_SESSION['success']) || $_SESSION['success'] !== true || ($_SESSION['user_type'] !== 'admin' && $_SESSION['user_type'] !== 'super_admin')) {
         header('Location: ../index.php');
         exit();
     }

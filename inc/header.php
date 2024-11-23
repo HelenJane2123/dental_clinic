@@ -38,6 +38,10 @@
   </head>
   <?php
     session_start();
+    if (substr($_SERVER['REQUEST_URI'], -1) === '/') {
+      header("Location: ../login.php");
+      exit;
+  }
   ?>
   <body>
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">

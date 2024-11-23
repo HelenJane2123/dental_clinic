@@ -564,6 +564,7 @@
                         birthdate = ?, 
                         age = ?,  
                         sex = ?, 
+                        marital_status = ?,
                         nickname = ?, 
                         religion = ?, 
                         nationality = ?, 
@@ -575,7 +576,7 @@
         
                     $stmt = $this->db->prepare($updatePatientQuery);
                     $stmt->bind_param(
-                        'ssssssssssssssi',
+                        'sssssssssssssssi',
                         $data['member_id'],
                         $data['last_name'],
                         $data['first_name'],
@@ -583,6 +584,7 @@
                         $data['birthdate'],
                         $data['age'],  
                         $data['sex'],  
+                        $data['marital_status'], 
                         $data['nickname'],
                         $data['religion'], 
                         $data['nationality'],
@@ -690,10 +692,10 @@
                     $stmt->close();  // Close the previous statement
                     
                     // Insert into patients
-                    $insertPatientQuery = "INSERT INTO patients (member_id, last_name, first_name, middle_name, birthdate, age, sex, nickname, religion, nationality, cellphone_no, email, home_address, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $insertPatientQuery = "INSERT INTO patients (member_id, last_name, first_name, middle_name, birthdate, age, sex, marital_status, nickname, religion, nationality, cellphone_no, email, home_address, occupation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = $this->db->prepare($insertPatientQuery);
                     $stmt->bind_param(
-                        'ssssssssssssss',
+                        'sssssssssssssss',
                         $data['member_id'],
                         $data['last_name'],
                         $data['first_name'],
@@ -701,6 +703,7 @@
                         $data['birthdate'],
                         $data['age'],  
                         $data['sex'],  
+                        $data['marital_status'], 
                         $data['nickname'],
                         $data['religion'], 
                         $data['nationality'],
@@ -816,6 +819,7 @@
                     p.birthdate,
                     p.age,
                     p.sex,
+                    p.marital_status,
                     p.nickname,
                     p.religion,
                     p.nationality,
