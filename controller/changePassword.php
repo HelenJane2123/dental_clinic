@@ -11,8 +11,6 @@
         $current_password = $_POST['current_password'];
         $new_password = $_POST['new_password'];
         $confirm_password = $_POST['confirm_password'];
-    
-       
 
          // Password condition: at least 8 characters, one uppercase, one lowercase, one digit, and one special character
          $password_regex = "/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).{8,}$/";

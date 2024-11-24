@@ -1,5 +1,6 @@
 <?php
     include_once('inc/header.php');
+
 ?>
 
 <div class="container-fluid">
@@ -16,7 +17,7 @@
                 <form action="controller/loginAccount.php" id="login_form" class="needs-validation" method="POST" novalidate enctype="multipart/form-data">
                     <?php 
                         if (isset($_SESSION['message'])) : 
-                            $message_type = $_SESSION['message_type'] ?? 'info';
+                            $message_type = $_SESSION['message_type'] ?? 'info'; 
                             $alert_class = 'alert-info';
                             switch ($message_type) {
                                 case 'error':
@@ -29,7 +30,7 @@
                                     $alert_class = 'alert-warning';
                                     break;
                             }
-                    ?>
+                        ?>
                     <div class="alert <?php echo htmlspecialchars($alert_class, ENT_QUOTES, 'UTF-8'); ?> fade show" role="alert">
                         <span>
                         <?php 
@@ -39,8 +40,8 @@
                         ?>
                         </span>
                     </div>
-                    <?php endif ?>
-                    
+                    <?php endif; ?>
+                                        
                     <div class="form-group position-relative has-icon-left mb-4">
                         <input type="text" class="form-control form-control-xl" placeholder="Username" name="username">
                         <div class="form-control-icon">
@@ -59,12 +60,6 @@
                 <div class="text-center mt-5 text-lg fs-4">
                     <p><a class="font-bold" href="forgot-password.php">Forgot password?</a></p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Image Section -->
-        <div class="col-lg-7 col-12 d-none d-lg-block">
-            <img src="images/bg/bg_1.JPG" alt="Login Image" class="img-fluid" style="height: 100vh; object-fit: cover;">
         </div>
     </div>
 </div>

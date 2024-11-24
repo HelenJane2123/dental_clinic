@@ -36,6 +36,16 @@ if (isset($_POST['token'], $_POST['password'], $_POST['confirm_password'])) {
         exit();
     }
 
+    // Check if the new password is the same as the old password
+    $stored_password = $funObj->get_current_password_token($token);
+    if (password_verify($password, $stored_password)) {
+        $_SESSION['message'] = "New password cannot be the same as the current password.";
+        $_SESSION['message_type'] = "error";
+        header('Location: ../reset_password.php?token=' . urlencode($token));
+        exit();
+    }
+
+
     // Hash the new password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 

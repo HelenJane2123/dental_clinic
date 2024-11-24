@@ -17,6 +17,32 @@ $token = $_GET['token'] ?? '';
                 <h1 class="auth-title text-black">Reset Password</h1>
 
                 <form action="controller/resetPassword.php" method="POST">
+                <?php 
+                        if (isset($_SESSION['message'])) : 
+                            $message_type = $_SESSION['message_type'] ?? 'info'; 
+                            $alert_class = 'alert-info';
+                            switch ($message_type) {
+                                case 'error':
+                                    $alert_class = 'alert-danger';
+                                    break;
+                                case 'success':
+                                    $alert_class = 'alert-success';
+                                    break;
+                                case 'warning':
+                                    $alert_class = 'alert-warning';
+                                    break;
+                            }
+                        ?>
+                    <div class="alert <?php echo htmlspecialchars($alert_class, ENT_QUOTES, 'UTF-8'); ?> fade show" role="alert">
+                        <span>
+                        <?php 
+                            echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); 
+                            unset($_SESSION['message']);
+                            unset($_SESSION['message_type']);
+                        ?>
+                        </span>
+                    </div>
+                    <?php endif; ?>
                     <!-- Hidden field to pass the token -->
                     <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>" required>
                     

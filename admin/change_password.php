@@ -50,7 +50,7 @@ include_once('inc/sidebarMenu.php');
                 <div class="form-group col-6">
                   <label class="required" for="current_password">Current Password</label>
                   <div class="input-group">
-                    <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($member_id) ? $member_id : '' ?>">
+                    <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($member_id_admin) ? $member_id_admin : '' ?>">
                     <input type="password" class="form-control" id="current_password" name="current_password" required 
                            data-parsley-required-message="Current password is required" 
                            data-parsley-minlength="6" 

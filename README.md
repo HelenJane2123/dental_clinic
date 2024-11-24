@@ -48,7 +48,7 @@ ADMIN/DENTIST SIDE
     1. Admin Login
         Example:
             User: RoselleSantander
-            Password: P@@swoord1223
+            Password: P@@swoord1223@
         Logic:
             - Validates invalid username and passwords
     2. Admin Dashboard
