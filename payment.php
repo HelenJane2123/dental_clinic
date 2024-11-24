@@ -132,15 +132,78 @@
                       </div>
                     </div>
                   </div>
-            
-
-
                 </div>
               </div>
             </div>
           </div>
           <!-- row end -->
-          <script>
+            
+    <!-- Modal for Payment Proof -->
+    <div class="modal fade" id="uploadProofModal" tabindex="-1" role="dialog" aria-labelledby="uploadProofModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadProofModalLabel">Upload Payment Proof</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="controller/uploadPaymentProof.php" method="POST" name="proofPayment" id="proofPayment" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="paymentReceipt">Upload Receipt</label>
+                        <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
+                        <input type="file" class="form-control" id="paymentReceipt" name="paymentReceipt"  accept=".jpg,.jpeg,.png,.pdf" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentID">Patient ID</label>
+                        <input type="text" class="form-control" id="patientId" name="patientId" value="<?=$member_id?>">  <!-- This will be set by JS -->
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentID">Appointment ID</label>
+                        <input type="text" class="form-control" id="appointmentID" name="appointmentID" readonly>  <!-- This will be set by JS -->
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks">Remarks</label>
+                        <textarea class="form-control" id="remarks" name="remarks"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+
+
+  <!-- Hidden Form -->
+  <form id="computationForm" method="POST" action="controller/fetchComputation.php" target="computationFrame" style="display: none;">
+    <input type="hidden" id="appointmentIdInput" name="appointment_id">
+  </form>
+
+  <div class="modal fade" id="viewComputationModal" tabindex="-1" role="dialog" aria-labelledby="viewComputationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewComputationModalLabel">Computation Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- The iframe will show the fetched computation details -->
+                <iframe name="computationFrame" id="computationFrame" style="width: 100%; height: 300px; border: none;"></iframe>      
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
         function checkFrameContent() {
             console.log('Iframe content loaded');
@@ -186,71 +249,7 @@
             });
         });
     });
-  </script>        
-  <!-- Modal for Payment Proof -->
-  <div class="modal fade" id="uploadProofModal" tabindex="-1" role="dialog" aria-labelledby="uploadProofModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="uploadProofModalLabel">Upload Payment Proof</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <form action="controller/uploadPaymentProof.php" method="POST" name="proofPayment" id="proofPayment" enctype="multipart/form-data">
-              <div class="modal-body">
-                  <div class="form-group">
-                      <label for="paymentReceipt">Upload Receipt</label>
-                      <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
-                      <input type="file" class="form-control" id="paymentReceipt" name="paymentReceipt"  accept=".jpg,.jpeg,.png,.pdf" required>
-                  </div>
-                  <div class="form-group">
-                      <label for="appointmentID">Patient ID</label>
-                      <input type="text" class="form-control" id="patientId" name="patientId" value="<?=$member_id?>">  <!-- This will be set by JS -->
-                  </div>
-                  <div class="form-group">
-                      <label for="appointmentID">Appointment ID</label>
-                      <input type="text" class="form-control" id="appointmentID" name="appointmentID" readonly>  <!-- This will be set by JS -->
-                  </div>
-                  <div class="form-group">
-                      <label for="remarks">Remarks</label>
-                      <textarea class="form-control" id="remarks" name="remarks"></textarea>
-                  </div>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary">Close</button>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
-          </form>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- Hidden Form -->
-  <form id="computationForm" method="POST" action="controller/fetchComputation.php" target="computationFrame" style="display: none;">
-    <input type="hidden" id="appointmentIdInput" name="appointment_id">
-  </form>
-
-  <div class="modal fade" id="viewComputationModal" tabindex="-1" role="dialog" aria-labelledby="viewComputationModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewComputationModalLabel">Computation Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- The iframe will show the fetched computation details -->
-                <iframe name="computationFrame" id="computationFrame" style="width: 100%; height: 300px; border: none;"></iframe>      
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-  </div>
+</script>
 <?php
     include_once("inc/userDashboardFooter.php");
 ?>

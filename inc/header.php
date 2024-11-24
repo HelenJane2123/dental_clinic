@@ -77,7 +77,7 @@
           if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'patient') {
               // User is logged in, display their name and dropdown
               echo '<div class="dropdown">';
-              echo '<a class="nav-link dropdown-toggle text-primary" href="#" id="profileDropdown" data-toggle="dropdown">';
+              echo '<a class="nav-link dropdown-toggle" style="color:#fff; font-weight:600;" href="#" id="profileDropdown" data-toggle="dropdown">';
               echo 'Welcome, ' . htmlspecialchars($_SESSION['firstname']) . ' ' . htmlspecialchars($_SESSION['lastname']) . '';
               echo '</a>';
               echo '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">';
