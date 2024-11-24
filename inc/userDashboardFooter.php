@@ -807,6 +807,27 @@
         printWindow.print();
     }
 
+    function toggleForWomenSection() {
+        const gender = document.getElementById('sex').value;
+        const forWomenSection = document.getElementById('for-women');
+
+        if (gender === 'F') {
+            forWomenSection.style.display = 'block';
+            // Enable required attribute for women's fields
+            document.getElementById('pregnant').setAttribute('required', 'true');
+            document.getElementById('nursing').setAttribute('required', 'true');
+            document.getElementById('birth_control').setAttribute('required', 'true');
+        } else {
+            forWomenSection.style.display = 'none';
+            // Remove required attribute for women's fields
+            document.getElementById('pregnant').removeAttribute('required');
+            document.getElementById('nursing').removeAttribute('required');
+            document.getElementById('birth_control').removeAttribute('required');
+        }
+    }
+
+    // Call the function on page load to handle pre-selected values
+    window.onload = toggleForWomenSection;
 
 
 

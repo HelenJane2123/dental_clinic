@@ -8,9 +8,7 @@
               <p>"At Roselle Santander Dental Clinic, we are committed to providing personalized, high-quality dental care in a welcoming environment. Our experienced team is here to make your dental visit as comfortable and efficient as possible."</p>
             </div>
             <ul class="ftco-footer-social list-unstyled float-md-left float-lft ">
-              <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-              <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-              <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+              <li class="ftco-animate"><a href="https://www.facebook.com/profile.php?id=100089099499565"><span class="icon-facebook"></span></a></li>
             </ul>
           </div>
           <div class="col-md-2">

@@ -147,7 +147,22 @@
                 return false; // Token is invalid or expired
             }
         }
-        
+
+        public function get_current_password_token($token) {
+            $query = "SELECT password FROM accounts WHERE reset_token = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param("s", $token);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc(); // Fetch the password from the result row
+                return $row['password']; // Return the password from the database
+            }
+
+            return false; // Return false if no password is found (e.g., member_id doesn't exist)
+        }
         
         
         public function update_password($hashedPassword, $token) {

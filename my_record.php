@@ -93,8 +93,14 @@
                                             </div>
                                             <div class="form-group col-sm-4">
                                                 <label class="required">Gender</label>
-                                                <select class="form-control" id="sex" name="sex" required data-parsley-required-message="Please select gender">
-                                                    <option>--Please Select--</option>
+                                                <select 
+                                                    class="form-control" 
+                                                    id="sex" 
+                                                    name="sex" 
+                                                    required 
+                                                    data-parsley-required-message="Please select gender" 
+                                                    onchange="toggleForWomenSection()">
+                                                    <option value="">--Please Select--</option>
                                                     <option value="M" <?= isset($patient['sex']) && $patient['sex'] == 'M' ? 'selected' : '' ?>>Male</option>
                                                     <option value="F" <?= isset($patient['sex']) && $patient['sex'] == 'F' ? 'selected' : '' ?>>Female</option>
                                                 </select>
@@ -176,8 +182,8 @@
                                                 <input type="text" class="form-control" id="previous_dentist" name="previous_dentist" value="<?= isset($patient['previous_dentist']) ? $patient['previous_dentist'] : '' ?>" required data-parsley-required-message="This field is required.">
                                             </div>
                                             <div class="form-group col-sm-6">
-                                                <label class="required" for="last_dental_visit">Last Dental Visit</label>
-                                                <input type="date" class="form-control" id="last_dental_visit" name="last_dental_visit" value="<?= isset($patient['last_dental_visit']) ? $patient['last_dental_visit'] : '' ?>" required data-parsley-required-message="This field is required.">
+                                                <label for="last_dental_visit">Last Dental Visit</label>
+                                                <input type="date" class="form-control" id="last_dental_visit" name="last_dental_visit" value="<?= isset($patient['last_dental_visit']) ? $patient['last_dental_visit'] : '' ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -343,12 +349,12 @@
                                         </div>
                                     </div>
                                     <!-- Additional Information for Women -->
-                                    <div id="for-women">
+                                    <div id="for-women" style="display: none;">
                                         <h4>For Women Only</h4>
                                         <div class="row">
                                             <div class="form-group col-sm-6">
                                                 <label class="required">Are you pregnant?</label>
-                                                <select class="form-control" id="pregnant" name="pregnant" required data-parsley-required-message="This field is required.">
+                                                <select class="form-control" id="pregnant" name="pregnant" data-parsley-required-message="This field is required.">
                                                     <option value="">--Please Select--</option>
                                                     <option value="1" <?= isset($patient['pregnant']) && $patient['pregnant'] == 1 ? 'selected' : '' ?>>Yes</option>
                                                     <option value="0" <?= isset($patient['pregnant']) && $patient['pregnant'] == 0 ? 'selected' : '' ?>>No</option>
@@ -356,7 +362,7 @@
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label class="required">Are you nursing?</label>
-                                                <select class="form-control" id="nursing" name="nursing" required data-parsley-required-message="This field is required.">
+                                                <select class="form-control" id="nursing" name="nursing" data-parsley-required-message="This field is required.">
                                                     <option value="">--Please Select--</option>
                                                     <option value="1" <?= isset($patient['nursing']) && $patient['nursing'] == 1 ? 'selected' : '' ?>>Yes</option>
                                                     <option value="0" <?= isset($patient['nursing']) && $patient['nursing'] == 0 ? 'selected' : '' ?>>No</option>
@@ -364,7 +370,7 @@
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label class="required">Are you taking birth control pills?</label>
-                                                <select class="form-control" id="birth_control" name="birth_control" required data-parsley-required-message="This field is required.">
+                                                <select class="form-control" id="birth_control" name="birth_control" data-parsley-required-message="This field is required.">
                                                     <option value="">--Please Select--</option>
                                                     <option value="1" <?= isset($patient['taking_birth_control']) && $patient['taking_birth_control'] == 1 ? 'selected' : '' ?>>Yes</option>
                                                     <option value="0" <?= isset($patient['taking_birth_control']) && $patient['taking_birth_control'] == 0 ? 'selected' : '' ?>>No</option>

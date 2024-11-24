@@ -33,17 +33,24 @@
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
         $stored_password = $funObj->get_current_password($member_id);
-
        
         if ($stored_password !== false) {
             // Verify the current password with the stored hash
             if (password_verify($current_password, $stored_password)) {
+                // Check if the new password is the same as the current password
+                if (password_verify($new_password, $stored_password)) {
+                    $_SESSION['display_message'] = "New password cannot be the same as the current password!";
+                    $_SESSION['message_type'] = "danger";
+                    header("Location: ../change_password.php");
+                    exit();
+                }
+        
                 // Hash the new password
                 $hashed_new_password = password_hash($new_password, PASSWORD_BCRYPT);
-    
+        
                 // Update the password in the database
                 $update_query = $funObj->update_password($member_id, $hashed_new_password);
-    
+        
                 if ($update_query) {
                     $_SESSION['display_message'] = "Password changed successfully!";
                     $_SESSION['message_type'] = "success";
@@ -59,7 +66,7 @@
             $_SESSION['display_message'] = "User not found!";
             $_SESSION['message_type'] = "danger";
         }
-    
+        
         // Redirect back to the password change page
         header("Location: ../change_password.php");
         exit();

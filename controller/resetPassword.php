@@ -38,12 +38,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
+        // Check if the new password is the same as the old password
+        $stored_password = $funObj->get_current_password_token($token);
+        if (password_verify($password, $stored_password)) {
+            $_SESSION['message'] = "New password cannot be the same as the current password.";
+            $_SESSION['message_type'] = "error";
+            header('Location: ../reset_password.php?token=' . urlencode($token));
+            exit();
+        }
+
         // Hash the password securely
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Update password in the database
         $update = $funObj->update_password($hashed_password, $token); // Assume this updates the password using the token
-        
+
         if ($update) {
             // If update is successful
             $_SESSION['message'] = "Password has been successfully updated. You can now log in.";
