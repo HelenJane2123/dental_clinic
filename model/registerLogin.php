@@ -20,15 +20,11 @@
 
 		/*** check if user name exist ***/
         public function isUserName($username){
-            $sql="SELECT * FROM accounts WHERE username='$username'";
-            $check =  $this->db->query($sql);
-            $count_row = $check->num_rows;
-            if($count_row == 0) {
-                return false;
-            }
-            else {
-                return true;
-            }
+            $stmt = $this->db->prepare("SELECT * FROM accounts WHERE username = ?");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result;
         }
 		/*** for registration process ***/
 		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created, $verification_code) {

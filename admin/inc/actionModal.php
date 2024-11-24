@@ -250,41 +250,42 @@
         <form id="assignPatientForm" method="POST" action="controller/assignPatient.php">
           <!-- Hidden input to store doctor ID -->
           <input type="hidden" id="doctorIdInput" name="doctor_id" value="">
-
-          <table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th>Patient ID</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Action</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <?php if (!empty($get_all_patients)) : ?>
-                      <?php foreach ($get_all_patients as $patient) : ?>
-                          <tr>
-                              <td><?= htmlspecialchars($patient['patient_id']) ?></td>
-                              <td><?= htmlspecialchars($patient['first_name']) . " " . htmlspecialchars($patient['last_name']) ?></td>
-                              <td><?= htmlspecialchars($patient['email']) ?></td>
-                              <td>
-                                  <!-- Add Patient button as a submit button to assign patient -->
-                                  <button type="submit" class="btn btn-warning btn-sm" 
-                                          onclick="assignPatient(<?= htmlspecialchars($patient['patient_id']) ?>)">
-                                      Add Patient
-                                  </button>
-                                  <!-- Hidden input to store patient ID for each row -->
-                                  <input type="hidden" name="patient_id" value="<?= htmlspecialchars($patient['patient_id']) ?>">
-                              </td>
-                          </tr>
-                      <?php endforeach; ?>
-                  <?php else : ?>
-                      <tr>
-                          <td colspan="4" class="text-center">No patients found.</td>
-                      </tr>
-                  <?php endif; ?>
-              </tbody>
-          </table>
+          <div class="table-responsive">            
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($get_all_patients)) : ?>
+                        <?php foreach ($get_all_patients as $patient) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($patient['patient_id']) ?></td>
+                                <td><?= htmlspecialchars($patient['first_name']) . " " . htmlspecialchars($patient['last_name']) ?></td>
+                                <td><?= htmlspecialchars($patient['email']) ?></td>
+                                <td>
+                                    <!-- Add Patient button as a submit button to assign patient -->
+                                    <button type="submit" class="btn btn-warning btn-sm" 
+                                            onclick="assignPatient(<?= htmlspecialchars($patient['patient_id']) ?>)">
+                                        Add Patient
+                                    </button>
+                                    <!-- Hidden input to store patient ID for each row -->
+                                    <input type="hidden" name="patient_id" value="<?= htmlspecialchars($patient['patient_id']) ?>">
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="4" class="text-center">No patients found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+          </div>    
         </form>
       </div>
     </div>

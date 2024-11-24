@@ -500,8 +500,7 @@
                 LEFT JOIN
                 	dental_services AS ds ON ds.id = appointments.services
                 ORDER BY 
-                    appointments.appointment_date DESC, 
-                    appointments.appointment_time DESC;";
+                    appointments.appointment_date DESC";
         
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -573,9 +572,7 @@
                 WHERE 
                     patients.assigned_doctor = ?
                 ORDER BY 
-                    appointments.appointment_date DESC, 
-                    appointments.appointment_time DESC;
-            ";
+                    appointments.appointment_date DESC";
         
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
