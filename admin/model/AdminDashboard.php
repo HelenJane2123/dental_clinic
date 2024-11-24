@@ -656,21 +656,53 @@
         }
         
         public function approve_appointment($appointment_id, $notes, $updated_by, $user_id) {
-            // Logic to approve the appointment
+             // Logic to approve the appointment
             $status = 'Confirmed';
-            $updated_date = date('Y-m-d H:i:s'); // Get the current date and time in the appropriate format
-            
-            // Prepare the SQL statement to include updated_by and updated_date
-            $stmt = $this->db->prepare("UPDATE appointments SET status = ?, notes = ?, approved_by = ?, approved_at = ? WHERE id = ?");
-            
-            // Bind the parameters; assuming updated_by is a string
-            $stmt->bind_param("ssisi", $status, $notes,  $user_id, $updated_date, $appointment_id);
-            
-            if ($stmt->execute()) {
+            $updated_date = date('Y-m-d H:i:s'); // Get the current date and time
+
+            // Begin transaction to ensure atomicity
+            $this->db->begin_transaction();
+
+            try {
+                // Update the appointment status
+                $stmt1 = $this->db->prepare("
+                    UPDATE appointments 
+                    SET status = ?, notes = ?, approved_by = ?, approved_at = ? 
+                    WHERE id = ?
+                ");
+                $stmt1->bind_param("ssisi", $status, $notes, $user_id, $updated_date, $appointment_id);
+
+                if (!$stmt1->execute()) {
+                    throw new Exception("Failed to update appointments table.");
+                }
+
+                // Update the proof_of_payment status
+                $stmt2 = $this->db->prepare("
+                    UPDATE proof_of_payment 
+                    SET status = 'Approved' 
+                    WHERE appointment_id = ?
+                ");
+                $stmt2->bind_param("i", $appointment_id);
+
+                if (!$stmt2->execute()) {
+                    throw new Exception("Failed to update proof_of_payment table.");
+                }
+
+                // Log the approval in the notifications table or system
                 $this->log_notification($appointment_id, 'Confirmed', $notes, $updated_by, $user_id);
+
+                // Commit transaction
+                $this->db->commit();
+
                 return true;
+            } catch (Exception $e) {
+                // Rollback transaction in case of error
+                $this->db->rollback();
+
+                // Optionally, log or handle the error as needed
+                error_log("Error in approve_appointment: " . $e->getMessage());
+                return false;
             }
-            return false;
         }
         
         private function log_notification($appointment_id, $action, $notes, $performed_by, $user_id) {
@@ -1025,6 +1057,35 @@
                 // Roll back the transaction on error
                 $this->db->rollback();
                 error_log("Error deleting doctor: " . $e->getMessage());
+                return false;
+            }
+        }
+
+        public function check_assigned_doctor($doctor) {
+            $sql = "SELECT * FROM patients WHERE assigned_doctor = ?";
+            
+            // Prepare the statement
+            $stmt = $this->db->prepare($sql);
+            
+            if ($stmt === false) {
+                // Handle error in preparing statement
+                return false;
+            }
+            
+            // Bind the parameter (member_id)
+            $stmt->bind_param('i', $doctor);
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Get the result
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows > 0) {
+                // Fetch the user data as an associative array
+                return $result->fetch_assoc();
+            } else {
+                // No user found
                 return false;
             }
         }

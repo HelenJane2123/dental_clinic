@@ -51,7 +51,6 @@
         </div>
     </div>
 
-
     <!-- Reschedule Modal -->
     <div class="modal fade" id="rescheduleModal<?= $appointments['appointment_id'] ?>" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -251,7 +250,7 @@
           <!-- Hidden input to store doctor ID -->
           <input type="hidden" id="doctorIdInput" name="doctor_id" value="">
           <div class="table-responsive">            
-            <table class="table table-striped">
+            <table class="table table-striped" id="table1">
                 <thead>
                     <tr>
                         <th>Patient ID</th>
