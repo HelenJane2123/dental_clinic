@@ -115,21 +115,37 @@
                   <div class="container">
                     <h3 class="text-center mb-4">QR Codes for Payment Methods</h3>
                     <div class="row">
+                        <!-- Payment Method Selection -->
+                        <div class="form-group">
+                            <label for="paymentMethod">Choose Payment Method</label>
+                            <select id="paymentMethod" name="paymentMethod" class="form-control" required>
+                                <option value="">Select Payment Method</option>
+                                <option value="gcash">GCash</option>
+                                <option value="paymaya">PayMaya</option>
+                                <option value="bank_transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4 text-center mb-3" id="qrCodeSection" style="display:none;">
+                            <h4>QR Code for Selected Payment Method</h4>
+                            <div class="text-center">
+                                <img id="paymentQR" src="" alt="Payment QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
+                                <h5 id="paymentMethodName"></h5>
+                            </div>
+                        </div>
+
                       <!-- GCash QR Code -->
-                      <div class="col-12 col-md-4 text-center mb-3">
+                      <!-- <div class="col-12 col-md-4 text-center mb-3">
                         <img src="img/payment/gcash.jpg" alt="GCash QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
                         <h5>GCash</h5>
                       </div>
-                      <!-- PayMaya QR Code -->
                       <div class="col-12 col-md-4 text-center mb-3">
                         <img src="img/payment/paymaya.jpg" alt="PayMaya QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
                         <h5>PayMaya</h5>
                       </div>
-                      <!-- Bank Transfer QR Code -->
                       <div class="col-12 col-md-4 text-center mb-3">
                         <img src="img/payment/bpi.jpg" alt="Bank Transfer QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
                         <h5>Bank Transfer</h5>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -249,6 +265,43 @@
             });
         });
     });
+     // Listen for the form submission
+     // Listen for change on the payment method dropdown
+     document.getElementById('paymentMethod').addEventListener('change', function() {
+            var paymentMethod = this.value;
+
+            if (paymentMethod) {
+                var qrImage = "";
+                var paymentMethodName = "";
+
+                // Set the QR code based on selected payment method
+                switch (paymentMethod) {
+                    case "gcash":
+                        qrImage = "img/payment/gcash.jpg";
+                        paymentMethodName = "GCash";
+                        break;
+                    case "paymaya":
+                        qrImage = "img/payment/paymaya.jpg";
+                        paymentMethodName = "PayMaya";
+                        break;
+                    case "bank_transfer":
+                        qrImage = "img/payment/bpi.jpg";
+                        paymentMethodName = "Bank Transfer";
+                        break;
+                    default:
+                        qrImage = "";
+                        paymentMethodName = "";
+                        break;
+                }
+
+                // Display the selected QR code and payment method name
+                document.getElementById('paymentQR').src = qrImage;
+                document.getElementById('paymentMethodName').innerText = paymentMethodName;
+                document.getElementById('qrCodeSection').style.display = 'block'; // Show the QR code section
+            } else {
+                document.getElementById('qrCodeSection').style.display = 'none'; // Hide QR code if no method is selected
+            }
+        });
 </script>
 <?php
     include_once("inc/userDashboardFooter.php");
