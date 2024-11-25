@@ -132,20 +132,6 @@
                                 <h5 id="paymentMethodName"></h5>
                             </div>
                         </div>
-
-                      <!-- GCash QR Code -->
-                      <!-- <div class="col-12 col-md-4 text-center mb-3">
-                        <img src="img/payment/gcash.jpg" alt="GCash QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
-                        <h5>GCash</h5>
-                      </div>
-                      <div class="col-12 col-md-4 text-center mb-3">
-                        <img src="img/payment/paymaya.jpg" alt="PayMaya QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
-                        <h5>PayMaya</h5>
-                      </div>
-                      <div class="col-12 col-md-4 text-center mb-3">
-                        <img src="img/payment/bpi.jpg" alt="Bank Transfer QR Code" class="img-fluid" style="max-width: 100%; height: auto;">
-                        <h5>Bank Transfer</h5>
-                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -160,7 +146,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="uploadProofModalLabel">Upload Payment Proof</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -185,7 +171,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -204,7 +190,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="viewComputationModalLabel">Computation Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -213,7 +199,7 @@
                 <iframe name="computationFrame" id="computationFrame" style="width: 100%; height: 300px; border: none;"></iframe>      
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
