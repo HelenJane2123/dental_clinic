@@ -92,9 +92,6 @@ include_once('inc/header.php');
     </div>
   </div>
 </section>
-
-
-
 <?php
 include_once('inc/footer.php');
 ?>
