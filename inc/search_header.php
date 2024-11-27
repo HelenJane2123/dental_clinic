@@ -31,7 +31,6 @@
     <div class="collapse navbar-collapse" id="offcanvasMenu">
       <div class="offcanvas-header">
         <h5>Navigation</h5>
-        <button class="btn-close" id="closeMenu">X</button>
         <h4 class="font-weight-bold mb-0 d-none d-md-block mt-1">Welcome back, <?php echo htmlspecialchars($_SESSION['username']); ?></h4>
       </div>
       <div class="offcanvas-body">

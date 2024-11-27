@@ -3,7 +3,7 @@
     include_once('inc/header.php');
 ?>
     <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image: url('img/bg_1.jpg');">
+      <div class="slider-item" style="background-image: url('img/bg_1.jpeg');">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div class="slider-item" style="background-image: url('img/bg_2.jpg');">
+      <div class="slider-item" style="background-image: url('img/bg_2.jpeg');">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
@@ -24,6 +24,19 @@
               <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Achieve Your Desired Perfect Smile</h1>
               <p class="mb-4">Our goal is to provide exceptional care while ensuring you feel at ease every step of the way.</p>
               <p><a href="signup.php" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-item" style="background-image: url('img/bg_3.jpeg');">
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row slider-text align-items-center" data-scrollax-parent="true">
+            <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+              <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Got Questions?</h1>
+              <p class="mb-4">We're here to help with all your dental concerns. Reach out anytime!</p>
+              <p><a href="faq.php" class="btn btn-primary px-4 py-3">Contact Us</a> <a href="contact.php" class="btn btn-outline-primary px-4 py-3">Contact Us</a></p>
             </div>
           </div>
         </div>
@@ -53,7 +66,7 @@
       	<div class="row justify-content-center mb-5 pb-5">
           <div class="col-md-7 text-center heading-section ftco-animate">
             <h2 class="mb-2">Our Service Keeps you Smile</h2>
-            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+            <p>Discover the wide range of dental care services we provide, designed to enhance your oral health and leave you with a confident smile.</p>
           </div>
         </div>
         <div class="row">
@@ -64,7 +77,7 @@
               </div>
               <div class="media-body p-2 mt-3">
                 <h3 class="heading">Teeth Whitening</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <p>Brighten your smile with our professional teeth whitening service. Safely remove stains caused by coffee, tea, and more for a dazzling smile.</p>
               </div>
             </div>      
           </div>
@@ -75,7 +88,7 @@
               </div>
               <div class="media-body p-2 mt-3">
                 <h3 class="heading">Teeth Cleaning</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <p>Keep your teeth healthy and clean. Our expert cleaning services remove plaque and tartar, helping to prevent gum disease and cavities.</p>
               </div>
             </div>    
           </div>
@@ -85,19 +98,19 @@
             		<span class="flaticon-tooth-with-braces"></span>
               </div>
               <div class="media-body p-2 mt-3">
-                <h3 class="heading">Quality Brackets</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <h3 class="heading">Quality Braces</h3>
+                <p>Align your teeth with our range of braces, including traditional metal, ceramic, and Invisalign options for a perfect smile.</p>
               </div>
             </div>      
           </div>
           <div class="col-md-3 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services d-block text-center">
               <div class="icon d-flex justify-content-center align-items-center">
-            		<span class="flaticon-anesthesia"></span>
+            		<span class="flaticon-tooth"></span>
               </div>
               <div class="media-body p-2 mt-3">
-                <h3 class="heading">Modern Anesthetic</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
+                <h3 class="heading">Dental Restoration</h3>
+                <p>Restore the shape and function of damaged teeth with our advanced restoration services, including fillings and crowns.</p>
               </div>
             </div>      
           </div>
