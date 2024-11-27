@@ -349,7 +349,7 @@
 
             newRow.innerHTML = `
                 <td><input type="date" name="date[]" class="form-control" required></td>
-                <td><input type="text" name="tooth_no[]" class="form-control" required></td>
+                <td><input type="text" name="tooth_no[]" class="form-control"></td>
                 <td><input type="text" name="procedure[]" class="form-control" required></td>
                 <td><input type="text" name="dentist[]" class="form-control" required></td>
                 <td><input type="number" name="amount_charged[]" class="form-control" step="0.01" required></td>
