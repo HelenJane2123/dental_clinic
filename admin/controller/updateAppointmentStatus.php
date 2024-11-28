@@ -18,11 +18,6 @@ $updated_by = $_SESSION['username']; // Get the username from the session
 $user_id = $_POST['user_id_admin'];
 $patient_id = $_POST['patient_id'];
 
-// Fetch assigned doctor's details
-$doctor = $funObj->get_assigned_doctor_by_appointment_id($patient_id);
-$doctorName = $doctor['name'];
-$doctorEmail = $doctor['email'];
-$doctorPhone = $doctor['phone'];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
@@ -35,6 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
     $appointmentTime = date("h:i A", strtotime($patient['appointment_time']));
     $appointmentDate = date("F j, Y", strtotime($patient['appointment_date']));
     $patient_email = $patient['email'];
+
+    
+    // Fetch assigned doctor's details
+    $doctor = $funObj->get_assigned_doctor_by_appointment_id($patient_id);
+    
+    if (!empty($doctor)) {
+        $doctorName = $doctor[0]['doctor_name'];
+        $doctorEmail = $doctor[0]['doctor_email'];
+        $doctorPhone = $doctor[0]['contact_number'];
+    } else {
+        // Handle case where no doctor is assigned
+        echo "No doctor assigned for this patient.";
+    }
 
     if (isset($_POST['action']) && $_POST['action'] === 'complete') {
         $notes = isset($_POST['notes']) ? $_POST['notes'] : '';

@@ -504,7 +504,7 @@
                 LEFT JOIN 
                     doctors as d ON d.account_id = patients.assigned_doctor
                 ORDER BY 
-                    appointments.appointment_date DESC";
+                    appointments.created_at DESC";
         
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -585,7 +585,7 @@
                 WHERE 
                     patients.assigned_doctor = ?
                 ORDER BY 
-                    appointments.appointment_date DESC";
+                    appointments.created_at DESC";
         
             // Prepare the SQL statement
             if ($stmt = $this->db->prepare($query)) {
@@ -895,9 +895,9 @@
             $query = "
                 SELECT 
                     doctors.account_id AS doctor_id, 
-                    doctors.name AS doctor_name, 
-                    accounts.email, 
-                    accounts.phone, 
+                    CONCAT(doctors.first_name, ' ', doctors.last_name) AS doctor_name, 
+                    doctors.email as doctor_email, 
+                    doctors.contact_number, 
                     accounts.member_id
                 FROM 
                     doctors
@@ -908,7 +908,7 @@
                 LEFT JOIN 
                     accounts 
                 ON 
-                    accounts.account_id = doctors.account_id
+                    accounts.id = doctors.account_id
                 WHERE 
                     patients.patient_id = ?
             ";
