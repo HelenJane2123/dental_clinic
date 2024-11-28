@@ -246,49 +246,46 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="assignPatientForm" method="POST" action="controller/assignPatient.php">
-          <!-- Hidden input to store doctor ID -->
-          <input type="hidden" id="doctorIdInput" name="doctor_id" value="">
-
-          <div class="table-responsive">
-            <table class="table table-striped" id="table_assignee"> <!-- Updated ID -->
-              <thead>
-                <tr>
-                  <th>Patient ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Assigned Doctor</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php if (!empty($get_all_patients)) : ?>
-                  <?php foreach ($get_all_patients as $patient) : ?>
-                    <tr>
-                      <td><?= htmlspecialchars($patient['member_id']) ?>
-                        <input type="hidden" name="member_id" value="<?= $patient['member_id'] ?>">
-                        <input type="hidden" name="patient_id" value="<?= $patient['patient_id'] ?>">
-
-                     </td>
-                      <td><?= htmlspecialchars($patient['first_name']) . " " . htmlspecialchars($patient['last_name']) ?></td>
-                      <td><?= htmlspecialchars($patient['email']) ?></td>
-                      <td><?= htmlspecialchars($patient['doctor_first_name']) . " " . htmlspecialchars($patient['doctor_last_name']) ?></td>
-                      <td>
+        <div class="table-responsive">
+        <table class="table table-striped" id="table_assignee">
+          <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Assigned Doctor</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if (!empty($get_all_patients)) : ?>
+                <?php foreach ($get_all_patients as $patient) : ?>
+                  <tr>
+                    <td><?= htmlspecialchars($patient['member_id']) ?></td>
+                    <td><?= htmlspecialchars($patient['first_name']) . " " . htmlspecialchars($patient['last_name']) ?></td>
+                    <td><?= htmlspecialchars($patient['email']) ?></td>
+                    <td><?= htmlspecialchars($patient['doctor_first_name']) . " " . htmlspecialchars($patient['doctor_last_name']) ?></td>
+                    <td>
+                      <!-- Separate form for each patient -->
+                      <form method="POST" action="controller/assignPatient.php">
+                        <input type="hidden" name="member_id" value="<?= htmlspecialchars($patient['member_id']) ?>">
+                        <input type="hidden" name="patient_id" value="<?= htmlspecialchars($patient['patient_id']) ?>">
+                        <input type="hidden" name="doctor_id" class="doctorIdInput">
                         <button type="submit" class="btn btn-warning btn-sm">
                           Add Patient
                         </button>
-                      </td>
-                    </tr>
-                  <?php endforeach; ?>
-                <?php else : ?>
-                  <tr>
-                    <td colspan="4" class="text-center">No patients found.</td>
+                      </form>
+                    </td>
                   </tr>
-                <?php endif; ?>
-              </tbody>
-            </table>
-          </div>
-        </form>
+                <?php endforeach; ?>
+              <?php else : ?>
+                <tr>
+                  <td colspan="5" class="text-center">No patients found.</td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -474,6 +471,5 @@
         document.getElementById('editDownPayment').value = '0.00'; // Set to 0 if price is invalid
         }
     });
-
 
 </script>

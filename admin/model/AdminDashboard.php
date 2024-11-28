@@ -990,7 +990,7 @@
 
         public function get_patient_details($id) {
             // Prepare the query to fetch patient's details (email, id, and account_id) by the provided patient ID
-            $stmt = $this->db->prepare("SELECT patient_id, email,  first_name, last_name, member_id FROM patients WHERE patient_id = ?");
+            $stmt = $this->db->prepare("SELECT patient_id, email,  first_name, last_name, member_id, assigned_doctor FROM patients WHERE patient_id = ?");
             
             // Bind the input parameter (patient_id)
             $stmt->bind_param("i", $id);
@@ -1004,7 +1004,7 @@
             // Check if the patient exists
             if ($stmt->num_rows > 0) {
                 // Bind the result to the variables (patient_id, email, account_id, first_name, last_name)
-                $stmt->bind_result($patient_id, $email, $first_name, $last_name, $member_id);
+                $stmt->bind_result($patient_id, $email, $first_name, $last_name, $member_id, $assigned_doctor);
                 
                 // Fetch the data
                 $stmt->fetch();
@@ -1018,7 +1018,8 @@
                     'email' => $email,
                     'first_name' => $first_name,
                     'last_name' => $last_name,
-                    'member_id' => $member_id
+                    'member_id' => $member_id,
+                    'assigned_doctor' => $assigned_doctor
                 );
             } else {
                 // Close the statement
@@ -1282,23 +1283,28 @@
         }
         
 
-        public function assign_patient($doctor_id, $member_id) {
-            // Prepare the SQL statement
-            $sql = "UPDATE patients SET assigned_doctor = ? WHERE member_id = ?";
+        public function assign_patient($doctor_id, $patient_id) {
+            $sql = "UPDATE patients SET assigned_doctor = ? WHERE patient_id = ?";
             $stmt = $this->db->prepare($sql);
         
-            // Bind the doctor_id and patient_id to the SQL statement
-            $stmt->bind_param("is", $doctor_id, $member_id);
+            if (!$stmt) {
+                error_log("Statement preparation failed: " . $this->db->error);
+                return false;
+            }
         
-            // Execute the statement and check for success
+            $stmt->bind_param("ii", $doctor_id, $patient_id);
+            
             if ($stmt->execute()) {
+                error_log("Successfully updated assigned doctor for patient ID: $patient_id");
                 $stmt->close();
                 return true;
             } else {
+                error_log("Query execution failed: " . $stmt->error);
                 $stmt->close();
                 return false;
             }
         }
+        
         
         public function getPaymentStatus() {
             $sql = "

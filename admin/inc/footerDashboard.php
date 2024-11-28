@@ -114,6 +114,8 @@
             const modal = new bootstrap.Modal(document.getElementById('genericModal'));
             modal.show();
         }
+
+
         // Simple Datatable
         document.addEventListener("DOMContentLoaded", function() {
             const dataTableElement = document.getElementById("table1");
@@ -126,8 +128,29 @@
                     const table = document.querySelector('#table_assignee');
                     dataTableInstance = new simpleDatatables.DataTable(table);
                 }
+                if (currentDoctorId !== null) {
+                    // Loop through each form and find the doctor_id hidden input field
+                    document.querySelectorAll('.doctorIdInput').forEach(function(input) {
+                        input.value = currentDoctorId;
+                    });
+                }
+            });
+
+            // Handle the Assign Patient button click, which passes the correct doctor ID
+            document.querySelectorAll('.assign-patient-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    // Get doctor_id from the button's data attribute
+                    currentDoctorId = button.getAttribute("data-doctor-id");
+
+                    // Update all hidden doctor_id inputs when the button is clicked
+                    document.querySelectorAll('.doctorIdInput').forEach(function(input) {
+                        input.value = currentDoctorId;
+                    });
+                });
             });
         });
+
+
 
         function toggleStatus(button, notificationId) {
             // Confirm the action if needed
@@ -347,10 +370,6 @@
                 }
             }
         });
-        function openPatientModal(doctorId) {
-            // Set the doctor ID in a hidden input within the modal
-            document.getElementById('doctorIdInput').value = doctorId;
-        }
 
         function addRow() {
             var table = document.getElementById('dentalTable').getElementsByTagName('tbody')[0];

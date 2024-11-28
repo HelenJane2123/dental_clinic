@@ -75,8 +75,8 @@ include_once('inc/sidebarMenu.php');
                                             <td><?= htmlspecialchars($doctors['contact_number']) ?></td>
                                             <td><?= htmlspecialchars($doctors['specialty']) ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#patientListModal" 
-                                                    onclick="openPatientModal(<?= htmlspecialchars($doctors['account_id']) ?>)">
+                                                <button type="button" class="btn btn-primary assign-patient-btn" data-bs-toggle="modal" data-bs-target="#patientListModal" 
+                                                        data-doctor-id="<?= htmlspecialchars($doctors['account_id']) ?>">
                                                     Assign Patient
                                                 </button>
                                                 <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">
@@ -111,6 +111,17 @@ include_once('inc/sidebarMenu.php');
                 password += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             document.getElementById("password").value = password;
+        }
+
+        let currentDoctorId = null;  // Global variable to store doctor ID
+
+        // Function to handle when the modal is opened
+        function openPatientModal(button) {
+            // Get the doctor_id from the data attribute of the button that was clicked
+            currentDoctorId = button.getAttribute("data-doctor-id");
+
+            // Set the hidden input field's value to the doctor ID
+            document.getElementById("doctorIdInput").value = currentDoctorId;
         }
     </script>
 
