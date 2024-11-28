@@ -543,6 +543,8 @@
                     patients.member_id AS patient_member_id,
                     patients.first_name AS patient_first_name,
                     patients.last_name AS patient_last_name,
+                    completed_admin.firstname AS completed_first_name,
+                    completed_admin.lastname AS completed_last_name,
                     approved_admin.firstname AS approved_first_name,
                     approved_admin.lastname AS approved_last_name,
                     canceled_admin.firstname AS canceled_first_name,
@@ -550,6 +552,9 @@
                     rescheduled_admin.firstname AS rescheduled_first_name,
                     rescheduled_admin.lastname AS rescheduled_last_name,
                     appointments.completed_at as date_completed,
+                    appointments.approved_at as date_approved,
+                    appointments.canceled_at as date_canceled,
+                    appointments.rescheduled_at as date_rescheduled,
                     pp.appointment_id as proof_id,
                     pp.file_name,
                     ds.sub_category as services_name
@@ -1228,8 +1233,9 @@
         public function get_all_patients_without_doctor() {
             // SQL query to get patients without an assigned doctor and exclude 'super_admin' user_type from the accounts table
             $sql = "
-                SELECT patients.*
+                SELECT patients.*, d.first_name AS doctor_first_name, d.last_name AS doctor_last_name
                 FROM patients
+                LEFT JOIN doctors AS d ON d.account_id = patients.assigned_doctor
             ";
         
             // Prepare the statement
@@ -1276,13 +1282,13 @@
         }
         
 
-        public function assign_patient($doctor_id, $patient_id) {
+        public function assign_patient($doctor_id, $member_id) {
             // Prepare the SQL statement
-            $sql = "UPDATE patients SET assigned_doctor = ? WHERE patient_id = ?";
+            $sql = "UPDATE patients SET assigned_doctor = ? WHERE member_id = ?";
             $stmt = $this->db->prepare($sql);
         
             // Bind the doctor_id and patient_id to the SQL statement
-            $stmt->bind_param("ii", $doctor_id, $patient_id);
+            $stmt->bind_param("is", $doctor_id, $member_id);
         
             // Execute the statement and check for success
             if ($stmt->execute()) {

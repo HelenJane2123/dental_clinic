@@ -239,7 +239,7 @@
 </div>
 <!-- Modal for Patient List -->
 <div class="modal fade" id="patientListModal" tabindex="-1" aria-labelledby="patientListModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="patientListModalLabel">List of Patients</h5>
@@ -249,47 +249,52 @@
         <form id="assignPatientForm" method="POST" action="controller/assignPatient.php">
           <!-- Hidden input to store doctor ID -->
           <input type="hidden" id="doctorIdInput" name="doctor_id" value="">
-          <div class="table-responsive">            
-            <table class="table table-striped" id="table1">
-                <thead>
+
+          <div class="table-responsive">
+            <table class="table table-striped" id="table_assignee"> <!-- Updated ID -->
+              <thead>
+                <tr>
+                  <th>Patient ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Assigned Doctor</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (!empty($get_all_patients)) : ?>
+                  <?php foreach ($get_all_patients as $patient) : ?>
                     <tr>
-                        <th>Patient ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Action</th>
+                      <td><?= htmlspecialchars($patient['member_id']) ?>
+                        <input type="hidden" name="member_id" value="<?= $patient['member_id'] ?>">
+                        <input type="hidden" name="patient_id" value="<?= $patient['patient_id'] ?>">
+
+                     </td>
+                      <td><?= htmlspecialchars($patient['first_name']) . " " . htmlspecialchars($patient['last_name']) ?></td>
+                      <td><?= htmlspecialchars($patient['email']) ?></td>
+                      <td><?= htmlspecialchars($patient['doctor_first_name']) . " " . htmlspecialchars($patient['doctor_last_name']) ?></td>
+                      <td>
+                        <button type="submit" class="btn btn-warning btn-sm">
+                          Add Patient
+                        </button>
+                      </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($get_all_patients)) : ?>
-                        <?php foreach ($get_all_patients as $patient) : ?>
-                            <tr>
-                                <td><?= htmlspecialchars($patient['patient_id']) ?></td>
-                                <td><?= htmlspecialchars($patient['first_name']) . " " . htmlspecialchars($patient['last_name']) ?></td>
-                                <td><?= htmlspecialchars($patient['email']) ?></td>
-                                <td>
-                                    <!-- Add Patient button as a submit button to assign patient -->
-                                    <button type="submit" class="btn btn-warning btn-sm" 
-                                            onclick="assignPatient(<?= htmlspecialchars($patient['patient_id']) ?>)">
-                                        Add Patient
-                                    </button>
-                                    <!-- Hidden input to store patient ID for each row -->
-                                    <input type="hidden" name="patient_id" value="<?= htmlspecialchars($patient['patient_id']) ?>">
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else : ?>
-                        <tr>
-                            <td colspan="4" class="text-center">No patients found.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
+                  <?php endforeach; ?>
+                <?php else : ?>
+                  <tr>
+                    <td colspan="4" class="text-center">No patients found.</td>
+                  </tr>
+                <?php endif; ?>
+              </tbody>
             </table>
-          </div>    
+          </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
 
 <!-- Edit Dental Service Modal -->
 <div class="modal fade" id="editDentalServiceModal" tabindex="-1" aria-labelledby="editDentalServiceModalLabel" aria-hidden="true">
@@ -469,5 +474,6 @@
         document.getElementById('editDownPayment').value = '0.00'; // Set to 0 if price is invalid
         }
     });
+
 
 </script>

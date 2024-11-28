@@ -118,6 +118,15 @@
         document.addEventListener("DOMContentLoaded", function() {
             const dataTableElement = document.getElementById("table1");
             const dataTable = new simpleDatatables.DataTable(dataTableElement);
+
+            let dataTableInstance = null;
+
+            document.getElementById('patientListModal').addEventListener('shown.bs.modal', function() {
+                if (!dataTableInstance) {
+                    const table = document.querySelector('#table_assignee');
+                    dataTableInstance = new simpleDatatables.DataTable(table);
+                }
+            });
         });
 
         function toggleStatus(button, notificationId) {
@@ -628,7 +637,6 @@
             printWindow.document.close();
             printWindow.print();
         }
-
     </script>
       
       <script src="js/main.js"></script>

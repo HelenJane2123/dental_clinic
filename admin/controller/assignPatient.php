@@ -8,12 +8,13 @@ $funObj = new Admin();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Get doctor ID and patient ID from the form
     $doctor_id = $_POST['doctor_id'];
+    $member_id = $_POST['member_id'];
     $patient_id = $_POST['patient_id'];
 
     // Check if both doctor_id and patient_id are provided
-    if (!empty($doctor_id) && !empty($patient_id)) {
+    if (!empty($doctor_id) && !empty($member_id)) {
         // Update query to assign the doctor to the patient
-        $assign_patient = $funObj->assign_patient($doctor_id, $patient_id);
+        $assign_patient = $funObj->assign_patient($doctor_id, $member_id);
 
         if ($assign_patient) {
             // Check if we retrieved the doctor's email

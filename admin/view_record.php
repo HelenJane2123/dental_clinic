@@ -426,7 +426,7 @@ if (isset($_GET['patient_id'])) {
                                                 <?php foreach ($dental_records as $record) : ?>
                                                     <tr>
                                                         <td><input type="date" name="date[]" value="<?= $record['date'] ?>" class="form-control" required></td>
-                                                        <td><input type="text" name="tooth_no[]" value="<?= $record['tooth_no'] ?>" class="form-control" ></td>
+                                                        <td><input type="text" name="tooth_no[]" value="<?= $record['tooth_no'] ?>" class="form-control"></td>
                                                         <td><input type="text" name="procedure[]" value="<?= $record['procedure'] ?>" class="form-control" required></td>
                                                         <td><input type="text" name="dentist[]" value="<?= $record['dentist'] ?>" class="form-control" required></td>
                                                         <td>
