@@ -27,7 +27,7 @@
                     <input type="hidden" name="member_id" class="form-control" value="<?=$_SESSION['member_id']?>" id="member_id">
                     <input type="hidden" name="old_emailaddress" class="form-control" value="<?=$_SESSION['email']?>" id="email">
                     <input type="hidden" name="user_admin_id" class="form-control" value="<?=$user_id_admin?>" id="user_id">
-                    <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
+                    <input type="hidden" name="doctor_id" class="form-control" value="<?= !empty($get_doctor_id['account_id']) ? $get_doctor_id['account_id'] : $user_id_admin ?>" id="doctor_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
                     
                     <div id="nameFields" style="display: none;">

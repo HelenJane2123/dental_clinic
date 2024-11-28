@@ -18,6 +18,12 @@ $updated_by = $_SESSION['username']; // Get the username from the session
 $user_id = $_POST['user_id_admin'];
 $patient_id = $_POST['patient_id'];
 
+// Fetch assigned doctor's details
+$doctor = $funObj->get_assigned_doctor_by_appointment_id($patient_id);
+$doctorName = $doctor['name'];
+$doctorEmail = $doctor['email'];
+$doctorPhone = $doctor['phone'];
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
     $appointment_id = intval($_POST['appointment_id']); // Use POST data
@@ -87,6 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 <p><strong>Service Description:</strong> $serviceDescription</p>
                 <p><strong>Appointment Date:</strong> $appointmentDate</p>
                 <p><strong>Time:</strong> $appointmentTime</p>
+                
+
                 <p>If you have further questions, feel free to reach out.</p>
                 <p>Thank you for choosing our clinic!</p>
                 <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
@@ -272,7 +280,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                         <p>Your appointment for <strong>$serviceName</strong> has been rescheduled.</p>
                         <p><strong>New Date:</strong> $new_date</p>
                         <p><strong>New Time:</strong> $new_time</p>
-                        <p>If you need further assistance, let us know.</p>
+                        <p>If you have further questions, feel free to contact your assigned doctor:</p>
+                        <p><strong>Doctor's Email:</strong> <a href='mailto:$doctorEmail'>$doctorEmail</a></p>
 
                     <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
                     <p><a href='https://rs-dentalclinic.com/contact.php' class='btn'>Contact Support</a></p>
@@ -363,8 +372,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                     <p>Your appointment for <strong>$serviceName</strong> has been approved.</p>
                     <p><strong>Date:</strong> $appointmentDate</p>
                     <p><strong>Time:</strong> $appointmentTime</p>
-                    <p><strong>Notes:</strong> $notes</p>
-                
+                    <p><strong>Notes:</strong> $notes</p>   
+                    <p>If you have further questions, feel free to contact your assigned doctor:</p>
+                    <p><strong>Doctor's Email:</strong> <a href='mailto:$doctorEmail'>$doctorEmail</a></p>
                     <p>If you have any questions or believe this is an error, please contact us at <a href='mailto:rosellesantander@rs-dentalclinic.com'>rosellesantander@rs-dentalclinic.com</a>.</p>
                     <p><a href='https://rs-dentalclinic.com/contact.php' class='btn'>Contact Support</a></p>
                     

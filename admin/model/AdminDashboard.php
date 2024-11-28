@@ -890,6 +890,59 @@
             }
         }
 
+        public function get_assigned_doctor_by_appointment_id($id) {
+            // Define the query with explicit column selection
+            $query = "
+                SELECT 
+                    doctors.account_id AS doctor_id, 
+                    doctors.name AS doctor_name, 
+                    accounts.email, 
+                    accounts.phone, 
+                    accounts.member_id
+                FROM 
+                    doctors
+                LEFT JOIN 
+                    patients 
+                ON 
+                    patients.assigned_doctor = doctors.account_id
+                LEFT JOIN 
+                    accounts 
+                ON 
+                    accounts.account_id = doctors.account_id
+                WHERE 
+                    patients.patient_id = ?
+            ";
+            
+            $doctorDetails = [];
+            
+            // Prepare the statement
+            if ($stmt = $this->db->prepare($query)) {
+                // Bind parameters (assuming $id is an integer)
+                $stmt->bind_param("i", $id);
+                
+                // Execute the statement
+                $stmt->execute();
+                
+                // Get the result set from the query
+                $result = $stmt->get_result();
+                
+                // Fetch all rows and store them in an associative array
+                while ($row = $result->fetch_assoc()) {
+                    $doctorDetails[] = $row;
+                }
+                
+                // Close the statement
+                $stmt->close();
+            } else {
+                // Log or handle the error
+                error_log("Failed to prepare statement: " . $this->db->error);
+                return [];
+            }
+            
+            return $doctorDetails; // Return an array of doctor details
+        }
+        
+
         public function get_doctor_details_with_account() {
             $query = "
                 SELECT doctors.*, accounts.*, accounts.member_id
