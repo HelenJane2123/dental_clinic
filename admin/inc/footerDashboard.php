@@ -456,6 +456,7 @@
             printWindow.document.write('<p style="margin-bottom: 5px;">Address: 2nd flr. EDP Bldg. San Juan I Gen. Trias, Cavite</p>'); // Reduced bottom margin for address
             printWindow.document.write('<p style="margin-bottom: 5px;">Telephone: 09954993703</p>'); // Reduced bottom margin for telephone
             printWindow.document.write('<p>Patient ID: ' + (document.querySelector('#member_id') ? document.querySelector('#member_id').value : 'N/A') + '</p>');
+            printWindow.document.write('<p>Assigned Doctor: ' + (document.querySelector('#doctor') ? document.querySelector('#doctor').value : 'N/A') + '</p>');
             printWindow.document.write('</div>');
             
             // Wrap the form content in a div with a print container class

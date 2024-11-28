@@ -480,6 +480,8 @@
                     appointments.approved_at as date_approved,
                     appointments.canceled_at as date_canceled,
                     appointments.rescheduled_at as date_rescheduled,
+                    d.first_name as doctor_first_name,
+                    d.last_name as doctor_last_name,
                     pp.appointment_id as proof_id,
                     pp.file_name,
                     ds.sub_category as services_name
@@ -499,6 +501,8 @@
                 	proof_of_payment AS pp ON pp.appointment_id = appointments.id
                 LEFT JOIN
                 	dental_services AS ds ON ds.id = appointments.services
+                LEFT JOIN 
+                    doctors as d ON d.account_id = patients.assigned_doctor
                 ORDER BY 
                     appointments.appointment_date DESC";
         
@@ -557,7 +561,9 @@
                     appointments.rescheduled_at as date_rescheduled,
                     pp.appointment_id as proof_id,
                     pp.file_name,
-                    ds.sub_category as services_name
+                    ds.sub_category as services_name,
+                    d.first_name as doctor_first_name,
+                    d.last_name as doctor_last_name,
                 FROM 
                     appointments
                 LEFT JOIN 
@@ -574,6 +580,8 @@
                 	proof_of_payment AS pp ON pp.appointment_id = appointments.id
                 LEFT JOIN
                 	dental_services AS ds ON ds.id = appointments.services
+                LEFT JOIN 
+                    doctors as d ON d.account_id = patients.assigned_doctor
                 WHERE 
                     patients.assigned_doctor = ?
                 ORDER BY 

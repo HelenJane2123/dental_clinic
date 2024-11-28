@@ -40,6 +40,7 @@ include_once('inc/sidebarMenu.php');
                                     <th>Name</th>
                                     <th>Appointment Date</th>
                                     <th>Appointment Time</th>
+                                    <th>Assigned Doctor</th>
                                     <th>Services</th>
                                     <th>Status</th>
                                     <th>Notes</th>
@@ -73,6 +74,7 @@ include_once('inc/sidebarMenu.php');
                                                     echo date('h:i A', strtotime($appointments['appointment_time'])); // Format as "Hour:Minute AM/PM"
                                                 ?>
                                             </td>
+                                            <td><?= htmlspecialchars($appointments['doctor_first_name'])." ".htmlspecialchars($appointments['doctor_last_name']) ?></td>
                                             <td>
                                                 <?= $appointments['services_name']?>
                                             </td>

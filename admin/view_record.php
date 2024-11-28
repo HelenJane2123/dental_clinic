@@ -80,12 +80,17 @@ if (isset($_GET['patient_id'])) {
                                 <div class="row">
                                     <div id="patient-info">
                                         <div class="member-id">
-                                            Patient ID: <span id="member_id_display"><?=$get_patient_by_id['member_id']?></span>
+                                            <strong>Patient ID:</strong> <span id="member_id_display"><?=$get_patient_by_id['member_id']?></span>
+                                        </div>
+                                        <div class="assigned-doctor">
+                                            <strong>Assigned Doctor:</strong> <span id="assigned_doctor_display"><?=$get_patient_by_id['doctor_first_name'] .' '.$get_patient_by_id['doctor_last_name']?></span>
                                         </div>
                                     </div>
+                                    <br/>
                                 <!-- Personal Information -->
                                     <div class="form-group col-sm-4">
-                                        <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($get_patient_by_id['member_id']) ? $get_patient_by_id['last_name'] : '' ?>"  readonly>
+                                    <input type="hidden" class="form-control" id="doctor" name="doctor" value="<?=$get_patient_by_id['doctor_first_name'] .' '.$get_patient_by_id['doctor_last_name']?>"  readonly>
+                                    <input type="hidden" class="form-control" id="member_id" name="member_id" value="<?= isset($get_patient_by_id['member_id']) ? $get_patient_by_id['member_id'] : '' ?>"  readonly>
                                         <label class="required" for="last_name">Last Name</label>
                                         <input type="text" class="form-control" id="last_name" name="last_name" value="<?= isset($get_patient_by_id['last_name']) ? $get_patient_by_id['last_name'] : '' ?>"  readonly>
                                     </div>
