@@ -291,6 +291,46 @@
   </div>
 </div>
 
+<div class="modal fade" id="viewDoctorModal" tabindex="-1" aria-labelledby="viewDoctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDoctorModalLabel">Doctor Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="doctorName" class="form-label">Doctor Name:</label>
+                    <h5 id="doctorName" class="form-control-plaintext" style="color: #000;"></h5>
+                </div>
+                <div class="mb-3">
+                    <label for="doctorEmail" class="form-label">Doctor Email:</label>
+                    <p id="doctorEmail" class="form-control-plaintext"></p>
+                </div>
+                <div class="mb-3">
+                    <label for="doctorSpecialty" class="form-label">Doctor Specialty:</label>
+                    <p id="doctorSpecialty" class="form-control-plaintext"></p>
+                </div>
+
+                <h5>Patients Assigned:</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="patientsTable">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientsList">
+                            <!-- Patients will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Edit Dental Service Modal -->
@@ -471,5 +511,50 @@
         document.getElementById('editDownPayment').value = '0.00'; // Set to 0 if price is invalid
         }
     });
+
+    function viewDoctorDetails(doctorId) {
+    // Simulate an AJAX request to fetch doctor and patient data
+    fetch('controller/getDoctorDetails.php?doctor_id=' + doctorId)
+        .then(response => response.json())
+        .then(data => {
+            // Check if there's an error in the response
+            if (data.error) {
+                console.error('Error:', data.error);
+                return;
+            }
+
+            // Populate doctor information
+            if (data.doctor) {
+                const doctor = data.doctor;
+                document.getElementById('doctorName').innerText = doctor.first_name + ' ' + doctor.last_name;
+                document.getElementById('doctorEmail').innerText = doctor.email;
+                document.getElementById('doctorSpecialty').innerText = doctor.specialty || 'N/A';  // Handle missing specialty
+            }
+
+            // Populate the patients list
+            let patientsTableBody = document.getElementById('patientsList');
+            patientsTableBody.innerHTML = '';  // Clear previous patients data
+
+            if (data.patients && data.patients.length > 0) {
+                data.patients.forEach(patient => {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${patient.member_id}</td>
+                        <td>${patient.first_name} ${patient.last_name}</td>
+                        <td>${patient.email}</td>
+                    `;
+                    patientsTableBody.appendChild(row);
+                });
+            } else {
+                let row = document.createElement('tr');
+                row.innerHTML = `<td colspan="3">No patients assigned</td>`;
+                patientsTableBody.appendChild(row);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching doctor details:', error);
+        });
+}
+
 
 </script>

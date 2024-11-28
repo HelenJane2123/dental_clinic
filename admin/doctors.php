@@ -79,9 +79,9 @@ include_once('inc/sidebarMenu.php');
                                                         data-doctor-id="<?= htmlspecialchars($doctors['account_id']) ?>">
                                                     Assign Patient
                                                 </button>
-                                                <!-- <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editDoctorModal" onclick="populateEditModal(<?= htmlspecialchars(json_encode($doctors)) ?>)">
-                                                    <i class="fas fa-edit"></i>
-                                                </button> -->
+                                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#viewDoctorModal" onclick="viewDoctorDetails(<?= htmlspecialchars($doctors['account_id']) ?>)">
+                                                    <i class="fas fa-eye"></i> 
+                                                </button>                                                
                                                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteDoctorModal" onclick="confirmDoctorDelete(<?= htmlspecialchars($doctors['account_id']) ?>)">
                                                     <i class="fas fa-trash-alt"></i> <!-- Delete icon -->
                                                 </button>                                        

@@ -136,6 +136,13 @@
                 }
             });
 
+            document.getElementById('viewDoctorModal').addEventListener('shown.bs.modal', function() {
+                if (!dataTableInstance) {
+                    const table = document.querySelector('#patientsTable');
+                    dataTableInstance = new simpleDatatables.DataTable(table);
+                }
+            });
+
             // Handle the Assign Patient button click, which passes the correct doctor ID
             document.querySelectorAll('.assign-patient-btn').forEach(function(button) {
                 button.addEventListener('click', function() {

@@ -949,7 +949,7 @@
 
         public function get_doctor_details($id) {
             // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID
-            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id, first_name, last_name FROM doctors WHERE account_id = ?");
+            $stmt = $this->db->prepare("SELECT doctor_id, email, account_id, first_name, last_name, specialty FROM doctors WHERE account_id = ?");
             
             // Bind the input parameter (account_id)
             $stmt->bind_param("i", $id);
@@ -963,7 +963,7 @@
             // Check if the doctor exists
             if ($stmt->num_rows > 0) {
                 // Bind the result to the variables (id, email, account_id)
-                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name);
+                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name, $specialty);
                 
                 // Fetch the data
                 $stmt->fetch();
@@ -977,7 +977,8 @@
                     'email' => $email,
                     'account_id' => $account_id,
                     'first_name' => $first_name,
-                    'last_name' => $last_name
+                    'last_name' => $last_name,
+                    'specialty' => $specialty
                 );
             } else {
                 // Close the statement
@@ -1439,6 +1440,20 @@
             } else {
                 return false;
             }
+        }
+        
+        public function get_patient_assigned_doctor($doctorId) {
+            // Fetch patients assigned to the given doctor
+            $sql = "SELECT * FROM patients WHERE assigned_doctor = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param('i', $doctorId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $patients = [];
+            while ($row = $result->fetch_assoc()) {
+                $patients[] = $row; // Push each patient record into the patients array
+            }
+            return $patients; // Return an array of patients
         }
 
         // Method to get patient details by ID
