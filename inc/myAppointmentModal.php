@@ -171,7 +171,7 @@
                     <input type="hidden" id="first_name" name="first_name">
                     <input type="hidden" id="last_name" name="last_name">
                     <input type="hidden" id="member_id" name="member_id" value="<?=$member_id?>">
-                    <input type="hidden" name="doctor_id" class="form-control" value="<?=$get_doctor_id['account_id']?>" id="doctor_id">
+                    <input type="hidden" name="doctor_id" class="form-control" id="doctor_account_id">
                     <input type="hidden" class="form-control" id="patient_id" name="patient_id" value="<?= isset($patient_id) ? $patient_id : '' ?>">
 
                     <div class="form-group">

@@ -129,6 +129,7 @@
                             <li><strong>New Appointment Time:</strong> {$appointmentTime}</li>
                             <li><strong>Status:</strong> {$status}</li>
                             <li><strong>Notes:</strong> {$notes}</li>
+                            <li><strong>Assigned Doctor:</strong> {$doctorEmail['email']}</li>
                         </ul>
                         <p>Thank you,<br>Your Clinic Team</p>
                     </div>

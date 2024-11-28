@@ -17,6 +17,7 @@ if (isset($_POST['appointmentType'])) {
     $services = $_POST['services'];
     $notes = isset($_POST['notes']) ? $_POST['notes'] : null;
     $member_id = $_POST['member_id'];
+    $doctor_id = $_POST['doctor_id'];
     $contactNumber = isset($_POST['contactNumber']) ? $_POST['contactNumber'] : null;
     $patient_id = isset($_POST['patient_id']) ? $_POST['patient_id'] : null;
   
@@ -35,7 +36,7 @@ if (isset($_POST['appointmentType'])) {
     // }
 
     // Insert appointment details
-    $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id,$user_admin_id);
+    $query = $user_dashboard->register_appointment($member_id, $firstname, $lastname, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id,$user_admin_id, $doctor_id);
     
     if ($query) {
         $_SESSION['success'] = true;
@@ -43,7 +44,7 @@ if (isset($_POST['appointmentType'])) {
         $_SESSION['message_type'] = "success";
 
         // Get doctor's email
-        $get_doctor_email = $user_dashboard->get_doctor_details($user_admin_id);
+        $get_doctor_email = $user_dashboard->get_doctor_details($doctor_id);
         // Send email notification to the doctor (or any relevant recipient)
         $to = $get_doctor_email['email']; // Replace with the doctor's email
         $get_services = $user_dashboard->get_dental_service_by_id($services); // Assuming this returns an array
@@ -172,9 +173,6 @@ if (isset($_POST['appointmentType'])) {
         <body>
             <div class='email-container'>
                 <div class='header'>
-                    <img src='https://rs-dentalclinic.com/img/logo.png'>
-                </div>
-                <div class='header'>
                     <h1>Appointment Confirmation</h1>
                 </div>
                 <div class='content'>
@@ -187,8 +185,9 @@ if (isset($_POST['appointmentType'])) {
                         <li><strong>Contact Number:</strong> $contactNumber</li>
                         <li><strong>Email Address:</strong> $emailAddress</li>
                         <li><strong>Notes:</strong> $notes</li>
+                        <li><strong>Assigned Doctor's Contact Email:</strong> $to</li>
                     </ul>
-                    <p>If you need to reschedule or cancel, please contact us promptly.</p>
+                    <p>If you need to reschedule or cancel, please contact us promptly or reach out to your assigned doctor at the email provided above.</p>
                     <p>Thank you for choosing Roselle Santander Dental Clinic!</p>
                     <p>You may log in to the <a href='https://rs-dentalclinic.com/login.php'>Roselle Santander Website</a> for more information and to manage your appointments.</p>
                 </div>

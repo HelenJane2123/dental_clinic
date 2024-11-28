@@ -35,7 +35,7 @@
     $appointments = $appointment->get_all_appointments_by_member_id($member_id); // Fetch appointments
 
     $user_id_admin = $appointment->get_doctor_admin();
-    $get_doctor_id = $appointment->get_doctor_details($user_id_admin);
+    $get_doctor_id = $appointment->get_doctor_details_assigned_patient($member_id);
   
 
     if (isset($_GET['id'])) {

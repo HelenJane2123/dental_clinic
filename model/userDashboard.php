@@ -11,7 +11,7 @@
 			}
 		}
 
-        public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id, $user_admin_id) {
+        public function register_appointment($member_id, $first_name, $last_name, $contactNumber, $emailAddress, $appointmentType, $appointmentDate, $appointmentTime, $services, $notes, $patient_id, $user_admin_id, $doctor_id) {
             // Check if the patient already exists in the patients table
             $stmt = $this->db->prepare("SELECT patient_id FROM patients WHERE member_id = ?");
             $stmt->bind_param("s", $member_id);
@@ -30,7 +30,7 @@
                 if ($appointmentType === 'newPatient') {
                     // Insert new patient details under the same member ID (using alt_patient_id)
                     $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email, assigned_doctor) VALUES (?, ?, ?, ?, ?, ?)");
-                    $stmt->bind_param("sssssi", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $user_admin_id);
+                    $stmt->bind_param("sssssi", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $doctor_id);
             
                     if (!$stmt->execute()) {
                         echo "Error inserting new alternate patient: " . $stmt->error;
@@ -44,7 +44,7 @@
                 else {
                      // Update existing patient record with assigned doctor only
                     $stmt = $this->db->prepare("UPDATE patients SET assigned_doctor = ? WHERE patient_id = ?");
-                    $stmt->bind_param("ii", $user_admin_id, $patient_id);
+                    $stmt->bind_param("ii", $doctor_id, $patient_id);
                     
                     if (!$stmt->execute()) {
                         echo "Error updating existing patient: " . $stmt->error;
@@ -58,7 +58,7 @@
                 // No existing patient found, insert a new patient
                 $stmt->close();
                 $stmt = $this->db->prepare("INSERT INTO patients (member_id, last_name, first_name, cellphone_no, email, assigned_doctor) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("sssssi", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $user_admin_id);
+                $stmt->bind_param("sssssi", $member_id, $first_name, $last_name, $contactNumber, $emailAddress, $doctor_id);
             
                 if (!$stmt->execute()) {
                     echo "Error inserting new patient: " . $stmt->error;
@@ -88,7 +88,7 @@
             $stmt = $this->db->prepare("INSERT INTO notifications (user_id, notif_to, message, type, is_read, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
             $status = 0;  // Assuming the default status for a notification is 'unread'
             $type = 'set_appointment';
-            $stmt->bind_param("iissi", $patient_id, $user_admin_id, $message, $type, $status);
+            $stmt->bind_param("iissi", $patient_id, $doctor_id, $message, $type, $status);
             
             if (!$stmt->execute()) {
                 echo "Error inserting notification: " . $stmt->error;
@@ -113,7 +113,8 @@
                     d.first_name AS doctor_first_name, 
                     d.last_name AS doctor_last_name,
                     ds.sub_category AS service_name,
-                    pp.id AS proof_id
+                    pp.id AS proof_id,
+                    d.account_id as doctor_account_id
                 FROM 
                     appointments a
                 LEFT JOIN 
@@ -1081,7 +1082,37 @@
                 // Return false if no doctor is found with the given ID
                 return false;
             }
-        }   
+        }
+        
+        public function get_doctor_details_assigned_patient($id) {
+            $stmt = $this->db->prepare("SELECT doctors.doctor_id, doctors.email, doctors.account_id, doctors.first_name, doctors.last_name, accounts.member_id
+                                FROM doctors 
+                                LEFT JOIN patients ON patients.assigned_doctor = doctors.account_id
+                                LEFT JOIN accounts ON doctors.account_id = accounts.id
+                                WHERE patients.member_id = ?");
+            
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $stmt->store_result();
+            
+            if ($stmt->num_rows > 0) {
+                $stmt->bind_result($doctor_id, $email, $account_id, $first_name, $last_name, $member_id);
+                $stmt->fetch();
+                $stmt->close();
+                
+                return [
+                    'doctor_id' => $doctor_id,
+                    'email' => $email,
+                    'account_id' => $account_id,
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'member_id' => $member_id
+                ];
+            } else {
+                $stmt->close();
+                return []; // Return an empty array instead of false
+            }
+        }
         
         public function get_doctor_details_member_id($id) {
             // Prepare the query to fetch doctor's details (email, id, and account_id) by the provided doctor ID

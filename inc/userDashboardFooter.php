@@ -397,6 +397,7 @@
         status,
         firstName,
         lastName,
+        doctorAccountId,
         memberId) {
             // Populate modal fields with the passed data
             document.getElementById('edit_appointment_id').value = appointmentId;
@@ -407,6 +408,7 @@
             document.getElementById('status').value = status;
             document.getElementById('first_name').value = firstName;
             document.getElementById('last_name').value = lastName;
+            document.getElementById('doctor_account_id').value = doctorAccountId;
             document.getElementById('member_id').value = memberId;
 
 

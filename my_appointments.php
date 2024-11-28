@@ -98,6 +98,7 @@
                                                                 '<?= htmlspecialchars($appointment['status']) ?>', 
                                                                 '<?= htmlspecialchars($appointment['patient_first_name']) ?>', 
                                                                 '<?= htmlspecialchars($appointment['patient_last_name']) ?>', 
+                                                                '<?= htmlspecialchars($appointment['doctor_account_id']) ?>', 
                                                                 '<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
                                                                 <i class="mdi mdi-pencil"></i>
                                                             </button>
