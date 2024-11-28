@@ -91,8 +91,8 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
                                         echo "Payment Rejected";
                                     } else {
                                         if ($payment['file_name']) {
-                                            echo "<button class='btn btn-success btn-sm approve-btn' data-appointment-id='{$payment['appointment_id']}'>Approve</button>";
-                                            echo "<button class='btn btn-danger btn-sm reject-btn' data-appointment-id='{$payment['appointment_id']}'>Reject</button>";
+                                            echo "<button class='btn btn-success btn-sm approve-btn'  data-appointment-id='{$payment['appointment_id']}'>Approve</button>";
+                                            echo "<button class='btn btn-danger btn-sm reject-btn'  data-appointment-id='{$payment['appointment_id']}'>Reject</button>";
                                         } else {
                                             echo "No receipt uploaded";
                                         }
@@ -131,43 +131,68 @@ unset($_SESSION['modal_message']); // Clear message after displaying it
             </div>
         </div>
     </div>
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to approve this payment?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="confirmApproval">Yes</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Confirmation Modal for Reject -->
+    <div class="modal fade" id="rejectconfirmationModal" tabindex="-1" role="dialog" aria-labelledby="rejectconfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rejectconfirmationModalLabel">Confirm Rejection</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to reject this payment?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary" id="confirmReject">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-            const modalMessage = "<?php echo $modalMessage; ?>";
-            if (modalMessage) {
-                $('#feedbackModal').modal('show');
-            }
-
-            // Handle Approve button
-            document.querySelectorAll('.approve-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const appointmentId = this.getAttribute('data-appointment-id');  // Get the appointment ID
-                    
-                    // Show the confirmation modal
-                    $('#confirmationModal').modal('show');  // Show the modal using Bootstrap's modal method
-                    
-                    // Add event listener for 'Yes' button inside the modal
-                    document.getElementById('confirmApproval').addEventListener('click', function() {
-                        // Redirect to the action URL with the appointment ID when "Yes" is clicked
-                        window.location.href = `controller/paymentAction.php?action=approve&appointment_id=${appointmentId}`;
-                    });
-                });
-            });
-            // Handle Reject button
-            document.querySelectorAll('.reject-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const appointmentId = this.getAttribute('data-appointment-id');
-                    
-                    // Show the reject confirmation modal
-                    $('#rejectconfirmationModal').modal('show');
-                    
-                    // Add event listener for 'Yes' button inside the reject modal
-                    document.getElementById('confirmReject').addEventListener('click', function() {
-                        window.location.href = `controller/paymentAction.php?action=reject&appointment_id=${appointmentId}`;
-                    });
-                });
-            });
-        });
+        const modalMessage = "<?php echo $modalMessage; ?>";
+        if (modalMessage) {
+            $('#feedbackModal').modal('show');
+        }
+    });
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('approve-btn')) {
+            const appointmentId = event.target.getAttribute('data-appointment-id');
+            $('#confirmationModal').modal('show');
+            document.getElementById('confirmApproval').onclick = function () {
+                window.location.href = `controller/paymentAction.php?action=approve&appointment_id=${appointmentId}`;
+            };
+        } else if (event.target.classList.contains('reject-btn')) {
+            const appointmentId = event.target.getAttribute('data-appointment-id');
+            $('#rejectconfirmationModal').modal('show');
+            document.getElementById('confirmReject').onclick = function () {
+                window.location.href = `controller/paymentAction.php?action=reject&appointment_id=${appointmentId}`;
+            };
+        }
+    });
 </script>
 <?php
 include_once('inc/footerDashboard.php');

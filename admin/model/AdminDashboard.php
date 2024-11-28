@@ -563,7 +563,7 @@
                     pp.file_name,
                     ds.sub_category as services_name,
                     d.first_name as doctor_first_name,
-                    d.last_name as doctor_last_name,
+                    d.last_name as doctor_last_name
                 FROM 
                     appointments
                 LEFT JOIN 
@@ -581,7 +581,7 @@
                 LEFT JOIN
                 	dental_services AS ds ON ds.id = appointments.services
                 LEFT JOIN 
-                    doctors as d ON d.account_id = patients.assigned_doctor
+                    doctors AS d ON d.account_id = patients.assigned_doctor
                 WHERE 
                     patients.assigned_doctor = ?
                 ORDER BY 

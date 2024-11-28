@@ -7,7 +7,7 @@ function handleUnpaidAppointments() {
 
     // Query appointments booked yesterday without proof of payment
     $query = "
-        SELECT 
+       SELECT 
             a.id AS appointment_id,
             a.patient_id, 
             p.first_name AS patient_first_name,
@@ -17,7 +17,8 @@ function handleUnpaidAppointments() {
         FROM appointments a
         LEFT JOIN proof_of_payment pp ON a.id = pp.appointment_id
         JOIN patients p ON a.patient_id = p.patient_id
-        WHERE pp.id IS NULL AND DATE(a.appointment_date) = CURDATE() - INTERVAL 2 DAYS
+        WHERE pp.id IS NULL 
+        AND DATE(a.appointment_date) = CURDATE() - INTERVAL 2 DAY
     ";
 
     $result = $db->query($query);

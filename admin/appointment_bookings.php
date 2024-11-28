@@ -140,6 +140,7 @@ include_once('inc/sidebarMenu.php');
                                                 <?php if ($appointments['status'] === 'Confirmed') : ?>
                                                     <!-- If the appointment is confirmed, hide Cancel and Reschedule buttons -->
                                                     <button type="button" class="btn btn-primary btn-sm complete-button" data-bs-toggle="modal" data-bs-target="#completeModal<?= $appointments['appointment_id'] ?>">Complete</button>
+                                                    <button type="button" class="btn btn-info btn-sm reschedule-button" data-bs-toggle="modal" data-bs-target="#rescheduleModal<?= $appointments['appointment_id'] ?>">Reschedule</button>
                                                 <?php elseif ($appointments['status'] === 'Completed') : ?>
                                                     <!-- If the appointment is completed, hide all buttons -->
                                                     <p class="text-muted">Appointment Completed</p>
