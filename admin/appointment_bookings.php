@@ -141,6 +141,7 @@ include_once('inc/sidebarMenu.php');
                                                     <!-- If the appointment is confirmed, hide Cancel and Reschedule buttons -->
                                                     <button type="button" class="btn btn-primary btn-sm complete-button" data-bs-toggle="modal" data-bs-target="#completeModal<?= $appointments['appointment_id'] ?>">Complete</button>
                                                     <button type="button" class="btn btn-info btn-sm reschedule-button" data-bs-toggle="modal" data-bs-target="#rescheduleModal<?= $appointments['appointment_id'] ?>">Reschedule</button>
+                                                    <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
                                                 <?php elseif ($appointments['status'] === 'Completed') : ?>
                                                     <!-- If the appointment is completed, hide all buttons -->
                                                     <p class="text-muted">Appointment Completed</p>
@@ -150,6 +151,8 @@ include_once('inc/sidebarMenu.php');
                                                         <!-- If there is no proof of payment -->
                                                         <p class="text-muted">No proof of payment uploaded yet.</p>
                                                         <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
+                                                    <?php elseif ($appointments['proof_status'] !== 'Approved') : ?>
+                                                        <p class="text-muted">Payment has not been approved yet. Please approve payment first</p>
                                                     <?php elseif ($appointments['status'] !== 'Canceled') : ?>
                                                         <!-- If proof of payment exists and the appointment is not canceled -->
                                                         <button type="button" class="btn btn-success btn-sm approve-button" data-bs-toggle="modal" data-bs-target="#approveModal<?= $appointments['appointment_id'] ?>">Approve</button>

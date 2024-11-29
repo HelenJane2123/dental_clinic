@@ -484,6 +484,7 @@
                     d.last_name as doctor_last_name,
                     pp.appointment_id as proof_id,
                     pp.file_name,
+                    pp.status as proof_status,
                     ds.sub_category as services_name
                 FROM 
                     appointments
@@ -561,6 +562,7 @@
                     appointments.rescheduled_at as date_rescheduled,
                     pp.appointment_id as proof_id,
                     pp.file_name,
+                    pp.status as proof_status,
                     ds.sub_category as services_name,
                     d.first_name as doctor_first_name,
                     d.last_name as doctor_last_name
