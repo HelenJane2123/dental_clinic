@@ -118,7 +118,7 @@
       </div>
       <div class="container-wrap mt-5">
       	<div class="row d-flex no-gutters">
-      		<div class="col-md-6 img" style="background-image: url(img/IMG_6806.jpg);">
+      		<div class="col-md-6 img" style="background-image: url(img/IMG_6815.jpg);">
       		</div>
       		<div class="col-md-6 d-flex">
       			<div class="about-wrap">

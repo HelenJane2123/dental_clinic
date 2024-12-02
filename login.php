@@ -14,7 +14,7 @@ include_once('inc/header.php');
 
       <!-- Left Column for Image -->
       <div class="col-md-6 mb-5 d-none d-md-block">
-        <img src="img/dental-banner.jpg" alt="Dental Clinic" class="img-fluid"> <!-- Image -->
+        <img src="img/IMG_6806.JPG" alt="Dental Clinic" class="img-fluid"> <!-- Image -->
       </div>
 
       <!-- Right Column for Login Form -->

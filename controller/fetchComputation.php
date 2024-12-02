@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
         echo "<div class='payment-breakdown' style='border-radius: 5px; margin-bottom: 20px;'>
                 <h4 style='color: #495057; margin-bottom: 10px;'>Payment Breakdown</h4>
                 <p><strong>Total Amount:</strong> <span style='font-size: 24px; font-weight: bold; color: #28a745;'>$totalPrice</span></p>
-                <p><strong>Down Payment (20%):</strong> <span style='font-size: 18px; font-weight: bold; color: #ffc107;'>$downPayment</span></p>
+                <p><strong>Down Payment:</strong> <span style='font-size: 18px; font-weight: bold; color: #ffc107;'>$downPayment</span></p>
                 <p><strong>Remaining Balance:</strong> <span style='font-size: 18px; font-weight: bold; color: #dc3545;'>$remainingBalance</span></p>
             </div>";
 

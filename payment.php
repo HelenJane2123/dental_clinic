@@ -30,7 +30,7 @@
                       <h4>Steps to Complete Payment:</h4>
                       <ol>
                         <li>Scan the QR code corresponding to your preferred payment method using a mobile banking app or e-wallet.</li>
-                        <li>Enter the required amount. <strong>Note:</strong> You can view the computation of the amount you need to pay by clicking the <b>"View Computation"</b> button in the table. This will show you the breakdown of the total amount, the 20% down payment, and the remaining balance.</li>
+                        <li>Enter the required amount. <strong>Note:</strong> You can view the computation of the amount you need to pay by clicking the <b>"View Computation"</b> button in the table. This will show you the breakdown of the total amount, the down payment, and the remaining balance.</li>
                         <li>Complete the payment and take a screenshot or save the receipt.</li>
                         <li>Upload the proof of payment in the <b>Upload Payment Proof</b> section below.</li>
                       </ol>

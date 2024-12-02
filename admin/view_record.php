@@ -451,7 +451,7 @@ if (isset($_GET['patient_id'])) {
                                                                 required>
                                                         </td>
                                                         <td><input type="number" name="balance[]" value="<?= $record['balance'] ?>" class="form-control balance" step="0.01" readonly></td>
-                                                        <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control" required></td>
+                                                        <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control"></td>
                                                         <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
                                                     </tr>
                                                 <?php endforeach; ?>
@@ -476,7 +476,7 @@ if (isset($_GET['patient_id'])) {
                                                             required>
                                                     </td>
                                                     <td><input type="number" name="balance[]" class="form-control balance" step="0.01" readonly></td>
-                                                    <td><input type="date" name="next_appointment[]" class="form-control" required></td>
+                                                    <td><input type="date" name="next_appointment[]" class="form-control"></td>
                                                     <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
                                                 </tr>
                                             <?php endif; ?>

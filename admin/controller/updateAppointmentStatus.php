@@ -403,7 +403,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['appointment_id'])) {
                 // Set the email headers for HTML email
                 $headers = "MIME-Version: 1.0" . "\r\n";
                 $headers .= "Content-Type: text/html; charset=UTF-8" . "\r\n";
-                $headers .= "From: rosellesantander@rs-dentalclinic.com" . "\r\n";
+                $headers .= "From: :$doctorEmail" . "\r\n";
                 $headers .= "Reply-To: rosellesantander@rs-dentalclinic.com" . "\r\n";
                 $headers .= "X-Mailer: PHP/" . phpversion();
 
