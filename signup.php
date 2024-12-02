@@ -101,7 +101,7 @@ if (isset($_SESSION['form_data'])) {
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="iAgree" id="iAgree" required>
                     <label class="form-check-label text-secondary" for="iAgree">
-                      I agree to the <a href="#!" class="link-primary text-decoration-none">terms and conditions</a>
+                      I agree to the <a href="javascript:void(0);" class="link-primary text-decoration-none" data-bs-toggle="modal" data-bs-target="#termsModal">terms and conditions</a>
                     </label>
                   </div>
                 </div>
@@ -125,6 +125,54 @@ if (isset($_SESSION['form_data'])) {
     </div>
   </div>
 </section>
+<!-- Modal for Terms and Conditions -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <h4 class="text-secondary mb-3">User Agreement for <strong>Roselle Santander Dental Clinic</strong></h4>
+          <p class="text-muted mb-4">By accessing and using our system, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p>
+
+          <!-- Terms and Conditions Content -->
+          <div class="terms-content" style="max-height: 400px; overflow-y: auto;">
+            <h5 class="mb-3">1. Introduction</h5>
+            <p>Welcome to <strong>Your Roselle Santander Dental Clinic</strong>. By accessing and using our system, you agree to comply with and be bound by the following terms and conditions.</p>
+
+            <h5 class="mb-3">2. User Responsibilities</h5>
+            <ul class="list-unstyled">
+              <li>You must provide accurate and complete information when using the system.</li>
+              <li>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</li>
+              <li>You agree to use the system only for lawful purposes and in accordance with applicable laws and regulations.</li>
+            </ul>
+
+            <h5 class="mb-3">3. Access and Use</h5>
+            <p>We grant you a non-exclusive, non-transferable license to access and use the system for its intended purpose. We reserve the right to modify, suspend, or discontinue any part of the system at our discretion.</p>
+
+            <h5 class="mb-3">4. Data Privacy</h5>
+            <p>Your personal and medical information will be collected and stored in accordance with our Privacy Policy, which outlines how we use, protect, and share your data. You are responsible for ensuring that your data is accurate and up-to-date.</p>
+
+            <h5 class="mb-3">5. Intellectual Property</h5>
+            <p>All content and materials provided through the system are the property of <strong>Roselle Santander Dental Clinic</strong> or its licensors and are protected by intellectual property laws.</p>
+
+            <h5 class="mb-3">6. Limitation of Liability</h5>
+            <p><strong>Roselle Santander Dental Clinic</strong> is not liable for any direct, indirect, incidental, or consequential damages arising from the use or inability to use the system.</p>
+
+            <h5 class="mb-3">7. Termination</h5>
+            <p>We may terminate or suspend your access to the system at any time, with or without cause, if you violate these terms or for any other reason.</p>
+
+            <h5 class="mb-3">8. Changes to Terms</h5>
+            <p>We may update these terms from time to time. Any changes will be posted on our website, and your continued use of the system constitutes acceptance of the updated terms.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <?php include_once('inc/footer.php'); ?>
 
@@ -144,5 +192,11 @@ if (isset($_SESSION['form_data'])) {
     const type = confirmPassField.getAttribute('type') === 'password' ? 'text' : 'password';
     confirmPassField.setAttribute('type', type);
     this.classList.toggle('fa-eye-slash');
+  });
+
+  const modalTrigger = document.querySelector('[data-bs-toggle="modal"]');
+  const termsModal = new bootstrap.Modal(document.getElementById('termsModal'));
+  modalTrigger.addEventListener('click', function() {
+    termsModal.show();
   });
 </script>
