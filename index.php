@@ -3,7 +3,7 @@
     include_once('inc/header.php');
 ?>
     <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image: url('img/hp 3.jpeg');">
+      <div class="slider-item" style="background-image: url('img/hp 3.jpg');">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div class="slider-item" style="background-image: url('img/hp 1.jpeg');">
+      <div class="slider-item" style="background-image: url('img/hp 1.jpg');">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="slider-item" style="background-image: url('img/hp 2.jpeg');">
+      <div class="slider-item" style="background-image: url('img/hp 2.jpg');">
         <div class="overlay"></div>
         <div class="container">
           <div class="row slider-text align-items-center" data-scrollax-parent="true">
