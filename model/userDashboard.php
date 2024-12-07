@@ -1526,7 +1526,7 @@
             $sql = "SELECT prescriptions.*, patients.*, dental_records.* 
                     FROM dental_records 
                     LEFT JOIN patients ON patients.patient_id = dental_records.patient_id
-                    LEFT JOIN prescriptions ON prescriptions.patient_id = patients.patient_id
+                    LEFT JOIN prescriptions ON prescriptions.dental_record = dental_records.id
                     WHERE patients.member_id = ? ORDER BY date DESC";
         
             // Prepare the SQL statement

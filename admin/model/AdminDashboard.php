@@ -1621,155 +1621,130 @@
             return []; // Return an empty array if no conditions found
         }
 
-        public function save_dental_record($patient_id, $date, $tooth_no, $procedure, $dentist, $amount_charged, $amount_paid, $balance, $next_appointment, $medications, $dosages, $instructions, $doctor_id) {
+        public function save_dental_record($patient_id, $date, $tooth_no, $procedure, $dentist, $amount_charged, $amount_paid, $balance, $next_appointment) {
             // First, check if a record for the patient already exists on the given date and tooth number
             $check_query = "SELECT id FROM dental_records WHERE patient_id = ? AND `date` = ? AND tooth_no = ?";
         
             if ($stmt = $this->db->prepare($check_query)) {
+                // Bind parameters
                 $stmt->bind_param('iss', $patient_id, $date, $tooth_no);
-        
+                
                 // Execute and get the result
-                if ($stmt->execute()) {
-                    $stmt->store_result();
-                    if ($stmt->num_rows > 0) {
-                        // Record exists, so update it
-                        $update_query = "UPDATE dental_records SET 
-                                            `procedure` = ?, 
-                                            dentist = ?, 
-                                            amount_charged = ?, 
-                                            amount_paid = ?, 
-                                            balance = ?, 
-                                            next_appointment = ?
-                                          WHERE patient_id = ? AND `date` = ? AND tooth_no = ?";
+                $stmt->execute();
+                $stmt->store_result();
         
-                        if ($update_stmt = $this->db->prepare($update_query)) {
-                            $update_stmt->bind_param('ssdddsiss', 
-                                $procedure, 
-                                $dentist, 
-                                $amount_charged, 
-                                $amount_paid, 
-                                $balance, 
-                                $next_appointment, 
-                                $patient_id, 
-                                $date, 
-                                $tooth_no
-                            );
+                // If the record exists, update it, otherwise insert a new one
+                if ($stmt->num_rows > 0) {
+                    // Record exists, so update it
+                    $update_query = "UPDATE dental_records SET 
+                                        `procedure` = ?, 
+                                        dentist = ?, 
+                                        amount_charged = ?, 
+                                        amount_paid = ?, 
+                                        balance = ?, 
+                                        next_appointment = ?
+                                      WHERE patient_id = ? AND `date` = ? AND tooth_no = ?";
         
-                            if ($update_stmt->execute()) {
-                                // Update prescription as well
-                                foreach ($medications as $key => $medication) {
-                                    $dosage = $dosages[$key];
-                                    $instruction = $instructions[$key];
+                    if ($update_stmt = $this->db->prepare($update_query)) {
+                        // Bind parameters for the update query
+                        $update_stmt->bind_param('ssdddsiss', 
+                            $procedure, 
+                            $dentist, 
+                            $amount_charged, 
+                            $amount_paid, 
+                            $balance, 
+                            $next_appointment, 
+                            $patient_id, 
+                            $date, 
+                            $tooth_no
+                        );
         
-                                    $update_prescription_query = "UPDATE prescriptions SET 
-                                                                    doctor_id = ?, 
-                                                                    medication = ?, 
-                                                                    dosage = ?, 
-                                                                    instructions = ? 
-                                                                  WHERE patient_id = ?";
-        
-                                    if ($update_prescription_stmt = $this->db->prepare($update_prescription_query)) {
-                                        $update_prescription_stmt->bind_param('isssi', 
-                                            $doctor_id, 
-                                            $medication, 
-                                            $dosage, 
-                                            $instruction, 
-                                            $patient_id
-                                        );
-        
-                                        if (!$update_prescription_stmt->execute()) {
-                                            error_log("Prescription update failed: " . $update_prescription_stmt->error);
-                                            return false; // Prescription update failed
-                                        }
-                                    } else {
-                                        error_log("Prescription update statement preparation failed: " . $this->db->error);
-                                        return false; // Prescription update statement preparation failed
-                                    }
-                                }
-                                return true; // Dental record and prescription update successful
-                            } else {
-                                error_log("Dental record update failed: " . $update_stmt->error);
-                                return false; // Dental record update failed
-                            }
+                        // Execute the update statement
+                        if ($update_stmt->execute()) {
+                            $update_stmt->close();
+                            return true; // Update successful
                         } else {
-                            error_log("Dental record update statement preparation failed: " . $this->db->error);
-                            return false; // Dental record update statement preparation failed
+                            $update_stmt->close();
+                            return false; // Update failed
                         }
                     } else {
-                        // No existing record found, so insert a new one
-                        $insert_query = "INSERT INTO dental_records 
+                        return false; // Update statement preparation failed
+                    }
+                } else {
+                    // No existing record found, so insert a new one
+                    $insert_query = "INSERT INTO dental_records 
                                         (patient_id, `date`, tooth_no, `procedure`, dentist, 
                                         amount_charged, amount_paid, balance, next_appointment)
                                      VALUES 
                                         (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
-                        if ($insert_stmt = $this->db->prepare($insert_query)) {
-                            $insert_stmt->bind_param('issssddds', 
-                                $patient_id, 
-                                $date, 
-                                $tooth_no, 
-                                $procedure, 
-                                $dentist, 
-                                $amount_charged, 
-                                $amount_paid, 
-                                $balance, 
-                                $next_appointment
-                            );
+                    if ($insert_stmt = $this->db->prepare($insert_query)) {
+                        // Bind parameters for the insert query
+                        $insert_stmt->bind_param('issssddds', 
+                            $patient_id, 
+                            $date, 
+                            $tooth_no, 
+                            $procedure, 
+                            $dentist, 
+                            $amount_charged, 
+                            $amount_paid, 
+                            $balance, 
+                            $next_appointment
+                        );
         
-                            if ($insert_stmt->execute()) {
-                                // Insert prescription as well
-                                foreach ($medications as $key => $medication) {
-                                    $dosage = $dosages[$key];
-                                    $instruction = $instructions[$key];
-        
-                                    $insert_prescription_query = "INSERT INTO prescriptions 
-                                                                (patient_id, doctor_id, medication, dosage, instructions) 
-                                                              VALUES 
-                                                                (?, ?, ?, ?, ?)";
-        
-                                    if ($insert_prescription_stmt = $this->db->prepare($insert_prescription_query)) {
-                                        $insert_prescription_stmt->bind_param('iisss', 
-                                            $patient_id, 
-                                            $doctor_id, 
-                                            $medication, 
-                                            $dosage, 
-                                            $instruction
-                                        );
-        
-                                        if (!$insert_prescription_stmt->execute()) {
-                                            error_log("Prescription insert failed: " . $insert_prescription_stmt->error);
-                                            return false; // Prescription insert failed
-                                        }
-                                    } else {
-                                        error_log("Prescription insert statement preparation failed: " . $this->db->error);
-                                        return false; // Prescription insert statement preparation failed
-                                    }
-                                }
-                                return true; // Dental record and prescription insert successful
-                            } else {
-                                error_log("Dental record insert failed: " . $insert_stmt->error);
-                                return false; // Dental record insert failed
-                            }
+                        // Execute the insert statement
+                        if ($insert_stmt->execute()) {
+                            $insert_stmt->close();
+                            return true; // Insert successful
                         } else {
-                            error_log("Dental record insert statement preparation failed: " . $this->db->error);
-                            return false; // Dental record insert statement preparation failed
+                            $insert_stmt->close();
+                            return false; // Insert failed
                         }
+                    } else {
+                        return false; // Insert statement preparation failed
                     }
-                } else {
-                    error_log("Check query execution failed: " . $stmt->error);
-                    return false; // Check query execution failed
                 }
             } else {
-                error_log("Check query preparation failed: " . $this->db->error);
                 return false; // Check query preparation failed
             }
         }
         
+        public function save_prescription($patient_id,$dental_record_id, $medication, $dosage, $instructions) {
+            $insert_query = "INSERT INTO prescriptions (dental_record, patient_id, medication, dosage, instructions) 
+                             VALUES (?, ?, ?, ?, ?)";
+            
+            if ($insert_stmt = $this->db->prepare($insert_query)) {
+                // Bind parameters
+                $insert_stmt->bind_param('iisss', 
+                    $dental_record_id, 
+                    $patient_id,
+                    $medication, 
+                    $dosage, 
+                    $instructions
+                );
         
+                // Execute and check result
+                if ($insert_stmt->execute()) {
+                    $insert_stmt->close();
+                    return true; // Insert successful
+                } else {
+                    error_log("Error executing query: " . $insert_stmt->error);  // Log error if insert fails
+                    $insert_stmt->close();
+                    return false;
+                }
+            } else {
+                error_log("Error preparing query: " . $this->db->error);  // Log error if prepare fails
+                return false;
+            }
+        }
+        
+        
+        
+
         public function get_dental_records($patient_id) {
             // Assuming you have a database connection $this->db (mysqli)
-            $sql = "SELECT dental_records.*,  prescriptions.* FROM dental_records 
-                    LEFT JOIN prescriptions ON prescriptions.patient_id = dental_records.patient_id
+            $sql = "SELECT dental_records.*, dental_records.id as dental_record_id,  prescriptions.* FROM dental_records 
+                    LEFT JOIN prescriptions ON prescriptions.dental_record = dental_records.id
                     WHERE dental_records.patient_id = ? ORDER BY date DESC";
             
             // Prepare the SQL statement

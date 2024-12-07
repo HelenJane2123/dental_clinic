@@ -430,8 +430,6 @@ if (isset($_GET['patient_id'])) {
                                         </thead>
                                         <tbody>
                                             <input type="hidden" value=<?=$patient_id?> name="patient_id"/>
-                                            <input type="hidden" name="doctor_id" value="<?= $record['doctor_id'] ?>" class="form-control" required>
-
                                             <?php if ($dental_records) : ?>
                                                 <?php foreach ($dental_records as $record) : ?>
                                                     <tr>
@@ -459,11 +457,14 @@ if (isset($_GET['patient_id'])) {
                                                         </td>
                                                         <td><input type="number" name="balance[]" value="<?= $record['balance'] ?>" class="form-control balance" step="0.01" readonly></td>
                                                         <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control"></td>
-                                                        <td><input type="text" name="medication[]" value="<?= $record['medication'] ?>" class="form-control"></td>
-                                                        <td><textarea name="dosage[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['dosage'] ?>" class="form-control"><?= $record['dosage'] ?></textarea></td>
-                                                        <td><textarea name="instructions[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['instructions'] ?>" class="form-control"><?= $record['instructions'] ?></textarea></td>
+                                                        <td><input type="text" name="medication[]" disabled value="<?= $record['medication'] ?>" class="form-control"></td>
+                                                        <td><textarea name="dosage[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['dosage'] ?>" disabled class="form-control"><?= $record['dosage'] ?></textarea></td>
+                                                        <td><textarea name="instructions[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled value="<?= $record['instructions'] ?>" class="form-control"><?= $record['instructions'] ?></textarea></td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                                            <?php if (!empty($record['dental_record_id'])): ?>
+                                                                <button type="button" class="btn btn-primary" onclick="openPrescriptionModal('<?= $record['dental_record_id'] ?>')">Add Prescription</button>
+                                                            <?php endif; ?>                                                        
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>
@@ -489,10 +490,14 @@ if (isset($_GET['patient_id'])) {
                                                     </td>
                                                     <td><input type="number" name="balance[]" class="form-control balance" step="0.01" readonly></td>
                                                     <td><input type="date" name="next_appointment[]" class="form-control"></td>
-                                                    <td><input type="text" name="medication[]" class="form-control"></td>
-                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" name="dosage[]" class="form-control"></textarea></td>
-                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" name="instructions[]" class="form-control"></textarea></td>
-                                                    <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+                                                    <td><input type="text" name="medication[]" class="form-control" disabled></td>
+                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled name="dosage[]" class="form-control"></textarea></td>
+                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled name="instructions[]" class="form-control"></textarea></td>
+                                                    <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                                        <?php if (!empty($record['dental_record_id'])): ?>
+                                                            <button type="button" class="btn btn-primary" onclick="openPrescriptionModal('<?= $record['dental_record_id'] ?>')">Add Prescription</button>
+                                                        <?php endif; ?>                                                    
+                                                    </td>
                                                 </tr>
                                             <?php endif; ?>
                                         </tbody>
@@ -507,7 +512,64 @@ if (isset($_GET['patient_id'])) {
         </section>
     </div>
 </div>
+<!-- Prescription Modal -->
+<div class="modal fade" id="prescriptionModal" tabindex="-1" aria-labelledby="prescriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="prescriptionModalLabel">Add Prescription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="prescriptionForm" action="controller/submitPrescriptions.php" method="POST">
+                    <input type="hidden" value="<?=$patient_id?>" name="patient_id"/>
+                    <input type="hidden" name="dental_record_id" id="modal_dental_record_id" class="form-control">
+                    <div class="mb-3">
+                        <label for="medication" class="form-label">Medication</label>
+                        <input type="text" name="medication" id="modal_medication" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dosage" class="form-label">Dosage</label>
+                        <textarea name="dosage" id="modal_dosage" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="instructions" class="form-label">Instructions</label>
+                        <textarea name="instructions" id="modal_instructions" class="form-control" rows="4" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitPrescription()">Save Prescription</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
+    // Function to open the prescription modal and set the dental_record_id
+    function openPrescriptionModal(dental_record_id) {
+        document.getElementById('modal_dental_record_id').value = dental_record_id;
+        $('#prescriptionModal').modal('show');
+    }
+
+    function submitPrescription() {
+        // Ensure all fields are valid before submitting
+        var form = document.getElementById("prescriptionForm");
+
+        // Trigger form submission programmatically
+        if (form.checkValidity()) {
+            form.submit(); // This will submit the form to the action defined in the form
+            $('#prescriptionModal').modal('hide'); // Close the modal after form submission
+        } else {
+            // If form is invalid, alert the user or handle validation errors
+            alert('Please fill in all required fields.');
+        }
+    }
+
+
     function updateBalance(element) {
         // Get the current row of the clicked input
         var row = element.closest('tr');
