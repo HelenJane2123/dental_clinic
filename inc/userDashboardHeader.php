@@ -36,6 +36,7 @@
 
     $user_id_admin = $appointment->get_doctor_admin();
     $get_doctor_id = $appointment->get_doctor_details_assigned_patient($member_id);
+    
   
 
     if (isset($_GET['id'])) {
@@ -79,6 +80,27 @@
     $appointment_id = $appointment->getAppointmentId($member_id);
 
     $dental_services = $appointment->get_dental_services();
+     
+    // // Get the selected appointment date from the POST or other source
+    // $selectedDate = $_POST['appointmentDate'] ?? date('Y-m-d'); // Get current date in 'YYYY-MM-DD' format
+
+    // // Fetch the booked appointments for the doctor on the selected appointment date
+    // $get_booked_appointment = $appointment->get_booked_appointments($get_doctor_id['account_id'], $selectedDate);
+    // // Define all possible time slots
+    // $allTimeSlots = [
+    //   "09:00:00" => "9:00 AM",
+    //   "10:00:00" => "10:00 AM",
+    //   "11:00:00" => "11:00 AM",
+    //   "12:00:00" => "12:00 PM",
+    //   "13:00:00" => "1:00 PM",
+    //   "14:00:00" => "2:00 PM",
+    //   "15:00:00" => "3:00 PM",
+    //   "16:00:00" => "4:00 PM",
+    // ];
+    // // Extract the booked times into an array for easier comparison
+    // $bookedSlots = $get_booked_appointment; // Directly use the returned array
+    $dental_records = $appointment->get_dental_records($member_id);
+
     
 ?>
 <head>
@@ -171,12 +193,12 @@
             <span class="menu-title">Change Password</span>
           </a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="payment.php">
             <i class="mdi mdi-note menu-icon"></i>
             <span class="menu-title">Payment</span>
           </a>
-        </li>
+        </li> -->
         <li class="nav-item sidebar-category">
           <p>Menu</p>
           <span></span>

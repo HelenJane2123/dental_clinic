@@ -27,14 +27,16 @@
             return $result;
         }
 		/*** for registration process ***/
-		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created, $verification_code) {
+		public function reg_user($member_id, $first_name, $last_name, $mobile_number, $agree_terms, $username, $password_1, $email_address, $date_created) {
             // Add '0' at the start of the mobile number if it doesn't already start with '0'
             if (substr($mobile_number, 0, 1) !== '0') {
                 $mobile_number = '0' . $mobile_number;
             }
+
+            $is_verified = 1;
     
             // Prepare the SQL statement
-            $sql = "INSERT INTO accounts (member_id, firstname, lastname, contactnumber, termscondition, username, password, user_type, email, date_created, verification_code) 
+            $sql = "INSERT INTO accounts (member_id, firstname, lastname, contactnumber, termscondition, username, password, user_type, email, date_created, is_verified) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, 'patient', ?, ?, ?)";
     
             // Initialize the prepared statement
@@ -43,7 +45,7 @@
             if ($stmt) {
                 // Bind the parameters to the statement
                 $stmt->bind_param(
-                    "ssssssssss", 
+                    "sssssssssi", 
                     $member_id, 
                     $first_name, 
                     $last_name, 
@@ -52,8 +54,8 @@
                     $username, 
                     $password_1, 
                     $email_address, 
-                    $date_created, 
-                    $verification_code
+                    $date_created,
+                    $is_verified
                 );
     
                 // Execute the statement

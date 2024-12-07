@@ -10,7 +10,7 @@
             <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
               <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Modern Dentistry in a Calm and Relaxed Environment</h1>
               <p class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">We use the latest in dental innovations to make your visit as smooth and relaxing as possible.</p>
-              <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><a href="#" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
+              <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><a href="#" class="btn btn-primary px-4 py-3 header-btn">Make an Appointment</a></p>
             </div>
           </div>
         </div>
@@ -23,7 +23,7 @@
             <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
               <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Achieve Your Desired Perfect Smile</h1>
               <p class="mb-4">Our goal is to provide exceptional care while ensuring you feel at ease every step of the way.</p>
-              <p><a href="signup.php" class="btn btn-primary px-4 py-3">Make an Appointment</a></p>
+              <p><a href="signup.php" class="btn btn-primary px-4 py-3 header-btn">Make an Appointment</a></p>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
             <div class="col-md-6 col-sm-12 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
               <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Got Questions?</h1>
               <p class="mb-4">We're here to help with all your dental concerns. Reach out anytime!</p>
-              <p><a href="faq.php" class="btn btn-primary px-4 py-3">Contact Us</a> <a href="contact.php" class="btn btn-outline-primary px-4 py-3">Contact Us</a></p>
+              <p><a href="contact.php" class="btn btn-primary px-4 py-3 header-btn">Contact Us</a></p>
             </div>
           </div>
         </div>

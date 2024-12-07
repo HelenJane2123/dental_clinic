@@ -214,7 +214,7 @@ if (isset($_POST['appointmentType'])) {
         mail($emailAddress, "Appointment Confirmation", $userMessage, $userHeaders); // Email to User
 
         // Redirect to my_appointments.php after booking
-        header('Location: ../payment.php');
+        header('Location: ../my_appointments.php');
         exit();
     } else {
         $_SESSION['display_message'] = "Error booking appointment. Please try again.";

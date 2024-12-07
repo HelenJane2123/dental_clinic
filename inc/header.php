@@ -23,6 +23,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
 
     
     <link rel="stylesheet" href="css/flaticon.css">
@@ -44,38 +46,32 @@
   }
   ?>
   <body>
+  <div class="header-top"></div>
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
   <div class="container">
-    <a class="navbar-brand" href="index.php">
-      <img src="img/logo.png" alt="Logo" style="height:110px;">
-      <!-- <div class="clinic-name">
-          Roselle Santander<br>
-          <span class="subtext">Dental Clinic</span>
-      </div> -->
-    </a>
+    <!-- Logo with Tilted Semi-Circle -->
+    <div class="navbar-left logo"> 
+      <a class="navbar-brand" href="index.php">
+          <img src="img/logo.png" alt="Logo" class="logo">
+      </a>
+    </div>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="oi oi-menu"></span> Menu
     </button>
 
     <div class="collapse navbar-collapse" id="ftco-nav">
-      <ul class="navbar-nav ml-auto align-items-center"> <!-- align-items-center ensures the items are aligned properly -->
+      <ul class="navbar-nav ml-auto align-items-center">
         <li class="nav-item active"><a href="index.php" class="nav-link">Home</a></li>
         <li class="nav-item"><a href="about.php" class="nav-link">About</a></li>
         <li class="nav-item"><a href="services.php" class="nav-link">Services</a></li>
         <li class="nav-item"><a href="contact.php" class="nav-link">Contact</a></li>
-        <!-- <li class="nav-item cta">
-          <a href="signup.php" class="nav-link">
-            <span>Make an Appointment</span>
-          </a>
-        </li> -->
       </ul>
 
       <!-- User Dropdown -->
-      <div class="ml-lg-3 d-flex align-items-center"> <!-- Add margin-left and center align -->
+      <div class="ml-lg-3 d-flex align-items-center">
         <?php
           if (isset($_SESSION['firstname']) && isset($_SESSION['lastname']) && isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'patient') {
-              // User is logged in, display their name and dropdown
               echo '<div class="dropdown">';
               echo '<a class="nav-link dropdown-toggle" style="color:#fff; font-weight:600;" href="#" id="profileDropdown" data-toggle="dropdown">';
               echo 'Welcome, ' . htmlspecialchars($_SESSION['firstname']) . ' ' . htmlspecialchars($_SESSION['lastname']) . '';
@@ -86,7 +82,6 @@
               echo '</div>';
               echo '</div>';
           } else {
-              // User is not logged in, display the login button
               echo '<button class="btn btn-primary ml-3" id="login_button">';
               echo '<span>Login </span><i class="fa fa-user"></i>';
               echo '</button>';

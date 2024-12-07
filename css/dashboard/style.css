@@ -22580,5 +22580,34 @@ dl li {
   font-weight: 500;
 }
 
+.print-button, .view-record-button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.print-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+.view-record-button {
+    background-color: #007BFF; /* Blue */
+    color: white;
+}
+
+th.dental-treatment {
+  background-color: #f2f2f2;  /* Light grey background */
+  color: #333;  /* Dark text color */
+  font-weight: 600 !important;
+}
+
+/* Apply color to the prescription group */
+th.prescription {
+  background-color: #e6f7ff;  /* Light blue background */
+  color: #0056b3;  /* Blue text color */
+  font-weight: 600 !important;
+}
 
 

@@ -7300,15 +7300,15 @@ h1, h2, h3, h4, h5,
   color: #2f89fc !important; }
 
 .ftco-navbar-light {
-  background: transparent !important;
-  position: absolute;
-  top: 20px;
+  background: #fdfdfd !important;
+  position: relative;
+  top: 1px;
   left: 0;
   right: 0;
   z-index: 3; }
   @media (min-width: 992px) {
     .ftco-navbar-light {
-      padding: 15px 0; } }
+      padding: 0px 0; } }
   @media (max-width: 991.98px) {
     .ftco-navbar-light {
       background: #000 !important;
@@ -7326,22 +7326,24 @@ h1, h2, h3, h4, h5,
     .ftco-navbar-light .navbar-nav {
       padding-bottom: 20px; } }
   .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
-    font-size: 16px;
+    font-size: 13px;
     padding-top: .9rem;
     padding-bottom: .9rem;
     padding-left: 20px;
     padding-right: 20px;
     font-weight: 600;
-    color: #fff;
-    opacity: 1 !important; }
+    color: #333;
+    opacity: 1 !important;
+    text-transform: uppercase;
+  }
     @media (min-width: 992px) {
       .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
-        color: #fff; } }
+        color: #333; } }
     @media (max-width: 767.98px) {
       .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
         padding-left: 0; } }
     .ftco-navbar-light .navbar-nav > .nav-item > .nav-link:hover {
-      color: rgba(255, 255, 255, 0.8); }
+      color: #333; }
   .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu {
     border: none;
     background: #fff;
@@ -7384,14 +7386,16 @@ h1, h2, h3, h4, h5,
         -webkit-border-radius: 4px;
         -moz-border-radius: 4px;
         -ms-border-radius: 4px;
-        border-radius: 4px; } }
+        border-radius: 4px; 
+      } 
+    }
     .ftco-navbar-light .navbar-nav > .nav-item.cta > a span {
       display: inline-block;
       color: #fff; }
   .ftco-navbar-light .navbar-nav > .nav-item.cta.cta-colored span {
     border-color: #2f89fc; }
   .ftco-navbar-light .navbar-nav > .nav-item.active > a {
-    color: rgba(255, 255, 255, 0.5); }
+    color: #333; }
   .ftco-navbar-light .navbar-toggler {
     border: none;
     color: rgba(255, 255, 255, 0.5) !important;
@@ -7543,7 +7547,7 @@ h1, h2, h3, h4, h5,
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center center;
-      height: 700px;
+      height: 500px;
       position: relative; }
       .owl-carousel.home-slider .slider-item .overlay {
         position: absolute;
@@ -7561,7 +7565,10 @@ h1, h2, h3, h4, h5,
           font-size: 40px;
           color: #fff;
           line-height: 1.2;
-          font-weight: 400; }
+          font-weight: 400; 
+          position: relative;
+          top: -230px;
+        }
           @media (max-width: 991.98px) {
             .owl-carousel.home-slider .slider-item .slider-text h1 {
               font-size: 40px; } }
@@ -7569,7 +7576,10 @@ h1, h2, h3, h4, h5,
           font-size: 20px;
           line-height: 1.5;
           font-weight: 300;
-          color: rgba(255, 255, 255, 0.8); }
+          color: rgba(255, 255, 255, 0.8); 
+          position: absolute;
+          top: -118px;
+      }
           .owl-carousel.home-slider .slider-item .slider-text p strong {
             font-weight: 700; }
             .owl-carousel.home-slider .slider-item .slider-text p strong a {
@@ -9402,4 +9412,21 @@ textarea.form-control {
       .clinic-name .subtext {
           font-size: 0.8rem; /* Further reduce size on small screens */
       }
+  }
+
+  .logo {
+    height: 110px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    top: -3px;
+  }
+  .header-top {
+    background-color: #2a2a2a !important;
+    height: 30px;
+  }
+
+  .header-btn {
+    position: relative;
+    top: 95px;
   }

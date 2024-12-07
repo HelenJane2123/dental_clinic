@@ -30,9 +30,9 @@
         <div class="content-wrapper">
         <div class="row">
             <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Patient Record</h4>
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Patient Record</h4>
                     <div class="content">
                       <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
@@ -417,21 +417,112 @@
                                         </div>
                                     </div>
                                     <!-- Submit -->
-                                <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                <button type="reset" class="btn btn-light">Cancel</button>
-                            </form>
-
-                            
+                                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                    <button type="reset" class="btn btn-light">Cancel</button>
+                                </form>
                             </div>
                         </div>
                       </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Dental Treatment Records</h4>
+                        </div>
+                        <div class="table-responsive">
+                            <div class="card-body">
+                                <?php
+                                    // Check if $dental_records is an array and not false
+                                    if ($dental_records && is_array($dental_records)) :
+                                ?>
+                                    <table class="table table-bordered" id="dentalTable">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="8" class="text-center bg-light ">Dental Treatment Record</th>
+                                                <th colspan="3" class="text-center bg-light">Prescription Details</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="dental-treatment">Date</th>
+                                                <th class="dental-treatment">Tooth No./s</th>
+                                                <th class="dental-treatment">Procedure</th>
+                                                <th class="dental-treatment">Dentist/s</th>
+                                                <th class="dental-treatment">Amount Charged</th>
+                                                <th class="dental-treatment">Amount Paid</th>
+                                                <th class="dental-treatment">Balance</th>
+                                                <th class="dental-treatment">Next Appointment Date</th>
+                                                <th class="prescription">Dosage</th>
+                                                <th class="prescription">Medication</th>
+                                                <th class="prescription">Instructions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($dental_records as $record) : ?>
+                                                <tr>
+                                                    <td><?= $record['date'] ?></td>
+                                                    <td><?= $record['tooth_no'] ?></td>
+                                                    <td><?= $record['procedure'] ?></td>
+                                                    <td><?= $record['dentist'] ?></td>
+                                                    <td><?= $record['amount_charged'] ?></td>
+                                                    <td><?= $record['amount_paid'] ?></td>
+                                                    <td><?= $record['balance'] ?></td>
+                                                    <td><?= $record['next_appointment'] ?></td>
+                                                    <td><?= $record['dosage'] ?></td>
+                                                    <td><?= $record['medication'] ?></td>
+                                                    <td><?= $record['instructions'] ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else : ?>
+                                    <p>No dental records found.</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
               </div>
             </div>
           </div>
           <!-- row end -->
-    
+
+
+<!-- View Prescription Modal -->
+<div class="modal fade" id="viewPrescriptionModal" tabindex="-1" role="dialog" aria-labelledby="viewPrescriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewPrescriptionModalLabel">View Prescription</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Tooth No./s:</strong> <span id="modalToothNo"></span></p>
+                <p><strong>Procedure:</strong> <span id="modalProcedure"></span></p>
+                <p><strong>Dentist:</strong> <span id="modalDentist"></span></p>
+                <hr>
+                <h5>Doctor's Prescription</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Medication</th>
+                            <th>Dosage</th>
+                            <th>Instructions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="modalMedication"></td>
+                            <td id="modalDosage"></td>
+                            <td id="modalInstructions"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
     include_once("inc/userDashboardFooter.php");
 ?>

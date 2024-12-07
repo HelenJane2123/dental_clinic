@@ -1264,6 +1264,48 @@
             // Return the result
             return $result;
         }
+        
+        public function get_booked_appointments($doctorId, $appointmentDate = null) {
+            // Prepare the query
+            $query = "
+                SELECT a.appointment_date, a.appointment_time 
+                FROM appointments a
+                LEFT JOIN patients p ON a.patient_id = p.patient_id 
+                WHERE p.assigned_doctor = ?";
+        
+            // If the appointment date is provided, filter by date as well
+            if ($appointmentDate) {
+                $query .= " AND a.appointment_date = ?";
+            }
+        
+            // Check if the query preparation was successful
+            $stmt = $this->db->prepare($query);
+            if ($stmt === false) {
+                die('MySQL prepare error: ' . $this->db->error); // Output MySQL error
+            }
+            
+            // Bind the parameters and execute the query
+            if ($appointmentDate) {
+                $stmt->bind_param('is', $doctorId, $appointmentDate); // Bind both doctorId and appointmentDate
+            } else {
+                $stmt->bind_param('i', $doctorId); // Bind only doctorId if no date is passed
+            }
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            // Collect booked slots
+            $bookedSlots = [];
+            while ($row = $result->fetch_assoc()) {
+                $bookedSlots[] = $row['appointment_time'];
+            }
+            
+            // Return the booked slots (as an array)
+            return $bookedSlots;
+        }
+        
+        
+        
+        
 
         public function getPaymentStatus($member_id) {
             $sql = "
@@ -1474,10 +1516,107 @@
             return $details;
         }
         
+        public function get_dental_records($member_id) {
+            // Check database connection
+            if ($this->db->connect_error) {
+                die('Database connection failed: ' . $this->db->connect_error);
+            }
+        
+            // SQL Query with JOINs for prescriptions
+            $sql = "SELECT prescriptions.*, patients.*, dental_records.* 
+                    FROM dental_records 
+                    LEFT JOIN patients ON patients.patient_id = dental_records.patient_id
+                    LEFT JOIN prescriptions ON prescriptions.patient_id = patients.patient_id
+                    WHERE patients.member_id = ? ORDER BY date DESC";
+        
+            // Prepare the SQL statement
+            $stmt = $this->db->prepare($sql);
+        
+            // Check if the prepare() method returned false
+            if ($stmt === false) {
+                die('SQL Error: ' . $this->db->error); // Show the specific SQL error
+            }
+        
+            // Bind the patient_id to the query
+            $stmt->bind_param('s', $member_id);
+        
+            // Execute the query
+            $stmt->execute();
+        
+            // Get the result of the query
+            $result = $stmt->get_result();
+        
+            // Check if any records exist
+            if ($result->num_rows > 0) {
+                // Fetch all records into an associative array
+                $records = [];
+                while ($row = $result->fetch_assoc()) {
+                    $records[] = $row;
+                }
+                return $records; // Return all records
+            } else {
+                return false; // No records found
+            }
+        
+            // Close the prepared statement
+            $stmt->close();
+        }
         
         
+        public function get_prescription($id) {
+            // Assuming $db is a global variable or passed into the function
+            global $db;
         
+            // Prepare the query to get the dental record and prescription details
+            $query = "
+                SELECT 
+                    dental_records.tooth_no, 
+                    dental_records.dentist, 
+                    dental_records.procedure,
+                    dental_records.next_appointment, 
+                    prescriptions.medication, 
+                    prescriptions.dosage, 
+                    prescriptions.instructions
+                FROM dental_records
+                LEFT JOIN prescriptions ON dental_records.patient_id = prescriptions.patient_id
+                WHERE dental_records.patient_id = ?";
         
+            // Prepare the statement
+            $stmt = $db->prepare($query);
+            
+            // Bind the parameter to the query
+            $stmt->bind_param('i', $id); // Bind the patient_id (passed as $id) parameter
+            
+            // Execute the query
+            $stmt->execute();
+            
+            // Get the result
+            $result = $stmt->get_result();
+            
+            // Check if the query returned any results
+            if ($result->num_rows > 0) {
+                // Fetch the result and return it as JSON
+                $record = $result->fetch_assoc();
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'tooth_no' => $record['tooth_no'] ?? 'N/A',
+                        'dentist' => $record['dentist'] ?? 'N/A',
+                        'procedure' => $record['procedure'] ?? 'N/A',
+                        'next_appointment' => $record['next_appointment'] ?? 'N/A',
+                        'medication' => $record['medication'] ?? 'N/A',
+                        'dosage' => $record['dosage'] ?? 'N/A',
+                        'instructions' => $record['instructions'] ?? 'N/A',
+                    ]
+                ]);
+            } else {
+                // If no records are found, return an error message
+                echo json_encode(['success' => false, 'error' => 'No records found for the given patient ID.']);
+            }
+            
+            // Close the statement
+            $stmt->close();
+        }
         
         
         

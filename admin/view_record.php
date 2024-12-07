@@ -422,15 +422,22 @@ if (isset($_GET['patient_id'])) {
                                                 <th>Amount Paid</th>
                                                 <th>Balance</th>
                                                 <th>Next Appointment Date</th>
+                                                <th>Medication</th>
+                                                <th>Dosage</th>
+                                                <th>Instructions</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <input type="hidden" value=<?=$patient_id?> name="patient_id"/>
+                                            <input type="hidden" name="doctor_id" value="<?= $record['doctor_id'] ?>" class="form-control" required>
+
                                             <?php if ($dental_records) : ?>
                                                 <?php foreach ($dental_records as $record) : ?>
                                                     <tr>
-                                                        <td><input type="date" name="date[]" value="<?= $record['date'] ?>" class="form-control" required></td>
+                                                        <td>
+                                                            <input type="date" name="date[]" value="<?= $record['date'] ?>" class="form-control" required>
+                                                        </td>
                                                         <td><input type="text" name="tooth_no[]" value="<?= $record['tooth_no'] ?>" class="form-control"></td>
                                                         <td><input type="text" name="procedure[]" value="<?= $record['procedure'] ?>" class="form-control" required></td>
                                                         <td><input type="text" name="dentist[]" value="<?= $record['dentist'] ?>" class="form-control" required></td>
@@ -452,7 +459,12 @@ if (isset($_GET['patient_id'])) {
                                                         </td>
                                                         <td><input type="number" name="balance[]" value="<?= $record['balance'] ?>" class="form-control balance" step="0.01" readonly></td>
                                                         <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control"></td>
-                                                        <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
+                                                        <td><input type="text" name="medication[]" value="<?= $record['medication'] ?>" class="form-control"></td>
+                                                        <td><textarea name="dosage[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['dosage'] ?>" class="form-control"><?= $record['dosage'] ?></textarea></td>
+                                                        <td><textarea name="instructions[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['instructions'] ?>" class="form-control"><?= $record['instructions'] ?></textarea></td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                                                        </td>
                                                     </tr>
                                                 <?php endforeach; ?>
                                             <?php else : ?>
@@ -477,6 +489,9 @@ if (isset($_GET['patient_id'])) {
                                                     </td>
                                                     <td><input type="number" name="balance[]" class="form-control balance" step="0.01" readonly></td>
                                                     <td><input type="date" name="next_appointment[]" class="form-control"></td>
+                                                    <td><input type="text" name="medication[]" class="form-control"></td>
+                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" name="dosage[]" class="form-control"></textarea></td>
+                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" name="instructions[]" class="form-control"></textarea></td>
                                                     <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
                                                 </tr>
                                             <?php endif; ?>

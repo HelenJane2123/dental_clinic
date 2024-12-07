@@ -85,24 +85,20 @@
                                                     </button>
 
                                                     <?php if ($appointment['status'] !== 'Canceled') : ?>
-                                                        <?php if (empty($appointment['proof_id'])) : ?>
-                                                            <!-- Message if no proof of payment -->
-                                                            <p class="text-muted">Cannot re-schedule appointment. No proof of payment uploaded yet.</p>
-                                                        <?php else : ?>
-                                                            <!-- Edit Button -->
-                                                            <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, 
-                                                                '<?= htmlspecialchars($appointment['services']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['appointment_date']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['appointment_time']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['notes']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['status']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['patient_first_name']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['patient_last_name']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['doctor_account_id']) ?>', 
-                                                                '<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
-                                                                <i class="mdi mdi-pencil"></i>
-                                                            </button>
-                                                        <?php endif; ?>
+                                                    
+                                                        <button class="btn btn-warning btn-sm" onclick="openEditModal(<?= $appointment['id'] ?>, 
+                                                            '<?= htmlspecialchars($appointment['services']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['appointment_date']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['appointment_time']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['notes']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['status']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['patient_first_name']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['patient_last_name']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['doctor_account_id']) ?>', 
+                                                            '<?= htmlspecialchars($appointment['member_id']) ?>')" title="Edit">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                        </button>
+                                                    
 
                                                         <!-- Delete Button -->
                                                         <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal" onclick="setAppointmentId(<?= $appointment['id'] ?>)" title="Delete">

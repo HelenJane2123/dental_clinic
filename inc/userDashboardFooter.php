@@ -332,9 +332,7 @@
 
             // Check if the appointment is available
             if (result.available) {
-                showModal('Success', 'Appointment successfully booked! Redirecting to the payment page...', function() {
-                    window.location.href = 'payment.php'; // Redirect to the payment page
-                });                
+                showModal('Success', 'Appointment successfully booked!');                
                
                 // Submit the form if the slot is available
                 document.getElementById('addappointmentForm').submit();
@@ -348,7 +346,6 @@
             showModal('Error', 'An error occurred while checking availability. Please try again later.');
         }
     }
-
 
     function toggleNameFields(radio) {
       const nameFields = document.getElementById('nameFields');
@@ -387,6 +384,112 @@
     function setAppointmentId(appointmentId) {
       document.getElementById('appointment_id').value = appointmentId;
     }
+
+    document.getElementById('appointmentDate').addEventListener('change', function() {
+        // Get the selected date from the input field
+        var selectedDate = this.value;
+        var doctorId = document.getElementById('doctor_id').value; // Assuming doctor_id is in a hidden input field
+
+        // Send AJAX request to the server to fetch available slots
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'controller/getBookedslots.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        // Send the date and doctor_id as POST data
+        xhr.send('appointmentDate=' + encodeURIComponent(selectedDate) + '&doctor_id=' + encodeURIComponent(doctorId));
+
+        // Handle the server response
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.success) {
+                    var availableSlots = response.allTimeSlots;
+                    var bookedSlots = response.bookedSlots;
+                    var appointmentTimeSelect = document.getElementById('appointmentTime');
+                    
+                    // Clear the previous time slots
+                    appointmentTimeSelect.innerHTML = '<option value="" disabled selected>Select a time</option>';
+
+                    // Loop through all possible slots and add only available ones to the dropdown
+                    for (var time in availableSlots) {
+                        var option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = availableSlots[time];
+
+                        // If the time slot is booked, disable it
+                        if (bookedSlots.includes(time)) {
+                            option.disabled = true;
+                            option.textContent += ' (Booked)';
+                        }
+
+                        appointmentTimeSelect.appendChild(option);
+                    }
+                } else {
+                    alert(response.error); // Show error message if any
+                }
+            } else {
+                alert('An error occurred while fetching available time slots.');
+            }
+        };
+
+        // Handle any errors with the request
+        xhr.onerror = function() {
+            alert('An error occurred while fetching available time slots.');
+        };
+    });
+
+    document.getElementById('edit_appointment_date').addEventListener('change', function() {
+        var selectedDate = this.value;
+        var doctorId = document.getElementById('doctor_account_id').value;
+        var selectedTime = document.getElementById('edit_appointment_time').value; // Store the previously selected time
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'controller/getBookedslots.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        
+        // Send the selected date and doctor ID to the server
+        xhr.send('edit_appointment_date=' + encodeURIComponent(selectedDate) + '&doctor_id=' + encodeURIComponent(doctorId));
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    var availableSlots = response.allTimeSlots;
+                    var bookedSlots = response.bookedSlots;
+                    var appointmentTimeSelect = document.getElementById('edit_appointment_time');
+
+                    // Reset the time selection dropdown
+                    appointmentTimeSelect.innerHTML = '<option value="" disabled selected>Select a time</option>';
+
+                    // Loop through available slots and add them
+                    for (var time in availableSlots) {
+                        var option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = availableSlots[time];
+
+                        // Disable booked slots and append "(Booked)" text
+                        if (bookedSlots.includes(time)) {
+                            option.disabled = true;
+                            option.textContent += ' (Booked)';
+                        }
+
+                        // If the slot matches the previously selected time, mark it as selected
+                        if (time === selectedTime) {
+                            option.selected = true;
+                        }
+
+                        // Append the option to the dropdown
+                        appointmentTimeSelect.appendChild(option);
+                    }
+                } else {
+                    alert(response.error);
+                }
+            }
+        };
+    });
+
+
 
     function openEditModal(
         appointmentId,
@@ -574,6 +677,7 @@
     $('#closeMenu').on('click', function() {
         $('#offcanvasMenu').collapse('hide');
     });
+
     
     function printFormRecord() {
         // Create a new window
@@ -830,7 +934,6 @@
 
     // Call the function on page load to handle pre-selected values
     window.onload = toggleForWomenSection;
-
 
 
   </script>
