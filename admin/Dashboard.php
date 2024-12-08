@@ -116,7 +116,7 @@
                             <div class="card-body py-4 px-5">
                                 <div class="d-flex align-items-center">
                                     <div class="avatar avatar-xl">
-                                        <img src="assets/images/faces/1.jpg" alt="Face 1">
+                                      <!--   <img src="assets/images/faces/1.jpg" alt="Face 1"> -->
                                     </div>
                                     <div class="ms-3">
                                         <h6 class="font-bold text-muted">Welcome back,</h6>
