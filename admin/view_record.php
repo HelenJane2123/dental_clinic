@@ -425,6 +425,7 @@ if (isset($_GET['patient_id'])) {
                                                 <th>Medication</th>
                                                 <th>Dosage</th>
                                                 <th>Instructions</th>
+                                                <th>Prescription Image</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -460,6 +461,15 @@ if (isset($_GET['patient_id'])) {
                                                         <td><input type="text" name="medication[]" disabled value="<?= $record['medication'] ?>" class="form-control"></td>
                                                         <td><textarea name="dosage[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['dosage'] ?>" disabled class="form-control"><?= $record['dosage'] ?></textarea></td>
                                                         <td><textarea name="instructions[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled value="<?= $record['instructions'] ?>" class="form-control"><?= $record['instructions'] ?></textarea></td>
+                                                        <td>
+                                                            <?php
+                                                                if ($record['image']) {
+                                                                    echo "<a href='{$record['image']}' target='_blank'>View Prescription</a>";
+                                                                } else {
+                                                                    echo "No prescription uploaded";
+                                                                }
+                                                            ?>
+                                                        </td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
                                                             <?php if (!empty($record['dental_record_id'])): ?>
@@ -521,7 +531,7 @@ if (isset($_GET['patient_id'])) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="prescriptionForm" action="controller/submitPrescriptions.php" method="POST">
+                <form id="prescriptionForm" action="controller/submitPrescriptions.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" value="<?=$patient_id?>" name="patient_id"/>
                     <input type="hidden" name="dental_record_id" id="modal_dental_record_id" class="form-control">
                     <div class="mb-3">
@@ -536,6 +546,10 @@ if (isset($_GET['patient_id'])) {
                         <label for="instructions" class="form-label">Instructions</label>
                         <textarea name="instructions" id="modal_instructions" class="form-control" rows="4" required></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="prescription_image" class="form-label">Upload Prescription Image</label>
+                        <input type="file" name="prescription_image" id="prescription_image" class="form-control">
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -545,8 +559,6 @@ if (isset($_GET['patient_id'])) {
         </div>
     </div>
 </div>
-
-
 
 <script>
     // Function to open the prescription modal and set the dental_record_id

@@ -1709,18 +1709,19 @@
             }
         }
         
-        public function save_prescription($patient_id,$dental_record_id, $medication, $dosage, $instructions) {
-            $insert_query = "INSERT INTO prescriptions (dental_record, patient_id, medication, dosage, instructions) 
-                             VALUES (?, ?, ?, ?, ?)";
+        public function save_prescription($patient_id,$dental_record_id, $medication, $dosage, $instructions, $filePath) {
+            $insert_query = "INSERT INTO prescriptions (dental_record, patient_id, medication, dosage, instructions, image) 
+                             VALUES (?, ?, ?, ?, ?, ?)";
             
             if ($insert_stmt = $this->db->prepare($insert_query)) {
                 // Bind parameters
-                $insert_stmt->bind_param('iisss', 
+                $insert_stmt->bind_param('iissss', 
                     $dental_record_id, 
                     $patient_id,
                     $medication, 
                     $dosage, 
-                    $instructions
+                    $instructions,
+                    $filePath
                 );
         
                 // Execute and check result

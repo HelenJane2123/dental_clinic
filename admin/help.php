@@ -79,14 +79,14 @@ include_once('inc/sidebarMenu.php');
             </div>
 
             <!-- Managing Payments Section -->
-            <div class="card">
+            <!-- <div class="card">
                 <div class="card-header">
                     <h4>Managing Payments</h4>
                 </div>
                 <div class="card-body">
                     <p>In the Payment section, you can view the list of payments made for appointments. Make sure to confirm the booking once the payment is successful. You can also check for any pending payments here.</p>
                 </div>
-            </div>
+            </div> -->
         </section>
     </div>
 

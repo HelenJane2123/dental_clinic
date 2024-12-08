@@ -440,7 +440,7 @@
                                         <thead>
                                             <tr>
                                                 <th colspan="8" class="text-center bg-light ">Dental Treatment Record</th>
-                                                <th colspan="3" class="text-center bg-light">Prescription Details</th>
+                                                <th colspan="4" class="text-center bg-light">Prescription Details</th>
                                             </tr>
                                             <tr>
                                                 <th class="dental-treatment">Date</th>
@@ -454,6 +454,7 @@
                                                 <th class="prescription">Dosage</th>
                                                 <th class="prescription">Medication</th>
                                                 <th class="prescription">Instructions</th>
+                                                <th class="prescription">Prescription</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -470,6 +471,15 @@
                                                     <td><?= $record['dosage'] ?></td>
                                                     <td><?= $record['medication'] ?></td>
                                                     <td><?= $record['instructions'] ?></td>
+                                                    <td>
+                                                        <?php
+                                                            if ($record['image']) {
+                                                                echo "<a href='admin/{$record['image']}' target='_blank'>View Prescription</a>";
+                                                            } else {
+                                                                echo "No prescription uploaded";
+                                                            }
+                                                        ?>
+                                                    </td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>

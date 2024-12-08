@@ -65,14 +65,14 @@
                 </li>
             <?php endif; ?>
                 <li class="sidebar-title">Others</li>
-                <?php if ($_SESSION['user_type'] == 'super_admin'): ?>
-                <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'active' : '' ?>">
+            <?php if ($_SESSION['user_type'] == 'super_admin'): ?>
+                <!--<li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'active' : '' ?>">
                     <a href="payment.php" class='sidebar-link'>
                         <i class="bi bi-cash"></i>
                         <span>Payment</span>
                     </a>
-                </li>
-                <?php endif; ?>
+                </li>-->
+            <?php endif; ?> 
             
             <li class="sidebar-item  <?= basename($_SERVER['PHP_SELF']) == 'help.php' ? 'active' : '' ?>">
                 <a href="help.php" class='sidebar-link'>

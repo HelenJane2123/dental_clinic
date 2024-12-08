@@ -147,13 +147,7 @@ include_once('inc/sidebarMenu.php');
                                                     <p class="text-muted">Appointment Completed</p>
                                                 <?php else : ?>
                                                     <!-- Default case: buttons visible for other statuses -->
-                                                    <?php if (empty($appointments['proof_id'])) : ?>
-                                                        <!-- If there is no proof of payment -->
-                                                        <p class="text-muted">No proof of payment uploaded yet.</p>
-                                                        <button type="button" class="btn btn-danger btn-sm cancel-button" data-bs-toggle="modal" data-bs-target="#cancelModal<?= $appointments['appointment_id'] ?>">Cancel</button>
-                                                    <?php elseif ($appointments['proof_status'] !== 'Approved') : ?>
-                                                        <p class="text-muted">Payment has not been approved yet. Please approve payment first</p>
-                                                    <?php elseif ($appointments['status'] !== 'Canceled') : ?>
+                                                    <?php if ($appointments['status'] !== 'Canceled') : ?>
                                                         <!-- If proof of payment exists and the appointment is not canceled -->
                                                         <button type="button" class="btn btn-success btn-sm approve-button" data-bs-toggle="modal" data-bs-target="#approveModal<?= $appointments['appointment_id'] ?>">Approve</button>
                                                         <button type="button" class="btn btn-info btn-sm reschedule-button" data-bs-toggle="modal" data-bs-target="#rescheduleModal<?= $appointments['appointment_id'] ?>">Reschedule</button>
