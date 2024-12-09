@@ -9,20 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Form data
     $dental_record_id = $_POST['dental_record_id'] ?? '';
-    $medication = trim($_POST['medication'] ?? '');
-    $dosage = trim($_POST['dosage'] ?? '');
-    $instructions = trim($_POST['instructions'] ?? '');
     $patient_id = $_POST['patient_id'] ?? '';
 
     // Initialize variables and error array
     $errors = array();
     $publicDir = "../public/prescriptions/{$dental_record_id}/"; // Directory for the dental record ID
     $allowedFileTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    
-    // Validate form inputs
-    if (empty($medication)) $errors[] = "Medication is required.";
-    if (empty($dosage)) $errors[] = "Dosage is required.";
-    if (empty($instructions)) $errors[] = "Instructions are required.";
+
 
     // Handle file upload
     if (!empty($_FILES['prescription_image']['name'])) {
@@ -64,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // If no errors, proceed to save the prescription
     if (empty($errors)) {
         $filePath = "public/prescriptions/{$dental_record_id}/" . $fileName; // Relative path to store in DB
-        $result = $funObj->save_prescription($patient_id, $dental_record_id, $medication, $dosage, $instructions, $filePath);
+        $result = $funObj->save_prescription($patient_id, $dental_record_id, $filePath);
 
         if ($result) {
             $_SESSION['message'] = 'Prescription added successfully.';

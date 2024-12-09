@@ -350,9 +350,6 @@
                 <td><input type="number" name="amount_paid[]" class="form-control" step="0.01" required></td>
                 <td><input type="number" name="balance[]" class="form-control" step="0.01" required readonly></td>
                 <td><input type="date" name="next_appointment[]" class="form-control" required></td>
-                <td><input type="text" name="medication[]" class="form-control" disabled></td>
-                <td><textarea name="dosage[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled class="form-control"></textarea></td>
-                <td><textarea name="instructions[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled class="form-control"></textarea></td>
                 <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button></td>
             `;
 

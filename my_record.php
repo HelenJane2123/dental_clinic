@@ -451,9 +451,6 @@
                                                 <th class="dental-treatment">Amount Paid</th>
                                                 <th class="dental-treatment">Balance</th>
                                                 <th class="dental-treatment">Next Appointment Date</th>
-                                                <th class="prescription">Dosage</th>
-                                                <th class="prescription">Medication</th>
-                                                <th class="prescription">Instructions</th>
                                                 <th class="prescription">Prescription</th>
                                             </tr>
                                         </thead>
@@ -468,9 +465,6 @@
                                                     <td><?= $record['amount_paid'] ?></td>
                                                     <td><?= $record['balance'] ?></td>
                                                     <td><?= $record['next_appointment'] ?></td>
-                                                    <td><?= $record['dosage'] ?></td>
-                                                    <td><?= $record['medication'] ?></td>
-                                                    <td><?= $record['instructions'] ?></td>
                                                     <td>
                                                         <?php
                                                             if ($record['image']) {
@@ -496,43 +490,6 @@
           </div>
           <!-- row end -->
 
-
-<!-- View Prescription Modal -->
-<div class="modal fade" id="viewPrescriptionModal" tabindex="-1" role="dialog" aria-labelledby="viewPrescriptionModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="viewPrescriptionModalLabel">View Prescription</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Tooth No./s:</strong> <span id="modalToothNo"></span></p>
-                <p><strong>Procedure:</strong> <span id="modalProcedure"></span></p>
-                <p><strong>Dentist:</strong> <span id="modalDentist"></span></p>
-                <hr>
-                <h5>Doctor's Prescription</h5>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Medication</th>
-                            <th>Dosage</th>
-                            <th>Instructions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="modalMedication"></td>
-                            <td id="modalDosage"></td>
-                            <td id="modalInstructions"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 <?php
     include_once("inc/userDashboardFooter.php");
 ?>

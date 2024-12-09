@@ -1574,9 +1574,7 @@
                     dental_records.dentist, 
                     dental_records.procedure,
                     dental_records.next_appointment, 
-                    prescriptions.medication, 
-                    prescriptions.dosage, 
-                    prescriptions.instructions
+                    prescriptions.image
                 FROM dental_records
                 LEFT JOIN prescriptions ON dental_records.patient_id = prescriptions.patient_id
                 WHERE dental_records.patient_id = ?";

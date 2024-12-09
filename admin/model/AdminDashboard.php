@@ -1709,18 +1709,15 @@
             }
         }
         
-        public function save_prescription($patient_id,$dental_record_id, $medication, $dosage, $instructions, $filePath) {
-            $insert_query = "INSERT INTO prescriptions (dental_record, patient_id, medication, dosage, instructions, image) 
-                             VALUES (?, ?, ?, ?, ?, ?)";
+        public function save_prescription($patient_id,$dental_record_id, $filePath) {
+            $insert_query = "INSERT INTO prescriptions (dental_record, patient_id, image) 
+                             VALUES (?, ?, ?)";
             
             if ($insert_stmt = $this->db->prepare($insert_query)) {
                 // Bind parameters
-                $insert_stmt->bind_param('iissss', 
+                $insert_stmt->bind_param('iis', 
                     $dental_record_id, 
                     $patient_id,
-                    $medication, 
-                    $dosage, 
-                    $instructions,
                     $filePath
                 );
         
@@ -1739,12 +1736,9 @@
             }
         }
         
-        
-        
-
         public function get_dental_records($patient_id) {
             // Assuming you have a database connection $this->db (mysqli)
-            $sql = "SELECT dental_records.*, dental_records.id as dental_record_id,  prescriptions.* FROM dental_records 
+            $sql = "SELECT dental_records.*, dental_records.id as dental_record_id,  prescriptions.*, prescriptions.id as prescription_id FROM dental_records 
                     LEFT JOIN prescriptions ON prescriptions.dental_record = dental_records.id
                     WHERE dental_records.patient_id = ? ORDER BY date DESC";
             
@@ -1775,6 +1769,29 @@
             // Close the prepared statement
             $stmt->close();
         }
+
+        public function delete_prescription($prescription_id) {
+            $sql = "DELETE FROM prescriptions WHERE id = ?";
+            $stmt = $this->db->prepare($sql); // Prepare the SQL statement
+        
+            if ($stmt === false) {
+                // Handle error in statement preparation
+                return false;
+            }
+        
+            // Bind the parameter (e.g., 'i' for integer if prescription_id is an integer)
+            $stmt->bind_param('i', $prescription_id);
+        
+            // Execute the statement
+            $result = $stmt->execute();
+        
+            // Close the statement
+            $stmt->close();
+        
+            // Return the result of the execution
+            return $result;
+        }
+        
         
         //send adjustment braces
         public function send_adjustment_notifications() {

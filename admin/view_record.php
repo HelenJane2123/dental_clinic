@@ -422,9 +422,6 @@ if (isset($_GET['patient_id'])) {
                                                 <th>Amount Paid</th>
                                                 <th>Balance</th>
                                                 <th>Next Appointment Date</th>
-                                                <th>Medication</th>
-                                                <th>Dosage</th>
-                                                <th>Instructions</th>
                                                 <th>Prescription Image</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -458,9 +455,6 @@ if (isset($_GET['patient_id'])) {
                                                         </td>
                                                         <td><input type="number" name="balance[]" value="<?= $record['balance'] ?>" class="form-control balance" step="0.01" readonly></td>
                                                         <td><input type="date" name="next_appointment[]" value="<?= $record['next_appointment'] ?>" class="form-control"></td>
-                                                        <td><input type="text" name="medication[]" disabled value="<?= $record['medication'] ?>" class="form-control"></td>
-                                                        <td><textarea name="dosage[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" value="<?= $record['dosage'] ?>" disabled class="form-control"><?= $record['dosage'] ?></textarea></td>
-                                                        <td><textarea name="instructions[]"  style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled value="<?= $record['instructions'] ?>" class="form-control"><?= $record['instructions'] ?></textarea></td>
                                                         <td>
                                                             <?php
                                                                 if ($record['image']) {
@@ -472,9 +466,13 @@ if (isset($_GET['patient_id'])) {
                                                         </td>
                                                         <td>
                                                             <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
-                                                            <?php if (!empty($record['dental_record_id'])): ?>
+                                                            <?php if (!empty($record['prescription_id'])): ?>
+                                                                <!-- Show delete button if prescription exists -->
+                                                                <button type="button" class="btn btn-warning" onclick="deletePrescription('<?= $record['prescription_id'] ?>', '<?= $patient_id ?>')">Delete Prescription</button>                                              
+                                                            <?php else: ?>
+                                                                <!-- Show add button if no prescription exists -->
                                                                 <button type="button" class="btn btn-primary" onclick="openPrescriptionModal('<?= $record['dental_record_id'] ?>')">Add Prescription</button>
-                                                            <?php endif; ?>                                                        
+                                                            <?php endif; ?>                                                          
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>
@@ -500,13 +498,13 @@ if (isset($_GET['patient_id'])) {
                                                     </td>
                                                     <td><input type="number" name="balance[]" class="form-control balance" step="0.01" readonly></td>
                                                     <td><input type="date" name="next_appointment[]" class="form-control"></td>
-                                                    <td><input type="text" name="medication[]" class="form-control" disabled></td>
-                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled name="dosage[]" class="form-control"></textarea></td>
-                                                    <td><textarea style="width: 250px; height: 200px; font-size: 16px; padding: 10px;" disabled name="instructions[]" class="form-control"></textarea></td>
                                                     <td><button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
-                                                        <?php if (!empty($record['dental_record_id'])): ?>
+                                                        <?php if (!empty($record['prescription_id'])): ?>
+                                                            <button type="button" class="btn btn-warning" onclick="deletePrescription('<?= $record['prescription_id'] ?>', '<?= $patient_id ?>')">Delete Prescription</button>                                              
+                                                        <?php else: ?>
+                                                            <!-- Show add button if no prescription exists -->
                                                             <button type="button" class="btn btn-primary" onclick="openPrescriptionModal('<?= $record['dental_record_id'] ?>')">Add Prescription</button>
-                                                        <?php endif; ?>                                                    
+                                                        <?php endif; ?>                                                   
                                                     </td>
                                                 </tr>
                                             <?php endif; ?>
@@ -535,18 +533,6 @@ if (isset($_GET['patient_id'])) {
                     <input type="hidden" value="<?=$patient_id?>" name="patient_id"/>
                     <input type="hidden" name="dental_record_id" id="modal_dental_record_id" class="form-control">
                     <div class="mb-3">
-                        <label for="medication" class="form-label">Medication</label>
-                        <input type="text" name="medication" id="modal_medication" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="dosage" class="form-label">Dosage</label>
-                        <textarea name="dosage" id="modal_dosage" class="form-control" rows="4" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="instructions" class="form-label">Instructions</label>
-                        <textarea name="instructions" id="modal_instructions" class="form-control" rows="4" required></textarea>
-                    </div>
-                    <div class="mb-3">
                         <label for="prescription_image" class="form-label">Upload Prescription Image</label>
                         <input type="file" name="prescription_image" id="prescription_image" class="form-control">
                     </div>
@@ -559,6 +545,25 @@ if (isset($_GET['patient_id'])) {
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this prescription? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     // Function to open the prescription modal and set the dental_record_id
@@ -616,6 +621,31 @@ if (isset($_GET['patient_id'])) {
             updateBalance(this);
         });
     });
+
+    function deletePrescription(prescriptionId, patientId) {
+        // Get the delete confirmation modal
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+
+        // Set data attributes for the confirm button
+        const confirmButton = document.getElementById('confirmDeleteButton');
+        confirmButton.setAttribute('data-prescription-id', prescriptionId);
+        confirmButton.setAttribute('data-patient-id', patientId);
+
+        // Show the modal
+        deleteModal.show();
+    }
+
+    // Handle delete confirmation
+    document.getElementById('confirmDeleteButton').addEventListener('click', function () {
+        const prescriptionId = this.getAttribute('data-prescription-id');
+        const patientId = this.getAttribute('data-patient-id');
+
+        if (prescriptionId && patientId) {
+            // Redirect to the backend script for deletion
+            window.location.href = `controller/deletePrescription.php?prescription_id=${prescriptionId}&patient_id=${patientId}`;
+        }
+    });
+
 </script>
 <?php
 include_once('inc/footerDashboard.php');
