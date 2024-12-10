@@ -395,48 +395,54 @@
         xhr.open('POST', 'controller/getBookedslots.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-        // Send the date and doctor_id as POST data
-        xhr.send('appointmentDate=' + encodeURIComponent(selectedDate) + '&doctor_id=' + encodeURIComponent(doctorId));
+         // Add a loading indicator
+        var appointmentTimeSelect = document.getElementById('appointmentTime');
+        appointmentTimeSelect.innerHTML = '<option disabled>Loading available time slots...</option>';
 
-        // Handle the server response
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
+                try {
+                    var response = JSON.parse(xhr.responseText);
 
-                if (response.success) {
-                    var availableSlots = response.allTimeSlots;
-                    var bookedSlots = response.bookedSlots;
-                    var appointmentTimeSelect = document.getElementById('appointmentTime');
-                    
-                    // Clear the previous time slots
-                    appointmentTimeSelect.innerHTML = '<option value="" disabled selected>Select a time</option>';
+                    if (response.success) {
+                        var availableSlots = response.allTimeSlots;
+                        var bookedSlots = response.bookedSlots;
 
-                    // Loop through all possible slots and add only available ones to the dropdown
-                    for (var time in availableSlots) {
-                        var option = document.createElement('option');
-                        option.value = time;
-                        option.textContent = availableSlots[time];
+                        // Clear and repopulate the time slot dropdown
+                        appointmentTimeSelect.innerHTML = '<option value="" disabled selected>Select a time</option>';
+                        Object.entries(availableSlots).forEach(([time, label]) => {
+                            var option = document.createElement('option');
+                            option.value = time;
+                            option.textContent = label;
 
-                        // If the time slot is booked, disable it
-                        if (bookedSlots.includes(time)) {
-                            option.disabled = true;
-                            option.textContent += ' (Booked)';
-                        }
-
-                        appointmentTimeSelect.appendChild(option);
+                            // Mark booked slots as disabled
+                            if (bookedSlots.includes(time)) {
+                                option.disabled = true;
+                                option.textContent += ' (Booked)';
+                            }
+                            appointmentTimeSelect.appendChild(option);
+                        });
+                    } else {
+                        // Display an error message if provided by the server
+                        alert(response.error || 'Failed to load available slots.');
+                        appointmentTimeSelect.innerHTML = '<option disabled>No available slots.</option>';
                     }
-                } else {
-                    alert(response.error); // Show error message if any
+                } catch (error) {
+                    console.error('Error parsing JSON response:', error);
+                    alert('An unexpected error occurred.');
                 }
             } else {
-                alert('An error occurred while fetching available time slots.');
+                alert('An error occurred while fetching available time slots. Please try again.');
             }
         };
 
-        // Handle any errors with the request
-        xhr.onerror = function() {
-            alert('An error occurred while fetching available time slots.');
+        // Handle network errors
+        xhr.onerror = function () {
+            alert('A network error occurred. Please check your internet connection.');
         };
+
+        // Send the AJAX request
+        xhr.send(`appointmentDate=${encodeURIComponent(selectedDate)}&doctor_id=${encodeURIComponent(doctorId)}`);
     });
 
     document.getElementById('edit_appointment_date').addEventListener('change', function() {
